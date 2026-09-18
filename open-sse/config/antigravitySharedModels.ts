@@ -43,6 +43,45 @@ export const ANTIGRAVITY_SHARED_MODELS = Object.freeze([
     supportsVision: true,
     toolCalling: true,
   },
+  // Gemini 3.8 Flash tiers. The live endpoint serves `gemini-3.8-flash-tiered`
+  // (confirmed via streamGenerateContent 200s in production); the suffixed ids are
+  // aliases onto it with the thinking budget steered per tier, same as 3.7.
+  {
+    id: "gemini-3.8-flash-high",
+    name: "Gemini 3.8 Flash (High)",
+    contextLength: 1048576,
+    maxOutputTokens: 65536,
+    supportsReasoning: true,
+    supportsVision: true,
+    toolCalling: true,
+  },
+  {
+    id: "gemini-3.8-flash-medium",
+    name: "Gemini 3.8 Flash (Medium)",
+    contextLength: 1048576,
+    maxOutputTokens: 65536,
+    supportsReasoning: true,
+    supportsVision: true,
+    toolCalling: true,
+  },
+  {
+    id: "gemini-3.8-flash-low",
+    name: "Gemini 3.8 Flash (Low)",
+    contextLength: 1048576,
+    maxOutputTokens: 65536,
+    supportsReasoning: true,
+    supportsVision: true,
+    toolCalling: true,
+  },
+  {
+    id: "gemini-3.8-flash-tiered",
+    name: "Gemini 3.8 Flash (Tiered)",
+    contextLength: 1048576,
+    maxOutputTokens: 65536,
+    supportsReasoning: true,
+    supportsVision: true,
+    toolCalling: true,
+  },
   // Gemini 3.1 Pro budget tiers. Live streamGenerateContent validation uses
   // `gemini-pro-agent` for High; the separately advertised `gemini-3.1-pro-high`
   // discovery slot currently returns HTTP 400 and is intentionally not public.

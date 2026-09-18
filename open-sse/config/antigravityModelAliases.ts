@@ -1,7 +1,4 @@
-import {
-  ANTIGRAVITY_SHARED_MODELS,
-  buildSurfaceCatalog,
-} from "./antigravitySharedModels.ts";
+import { ANTIGRAVITY_SHARED_MODELS, buildSurfaceCatalog } from "./antigravitySharedModels.ts";
 
 export const ANTIGRAVITY_PUBLIC_MODELS = buildSurfaceCatalog(ANTIGRAVITY_SHARED_MODELS, {
   add: [], // IDE-only models (currently none)
@@ -15,6 +12,12 @@ export const ANTIGRAVITY_MODEL_ALIASES = Object.freeze({
   "gemini-3.7-flash-high": "gemini-3.7-flash-tiered",
   "gemini-3.7-flash-medium": "gemini-3.7-flash-tiered",
   "gemini-3.7-flash-low": "gemini-3.7-flash-tiered",
+  // Gemini 3.8 Flash tiers: same tiered-endpoint shape as 3.7. Without these the
+  // suffixed ids reach the upstream verbatim and 404 (only `-tiered` exists there).
+  "gemini-3.8-flash": "gemini-3.8-flash-tiered",
+  "gemini-3.8-flash-high": "gemini-3.8-flash-tiered",
+  "gemini-3.8-flash-medium": "gemini-3.8-flash-tiered",
+  "gemini-3.8-flash-low": "gemini-3.8-flash-tiered",
   "gpt-oss-120b": "gpt-oss-120b-medium",
   // gemini-3.1-pro-low is not aliased: the upstream accepts it verbatim.
   // gemini-3.1-pro-high: the discovery slot returns HTTP 400 on v1internal;

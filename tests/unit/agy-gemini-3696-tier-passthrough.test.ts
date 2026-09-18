@@ -20,7 +20,7 @@ test("(#3696) non-tiered ANTIGRAVITY_PUBLIC_MODELS entries resolve to distinct u
   for (const model of ANTIGRAVITY_PUBLIC_MODELS) {
     // Gemini 3.7 Flash tiers intentionally share the upstream `gemini-3.7-flash-tiered`
     // endpoint with different reasoning token budgets.
-    if (model.id.startsWith("gemini-3.7-flash")) continue;
+    if (/^gemini-3\.[78]-flash/.test(model.id)) continue;
     const upstream = resolveAntigravityModelId(model.id);
     if (seen.has(upstream)) {
       collisions.push(`${model.id} and ${seen.get(upstream)} both resolve to "${upstream}"`);
