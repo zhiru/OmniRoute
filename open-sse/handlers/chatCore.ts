@@ -181,6 +181,7 @@ import { noteOpencodeFreeTierSkip } from "../services/opencodeFreeTierSkip.ts";
 import { updateProviderConnection, getProviderConnectionById } from "@/lib/db/providers";
 
 import { connectionHasExtraKeys } from "../services/apiKeyRotator.ts";
+import { shouldKeepConnectionActiveOnRateLimit } from "./chatCore/rateLimitConnectionGuard.ts";
 import { recordKeyHealthStatus as recordKeyHealthStatusFor } from "./chatCore/keyHealth.ts";
 import { getSkillsModelIdForFormat } from "./chatCore/skillsFormat.ts";
 import { isSemaphoreCapacityError, getSafeErrorMetadata } from "./chatCore/streamErrorResult.ts";
@@ -261,6 +262,10 @@ import {
   resolveConnectionCacheOverride,
 } from "../utils/cacheControlPolicy.ts";
 import { getCachedSettings } from "@/lib/db/readCache";
+import {
+  applyApiKeyCodexServiceMode,
+  withApiKeyCodexServiceMode,
+} from "@/lib/providers/codexApiKeyServiceMode";
 import { applyCodexGlobalFastServiceTier } from "@/lib/providers/codexFastTier";
 import { buildUpstreamHeadersForExecute as buildUpstreamHeadersForExecuteFor } from "./chatCore/upstreamExecuteHeaders.ts";
 import {
@@ -293,6 +298,7 @@ import {
   resolveComboContextLimit,
 } from "../services/contextManager.ts";
 import { resolveBackgroundTaskRedirect } from "./chatCore/backgroundRedirect.ts";
+import { emitThinkingSignatureDiagnostics } from "./chatCore/thinkingSignatureDiagnostics.ts";
 import type {
   CompressionConfig,
   CompressionPipelineStep,
@@ -611,8 +617,9 @@ async function handleChatCoreInner({
     status: number,
     creds: Record<string, unknown> | null | undefined,
     transport?: string,
-    failureDetail?: string
-  ): void => recordKeyHealthStatusFor(status, creds, log, transport, failureDetail);
+    failureDetail?: string,
+    retryAfterMs?: number | null
+  ): void => recordKeyHealthStatusFor(status, creds, log, transport, failureDetail, retryAfterMs);
   // Endpoint/format resolution extracted to chatCore/requestFormat.ts (#3501); pure derivation
   // from the request. OUTSIDE the try below — persistFailureUsage closes over endpointPath.
   const {
@@ -1117,6 +1124,9 @@ async function handleChatCoreInner({
     model: requestedModel,
     body: body && typeof body === "object" ? (body as Record<string, unknown>) : null,
   });
+  const apiKeyCodexServiceMode = (apiKeyInfo as { codexServiceMode?: unknown } | null)
+    ?.codexServiceMode;
+  body = applyApiKeyCodexServiceMode(provider, body, apiKeyCodexServiceMode);
   effectiveServiceTier = resolveEffectiveServiceTier(body);
   setGeminiThoughtSignatureMode(settings.antigravitySignatureCacheMode);
   const semanticCacheEnabled = isSemanticCacheEnabled(settings, apiKeyInfo);
@@ -2942,17 +2952,22 @@ async function handleChatCoreInner({
   // Get executor for this provider (with optional upstream proxy routing)
   const executor = await resolveExecutorWithProxy(provider);
   const getExecutionCredentials = () =>
-    withReasoningRuleContext(
-      resolveExecutionCredentialsFor({
-        credentials,
-        nativeCodexPassthrough: nativeResponsesPassthrough,
-        endpointPath,
-        targetFormat,
-        provider,
-        ccSessionId,
-        modelInfo,
-      }),
-      reasoningRuleDirective
+    withApiKeyCodexServiceMode(
+      provider,
+      withReasoningRuleContext(
+        resolveExecutionCredentialsFor({
+          credentials,
+          nativeCodexPassthrough: nativeResponsesPassthrough,
+          endpointPath,
+          targetFormat,
+          provider,
+          ccSessionId,
+          modelInfo,
+          requestBody: body,
+        }),
+        reasoningRuleDirective
+      ),
+      apiKeyCodexServiceMode
     );
 
   let onPipelineStreamError: streamFailure.PipelineStreamErrorHandler | null = null;
@@ -3468,6 +3483,18 @@ async function handleChatCoreInner({
               console.warn(
                 `[provider] Node ${errorConnectionId} ${quotaScope}-only quota exhausted (${statusCode}) for ${targetModel} - ${Math.ceil(quotaCooldownMs / 1000)}s (cooldown_scope=${quotaScope}, ttl_source=${retryAfterMs ? "upstream" : "inferred"}, connection stays active)`
               );
+            } else if (shouldKeepConnectionActiveOnRateLimit(credentials, errorConnectionId)) {
+              // A 429 on one key must not disable a connection whose extra keys
+              // are still eligible. The hot key is already cooling via the
+              // per-key cooldown recorded at the execution sites.
+              await updateProviderConnection(errorConnectionId, {
+                lastErrorType: errorType,
+                lastError: persistentMessage,
+                errorCode: statusCode,
+              });
+              console.warn(
+                `[provider] Node ${errorConnectionId} rate limited on one key (${statusCode}) -- extra keys eligible, keeping connection active`
+              );
             } else {
               await writeTerminalStatus(
                 errorConnectionId,
@@ -3579,9 +3606,37 @@ async function handleChatCoreInner({
     }
   };
 
+  const reportSignatureFailure = (failure: {
+    status: number;
+    message: string;
+    outboundBody: unknown;
+    outboundBodyCaptured: boolean;
+    model: string;
+    recoveryAttempted: boolean;
+    recoverySucceeded: boolean;
+  }) => {
+    emitThinkingSignatureDiagnostics(
+      {
+        correlationId,
+        provider,
+        model: failure.model,
+        status: failure.status,
+        message: failure.message,
+        ingressBody: body,
+        outboundBody: failure.outboundBody,
+        outboundBodyCaptured: failure.outboundBodyCaptured,
+        recoveryAttempted: failure.recoveryAttempted,
+        recoverySucceeded: failure.recoverySucceeded,
+      },
+      noLogEnabled,
+      log
+    );
+  };
+
   let pipelineRecovered = false;
   if (stream) {
     const streamingOutcome = await runStreamingResponse({
+      reportSignatureFailure,
       apiKeyInfo,
       persistAttemptLogs,
       buildUpstreamHeadersForExecute,
@@ -3658,6 +3713,7 @@ async function handleChatCoreInner({
   // Non-streaming response
   if (!stream) {
     const nonStreamingOutcome = await runNonStreamingResponse({
+      reportSignatureFailure,
       apiKeyInfo,
       appendRequestLog,
       applyProviderFailureClassification,
