@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
+import { getErrorMessage } from "@/shared/utils/api";
 import { Button, Badge, Input, Modal, Toggle, TALL_MODAL_PROPS } from "@/shared/components";
 import { CHATGPT_WEB_CODEX_CONNECTOR_NAME } from "@/shared/constants/chatgptWebCodex";
 import {
@@ -291,8 +292,8 @@ export default function AddApiKeyModal({
         ok && data.capabilities && typeof data.capabilities === "object" ? data.capabilities : null
       );
       // #5088: surface backend reason (e.g. TLS/EACCES) instead of bare "invalid".
-      if (!ok && !unsupported && typeof data.error === "string" && data.error) {
-        setSaveError(data.error);
+      if (!ok && !unsupported && (!res.ok || data.error)) {
+        setSaveError(getErrorMessage(data, res.status, credentialValidationFailedMessage));
       }
     } catch {
       setValidationResult("failed");
@@ -378,8 +379,8 @@ export default function AddApiKeyModal({
           const data = await res.json();
           isValid = !!data.valid;
           isUnsupported = !!data.unsupported;
-          if (!isValid && data.error) {
-            validationError = data.error;
+          if (!isValid && (!res.ok || data.error)) {
+            validationError = getErrorMessage(data, res.status, credentialValidationFailedMessage);
           }
           if (
             isValid &&
