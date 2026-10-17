@@ -29,8 +29,9 @@ test("Anthropic has a remote HTTP-only validation route while spawning routes re
   );
   assert.ok(modalSource.includes("/api/providers/anthropic/validate"));
   assert.equal(isLocalOnlyPath("/api/providers/anthropic/validate"), false);
-  assert.equal(isLocalOnlyPath("/api/providers/validate"), true);
-  assert.equal(isLocalOnlyPath("/api/providers/bulk"), true);
+  assert.equal(isLocalOnlyPath("/api/providers/validate"), false);
+  assert.equal(isLocalOnlyPath("/api/providers/bulk"), false);
+  assert.equal(isLocalOnlyPath("/api/providers/cursor/login"), true);
 });
 
 test("remote Anthropic validation requires auth even when dashboard login is disabled", async () => {
