@@ -248,6 +248,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Heap for the webpack build inside BuildKit: 12288 MB on every build-args block below.
+      # Validated on the hosted runners (16 GB) by the publishes of 2026-10-16/17 — runs
+      # 38904652365, 38907575198 and 39010473398, amd64 and arm64 green (27-55 min). It stays
+      # at or above build.yml's native webpack floor (10240 MB), never below it
+      # (tests/unit/docker-publish-build-heap-14325.test.ts).
       - name: Build and push platform image by digest
         id: build
         uses: docker/build-push-action@v7
