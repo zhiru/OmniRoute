@@ -54,18 +54,18 @@ describe("Anthropic remote validation", () => {
         />
       )
     );
-    const input = element.querySelector<HTMLInputElement>('input[type="password"]')!;
+    const input = document.body.querySelector<HTMLInputElement>('input[type="password"]')!;
     const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
     act(() => {
       setter.call(input, "sk-ant-test-only");
       input.dispatchEvent(new Event("input", { bubbles: true }));
     });
-    const button = Array.from(element.querySelectorAll("button")).find(
+    const button = Array.from(document.body.querySelectorAll("button")).find(
       (candidate) => candidate.textContent?.trim().toLowerCase() === buttonLabel.toLowerCase()
     )!;
     await act(async () => button.click());
-    expect(element.textContent).toContain("This endpoint requires localhost access");
-    expect(element.textContent).not.toContain("[object Object]");
+    expect(document.body.textContent).toContain("This endpoint requires localhost access");
+    expect(document.body.textContent).not.toContain("[object Object]");
     expect(onSave).not.toHaveBeenCalled();
   });
 
@@ -90,13 +90,13 @@ describe("Anthropic remote validation", () => {
         />
       );
     });
-    const input = element.querySelector<HTMLInputElement>('input[type="password"]')!;
+    const input = document.body.querySelector<HTMLInputElement>('input[type="password"]')!;
     const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
     act(() => {
       setter.call(input, "sk-ant-test-only");
       input.dispatchEvent(new Event("input", { bubbles: true }));
     });
-    const button = Array.from(element.querySelectorAll("button")).find(
+    const button = Array.from(document.body.querySelectorAll("button")).find(
       (candidate) => candidate.textContent?.trim().toLowerCase() === buttonLabel.toLowerCase()
     )!;
     await act(async () => button.click());
