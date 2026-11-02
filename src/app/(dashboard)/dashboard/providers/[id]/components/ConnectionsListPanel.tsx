@@ -374,7 +374,7 @@ export default function ConnectionsListPanel({
     />
   );
   const searchToolbar = providerId === "codex" && (
-    <div className="mb-3 flex flex-wrap items-start gap-3 rounded-xl border border-border bg-surface p-3">
+    <div className="mb-3 grid grid-cols-1 items-center gap-3 rounded-xl border border-border bg-surface p-3 lg:grid-cols-[minmax(0,1fr)_auto_auto]">
       {accountSearchInput}
       <details className="relative rounded-lg border border-border px-3 py-2 text-sm">
         <summary className="cursor-pointer font-medium">
