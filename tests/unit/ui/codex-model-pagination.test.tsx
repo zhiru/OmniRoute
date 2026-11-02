@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -115,5 +116,17 @@ describe("Codex catalog pagination with 1,000 models", () => {
     expect(el.querySelector<HTMLButtonElement>('[aria-label="Previous page"]')?.disabled).toBe(
       true
     );
+  });
+});
+
+describe("Codex catalog page size", () => {
+  it("allows All without changing the default bounded page", () => {
+    const mounted = render(<ProviderModelsSection {...fixture()} />);
+    expect(mounted.container.querySelectorAll("[data-model-row]")).toHaveLength(25);
+    fireEvent.click(screen.getByRole("combobox", { name: "Per page" }));
+    fireEvent.click(screen.getByRole("option", { name: "All", exact: true }));
+    expect(mounted.container.querySelectorAll("[data-model-row]")).toHaveLength(1000);
+    expect(screen.getByRole("button", { name: "Next page" })).toHaveProperty("disabled", true);
+    cleanup();
   });
 });

@@ -78,8 +78,7 @@ export default function CodexOperationalRow({
   const t = useTranslations("providers");
   const locale = useLocale();
   const emailsVisible = useEmailPrivacyStore((s) => s.emailsVisible);
-  const [detailsOpen, setExpanded] = useState(false);
-  const expanded = props.codexViewMode === "detailed" || detailsOpen;
+  const [expanded, setExpanded] = useState(false);
   const detailsId = useId();
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
@@ -106,107 +105,147 @@ export default function CodexOperationalRow({
   const pool = connection.codexAccountPool?.children.find((child) => child.key.scope === "codex");
   const visible = connection.quotaVisible !== false;
   const detailsLabel = providerText(t, "accountDetailsActions", "Details & actions");
+  const identity = (
+    <div className="flex min-w-0 items-center gap-3">
+      {props.onToggleSelect && (
+        <Checkbox checked={props.isSelected} onChange={props.onToggleSelect} aria-label={name} />
+      )}
+      <div className="min-w-0">
+        <p className="[overflow-wrap:anywhere] text-sm font-semibold" title={name}>
+          {name}
+        </p>
+        <p className="mt-1 text-xs text-text-muted">
+          <span className="capitalize">{plan || "—"}</span>
+          <span className="mx-2 text-border">/</span>#{connection.priority ?? "—"}
+          {visible && (quotaCache?.bankedResetCredits ?? 0) > 0 && (
+            <span className="ml-2 text-text-muted">
+              {providerText(t, "resetCreditsAvailable", "{count} resets", {
+                count: quotaCache!.bankedResetCredits!,
+              })}
+            </span>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+  const statusCell = (
+    <div className="min-w-0 space-y-1">
+      <Badge
+        size="sm"
+        dot
+        variant={status.statusVariant as "success" | "warning" | "error" | "default"}
+      >
+        {connection.testStatus || connection.isActive === false || cooldown
+          ? status.statusLabel
+          : "—"}
+      </Badge>
+      {pool?.unavailable && (
+        <p className="text-xs text-warning">
+          {t(pool.quota.exhaustedWindow ? "codexPoolQuotaExhausted" : "codexPoolCoolingDown")}
+        </p>
+      )}
+      {cooldown && (
+        <p className="text-xs tabular-nums text-warning">
+          {new Date(connection.rateLimitedUntil!).toLocaleTimeString(locale, {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
+      )}
+      {connection.discoveryState?.status === "degraded" && (
+        <p className="break-words text-xs text-warning">{connection.discoveryState.cause}</p>
+      )}
+    </div>
+  );
+  const quotaCells = (["5h", "7d"] as const).map((window) => {
+    const quota: OperationalQuota = visible
+      ? codexOperationalQuota(connection, quotaCache, window)
+      : { usedPercent: null, resetAt: null };
+    return (
+      <QuotaCell
+        key={window}
+        label={quota.period === "monthly" ? t("quotaWindowMonthly") : window}
+        usedLabel={t("codexPoolUsed")}
+        resetLabel={providerText(t, "quotaResetsAtShort", "Resets")}
+        locale={locale}
+        quota={quota}
+      />
+    );
+  });
+  const actions = (
+    <div className="col-span-2 flex items-center justify-end gap-1 xl:col-span-1">
+      <CodexAccountActions {...props} />
+      <Button
+        size="sm"
+        variant="ghost"
+        icon={expanded ? "expand_less" : "expand_more"}
+        aria-expanded={expanded}
+        aria-controls={detailsId}
+        onClick={() => setExpanded(!expanded)}
+      >
+        {detailsLabel}
+      </Button>
+    </div>
+  );
+  const notices = (
+    <>
+      {shouldShowConnectionLastError(connection) && (
+        <p className={`col-span-2 break-words text-xs xl:col-span-5 ${status.errorTextClass}`}>
+          {connection.lastError}
+        </p>
+      )}
+      {quotaCache?.message && (
+        <p className="col-span-2 break-words text-xs text-warning xl:col-span-5">
+          {quotaCache.message}
+        </p>
+      )}
+    </>
+  );
+  const details = (
+    <div id={detailsId} hidden={!expanded}>
+      {expanded && (
+        <div className="border-t border-border bg-bg-subtle/40 px-4 py-3">{children}</div>
+      )}
+    </div>
+  );
+  const cells = [identity, statusCell, ...quotaCells, actions];
+  if (props.codexViewMode === "table")
+    return (
+      <>
+        <tr className={props.isSelected ? "bg-primary/5" : "bg-surface"}>
+          {cells.map((cell, index) => (
+            <td key={index} className="px-4 py-3 align-top">
+              {cell}
+            </td>
+          ))}
+        </tr>
+        {(expanded || shouldShowConnectionLastError(connection) || quotaCache?.message) && (
+          <tr>
+            <td colSpan={5}>
+              {notices}
+              {details}
+            </td>
+          </tr>
+        )}
+      </>
+    );
+  const cards = props.codexViewMode === "cards";
   return (
     <div className={`min-w-0 ${props.isSelected ? "bg-primary/5" : "bg-surface"}`}>
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 gap-y-3 px-4 py-3 xl:grid-cols-[minmax(180px,1.6fr)_minmax(110px,.8fr)_minmax(150px,1fr)_minmax(150px,1fr)_auto]">
-        <div className="flex min-w-0 items-center gap-3">
-          {props.onToggleSelect && (
-            <Checkbox
-              checked={props.isSelected}
-              onChange={props.onToggleSelect}
-              aria-label={name}
-            />
-          )}
-          <div className="min-w-0">
-            <p className="[overflow-wrap:anywhere] text-sm font-semibold" title={name}>
-              {name}
-            </p>
-            <p className="mt-1 text-xs text-text-muted">
-              <span className="capitalize">{plan || "—"}</span>
-              <span className="mx-2 text-border">/</span>#{connection.priority ?? "—"}
-              {visible && (quotaCache?.bankedResetCredits ?? 0) > 0 && (
-                <span className="ml-2 text-text-muted">
-                  {providerText(t, "resetCreditsAvailable", "{count} resets", {
-                    count: quotaCache!.bankedResetCredits!,
-                  })}
-                </span>
-              )}
-            </p>
-          </div>
-        </div>
-        <div className="min-w-0 space-y-1">
-          <Badge
-            size="sm"
-            dot
-            variant={status.statusVariant as "success" | "warning" | "error" | "default"}
+      <div
+        className={`grid grid-cols-2 items-center gap-x-5 gap-y-3 px-4 py-3 ${cards ? "" : "xl:grid-cols-[minmax(180px,1.6fr)_minmax(110px,.8fr)_minmax(150px,1fr)_minmax(150px,1fr)_auto]"}`}
+      >
+        {cells.map((cell, index) => (
+          <div
+            key={index}
+            className={`min-w-0 ${index === 4 ? (cards ? "col-span-2" : "col-span-2 xl:col-span-1") : cards && (index === 0 || index === 1) ? "col-span-2" : ""}`}
           >
-            {connection.testStatus || connection.isActive === false || cooldown
-              ? status.statusLabel
-              : "—"}
-          </Badge>
-          {pool?.unavailable && (
-            <p className="text-xs text-warning">
-              {t(pool.quota.exhaustedWindow ? "codexPoolQuotaExhausted" : "codexPoolCoolingDown")}
-            </p>
-          )}
-          {cooldown && (
-            <p className="text-xs tabular-nums text-warning">
-              {new Date(connection.rateLimitedUntil!).toLocaleTimeString(locale, {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-          )}
-          {connection.discoveryState?.status === "degraded" && (
-            <p className="break-words text-xs text-warning">{connection.discoveryState.cause}</p>
-          )}
-        </div>
-        {(["5h", "7d"] as const).map((window) => {
-          const quota: OperationalQuota = visible
-            ? codexOperationalQuota(connection, quotaCache, window)
-            : { usedPercent: null, resetAt: null };
-          return (
-            <QuotaCell
-              key={window}
-              label={quota.period === "monthly" ? t("quotaWindowMonthly") : window}
-              usedLabel={t("codexPoolUsed")}
-              resetLabel={providerText(t, "quotaResetsAtShort", "Resets")}
-              locale={locale}
-              quota={quota}
-            />
-          );
-        })}
-        <div className="col-span-2 flex items-center justify-end gap-1 xl:col-span-1">
-          <CodexAccountActions {...props} />
-          {props.codexViewMode !== "detailed" && (
-            <Button
-              size="sm"
-              variant="ghost"
-              icon={expanded ? "expand_less" : "expand_more"}
-              aria-expanded={expanded}
-              aria-controls={detailsId}
-              onClick={() => setExpanded(!expanded)}
-            >
-              {detailsLabel}
-            </Button>
-          )}
-        </div>
-        {shouldShowConnectionLastError(connection) && (
-          <p className={`col-span-2 break-words text-xs xl:col-span-5 ${status.errorTextClass}`}>
-            {connection.lastError}
-          </p>
-        )}
-        {quotaCache?.message && (
-          <p className="col-span-2 break-words text-xs text-warning xl:col-span-5">
-            {quotaCache.message}
-          </p>
-        )}
+            {cell}
+          </div>
+        ))}
       </div>
-      <div id={detailsId} hidden={!expanded}>
-        {expanded && (
-          <div className="border-t border-border bg-bg-subtle/40 px-4 py-3">{children}</div>
-        )}
-      </div>
+      {notices}
+      {details}
     </div>
   );
 }

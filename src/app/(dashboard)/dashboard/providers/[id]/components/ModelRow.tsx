@@ -82,6 +82,7 @@ export function ModelSourceBadge({ source }: { source?: string }) {
 // ---------------------------------------------------------------------------
 
 export interface ModelVisibilityToolbarProps {
+  collectionControls?: React.ReactNode;
   t: ((key: string, values?: Record<string, unknown>) => string) & {
     has?: (key: string) => boolean;
   };
@@ -107,6 +108,7 @@ export interface ModelVisibilityToolbarProps {
 }
 
 export function ModelVisibilityToolbar({
+  collectionControls,
   t,
   filterValue,
   onFilterChange,
@@ -128,20 +130,23 @@ export function ModelVisibilityToolbar({
   sortFreeFirst,
   onSortFreeFirstChange,
 }: ModelVisibilityToolbarProps) {
-  return (
-    <div className="mb-3 flex flex-wrap items-center gap-2">
-      <div className="w-full min-w-0 flex-1 sm:w-auto sm:min-w-[220px]">
-        <KitInput
-          type="text"
-          size="sm"
-          value={filterValue}
-          onChange={(e) => onFilterChange(e.target.value)}
-          placeholder={providerText(t, "filterModels", "Filter models…")}
-          aria-label={providerText(t, "filterModels", "Filter models…")}
-          leadingIcon={<Icon name="search" size={15} />}
-          className="text-xs"
-        />
-      </div>
+  const search = (
+    <div className="w-full min-w-0 flex-1 sm:w-auto sm:min-w-[220px]">
+      <KitInput
+        type="text"
+        size="sm"
+        value={filterValue}
+        onChange={(e) => onFilterChange(e.target.value)}
+        placeholder={providerText(t, "filterModels", "Filter models…")}
+        aria-label={providerText(t, "filterModels", "Filter models…")}
+        leadingIcon={<Icon name="search" size={15} />}
+        className="text-xs"
+      />
+    </div>
+  );
+  const filters = (
+    <>
+      {" "}
       {visibilityFilter !== undefined && onVisibilityFilterChange && (
         <FilterPills
           options={[
@@ -164,18 +169,6 @@ export function ModelVisibilityToolbar({
           onChange={(v) => onFreeFilterChange(v as "all" | "free" | "paid")}
         />
       )}
-      {onSortFreeFirstChange && (
-        <Button
-          size="sm"
-          variant={sortFreeFirst ? "secondary" : "outline"}
-          icon="sort"
-          onClick={() => onSortFreeFirstChange(!sortFreeFirst)}
-          aria-pressed={!!sortFreeFirst}
-          title={providerText(t, "sortFreeFirst", "Free first")}
-        >
-          <span>{providerText(t, "sortFreeFirst", "Free first")}</span>
-        </Button>
-      )}
       {onAutoHideFailedChange && (
         <span
           className="inline-flex"
@@ -196,6 +189,28 @@ export function ModelVisibilityToolbar({
           />
         </span>
       )}
+    </>
+  );
+  const sort = (
+    <>
+      {" "}
+      {onSortFreeFirstChange && (
+        <Button
+          size="sm"
+          variant={sortFreeFirst ? "secondary" : "outline"}
+          icon="sort"
+          onClick={() => onSortFreeFirstChange(!sortFreeFirst)}
+          aria-pressed={!!sortFreeFirst}
+          title={providerText(t, "sortFreeFirst", "Free first")}
+        >
+          <span>{providerText(t, "sortFreeFirst", "Free first")}</span>
+        </Button>
+      )}
+    </>
+  );
+  const actions = (
+    <>
+      {" "}
       {onTestAll && (
         <Button
           size="sm"
@@ -239,6 +254,35 @@ export function ModelVisibilityToolbar({
           total: totalCount,
         })}
       </span>
+    </>
+  );
+  if (collectionControls)
+    return (
+      <>
+        <div className="mb-3 flex flex-wrap items-start gap-3 rounded-xl border border-border bg-surface p-3">
+          {search}
+          <details className="relative rounded-lg border border-border px-3 py-2 text-sm">
+            <summary className="cursor-pointer font-medium">
+              {providerText(t, "collectionFilters", "Filters")}
+            </summary>
+            <div className="absolute right-0 top-full z-30 mt-2 flex w-80 max-w-[calc(100vw-3rem)] flex-wrap items-center gap-3 rounded-xl border border-border bg-surface p-3 shadow-xl">
+              {filters}
+            </div>
+          </details>
+          {collectionControls}
+        </div>
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">{actions}</div>
+          {sort}
+        </div>
+      </>
+    );
+  return (
+    <div className="mb-3 flex flex-wrap items-center gap-2">
+      {search}
+      {filters}
+      {sort}
+      {actions}
     </div>
   );
 }
@@ -248,6 +292,7 @@ export function ModelVisibilityToolbar({
 // ---------------------------------------------------------------------------
 
 export interface ModelRowProps {
+  collectionView?: "list" | "cards" | "table";
   model: { id: string; name?: string; source?: string; isHidden?: boolean };
   fullModel: string;
   provider: string;
@@ -274,6 +319,7 @@ export interface ModelRowProps {
 }
 
 export default function ModelRow({
+  collectionView = "list",
   model,
   fullModel,
   provider,
@@ -335,188 +381,198 @@ export default function ModelRow({
     }
   };
 
+  const identity = (
+    <div
+      className={`flex min-w-0 items-start gap-2 pr-7 ${provider === "codex" ? "relative" : ""}`}
+    >
+      <Icon name="smart_toy" size={16} className={isHidden ? "mt-0.5 text-text-muted" : "mt-0.5"} />
+      <code className="min-w-0 break-all pt-px font-mono text-xs leading-5 text-text-main">
+        {fullModel}
+      </code>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        icon={copied === `model-${model.id}` ? "check" : "content_copy"}
+        onClick={() => onCopy(fullModel, `model-${model.id}`)}
+        className={
+          provider === "codex"
+            ? "absolute right-0 top-0 rounded p-0.5 size-6 min-h-6 text-text-muted"
+            : "absolute right-2 top-2 rounded p-0.5 size-6 min-h-6 text-text-muted"
+        }
+        title={t("copyModel")}
+        aria-label={t("copyModel")}
+      />
+    </div>
+  );
+  const metadata = (
+    <div className="flex min-w-0 flex-wrap items-center gap-2 pl-6">
+      <ModelSourceBadge source={model.source} />
+      {combos && combos.length > 0 && <ModelComboBadge combos={combos} t={t} />}
+      {onSetAlias && (
+        <span className="flex min-w-0 flex-1 items-center text-[10px] gap-1">
+          {editing ? (
+            <KitInput
+              ref={inputRef}
+              type="text"
+              size="sm"
+              value={aliasValue}
+              onChange={(e) => setAliasValue(e.target.value)}
+              onBlur={handleAliasSubmit}
+              onKeyDown={handleKeyDown}
+              placeholder={providerText(t, "aliasInputPlaceholder", "alias name")}
+              aria-label={providerText(t, "aliasInputPlaceholder", "alias name")}
+              className="h-5 min-h-0 w-24 px-1 text-[9px]"
+            />
+          ) : (
+            <span
+              className={`min-w-0 truncate text-[10px] italic cursor-pointer hover:text-primary transition-colors ${alias ? "text-primary/80" : "text-text-muted/70"}`}
+              onClick={startEditing}
+              title={
+                alias
+                  ? providerText(t, "clickToEditAlias", "Alias: {alias} (click to edit)", {
+                      alias,
+                    })
+                  : providerText(t, "clickToSetAlias", "Click to set alias")
+              }
+            >
+              {alias || model.name || providerText(t, "clickToSetAlias", "Click to set alias")}
+            </span>
+          )}
+        </span>
+      )}
+      <div className="ml-auto flex max-w-full flex-wrap items-center gap-1">
+        <ProviderActionsMenu enabled={provider === "codex"}>
+          {onToggleHidden && testStatus === "error" && (
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="block"
+              loading={!!togglingHidden}
+              onClick={() => onToggleHidden(model.id, true)}
+              disabled={togglingHidden}
+              className="h-6 min-h-0 gap-1 rounded px-1 text-[11px] text-error"
+              title={providerText(
+                t,
+                "blacklistModelTooltip",
+                "Blacklist this model — hide it from the catalog"
+              )}
+            >
+              <span>{providerText(t, "blacklistModel", "Blacklist")}</span>
+            </Button>
+          )}
+          {onTestModel && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => onTestModel(model.id, fullModel)}
+              disabled={testingModel}
+              className={`size-6 min-h-6 rounded ${testStatus === "ok" ? "text-success" : testStatus === "quota" ? "text-warning" : testStatus === "error" ? "text-error" : "text-text-muted"}`}
+              title={
+                testingModel
+                  ? t("testingModel")
+                  : testStatus === "ok"
+                    ? "OK"
+                    : testStatus === "quota"
+                      ? t("modelTestQuotaTooltip")
+                      : testStatus === "error"
+                        ? providerText(t, "errorShort", "Error")
+                        : t("testModel")
+              }
+              aria-label={
+                testingModel
+                  ? t("testingModel")
+                  : testStatus === "ok"
+                    ? "OK"
+                    : testStatus === "quota"
+                      ? t("modelTestQuotaTooltip")
+                      : testStatus === "error"
+                        ? providerText(t, "errorShort", "Error")
+                        : t("testModel")
+              }
+            >
+              {testingModel ? (
+                <Icon name="progress_activity" size={14} className="animate-spin" />
+              ) : testStatus === "ok" ? (
+                <Icon name="check_circle" size={14} />
+              ) : testStatus === "quota" ? (
+                <Icon name="warning" size={14} />
+              ) : testStatus === "error" ? (
+                <Icon name="error" size={14} />
+              ) : (
+                <Icon name="play_circle" size={14} />
+              )}
+              {provider === "codex" && <span>{t("testModel")}</span>}
+            </Button>
+          )}
+          {onToggleHidden && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              icon={isHidden ? "visibility_off" : "visibility"}
+              onClick={() => onToggleHidden(model.id, !isHidden)}
+              disabled={togglingHidden}
+              className="size-6 min-h-6 rounded text-text-muted"
+              title={
+                isHidden
+                  ? providerText(t, "showModel", "Show model")
+                  : providerText(t, "hideModel", "Hide model")
+              }
+              aria-label={
+                isHidden
+                  ? providerText(t, "showModel", "Show model")
+                  : providerText(t, "hideModel", "Hide model")
+              }
+            >
+              {provider === "codex" && (
+                <span>
+                  {isHidden
+                    ? providerText(t, "showModel", "Show model")
+                    : providerText(t, "hideModel", "Hide model")}
+                </span>
+              )}
+            </Button>
+          )}
+          <ModelCompatPopover
+            t={t}
+            providerId={provider}
+            modelId={model.id}
+            effectiveModelNormalize={(p) => effectiveModelNormalize(model.id, p)}
+            effectiveModelPreserveDeveloper={(p) => effectiveModelPreserveDeveloper(model.id, p)}
+            getUpstreamHeadersRecord={getUpstreamHeadersRecord}
+            onCompatPatch={(protocol, payload) =>
+              saveModelCompatFlags(model.id, { compatByProtocol: { [protocol]: payload } })
+            }
+            showDeveloperToggle={showDeveloperToggle}
+            disabled={compatDisabled}
+          />
+        </ProviderActionsMenu>
+      </div>
+    </div>
+  );
+  const endpoints = (
+    <div className="min-w-0">
+      {endpointInfo && (
+        <ModelEndpointTagsEditor provider={provider} modelId={model.id} t={t} {...endpointInfo} />
+      )}
+    </div>
+  );
+  if (provider === "codex" && collectionView === "table")
+    return (
+      <tr className={isHidden ? "opacity-50" : ""}>
+        {[identity, metadata, endpoints].map((cell, index) => (
+          <td key={index} className="px-4 py-3 align-top">
+            {cell}
+          </td>
+        ))}
+      </tr>
+    );
   return (
     <div
-      className={`relative flex h-full w-full min-w-0 flex-col gap-2 ${provider === "codex" ? "px-4 py-3 lg:grid lg:grid-cols-[minmax(220px,1fr)_minmax(280px,1fr)] lg:gap-x-6" : "rounded-lg border border-border px-3 py-2"} hover:bg-sidebar/50 transition-opacity ${
-        isHidden ? "opacity-50" : ""
-      }`}
+      className={`relative flex h-full w-full min-w-0 flex-col gap-2 ${provider === "codex" ? `px-4 py-3 ${collectionView === "list" ? "lg:grid lg:grid-cols-[minmax(220px,1fr)_minmax(280px,1fr)] lg:gap-x-6" : ""}` : "rounded-lg border border-border px-3 py-2"} hover:bg-sidebar/50 transition-opacity ${isHidden ? "opacity-50" : ""}`}
     >
-      {/* Line 1: icon + full model name (wraps, never cut); copy pinned to the top-right corner. */}
-      <div
-        className={`flex min-w-0 items-start gap-2 pr-7 ${provider === "codex" ? "relative" : ""}`}
-      >
-        <Icon
-          name="smart_toy"
-          size={16}
-          className={isHidden ? "mt-0.5 text-text-muted" : "mt-0.5"}
-        />
-        <code className="min-w-0 break-all pt-px font-mono text-xs leading-5 text-text-main">
-          {fullModel}
-        </code>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          icon={copied === `model-${model.id}` ? "check" : "content_copy"}
-          onClick={() => onCopy(fullModel, `model-${model.id}`)}
-          className={
-            provider === "codex"
-              ? "absolute right-0 top-0 rounded p-0.5 size-6 min-h-6 text-text-muted"
-              : "absolute right-2 top-2 rounded p-0.5 size-6 min-h-6 text-text-muted"
-          }
-          title={t("copyModel")}
-          aria-label={t("copyModel")}
-        />
-      </div>
-      {/* Line 2 (never wraps): source, alias (truncates) and the actions, in the name's column. */}
-      <div className="flex min-w-0 flex-wrap items-center gap-2 pl-6">
-        <ModelSourceBadge source={model.source} />
-        {combos && combos.length > 0 && <ModelComboBadge combos={combos} t={t} />}
-        {onSetAlias && (
-          <span className="flex min-w-0 flex-1 items-center text-[10px] gap-1">
-            {editing ? (
-              <KitInput
-                ref={inputRef}
-                type="text"
-                size="sm"
-                value={aliasValue}
-                onChange={(e) => setAliasValue(e.target.value)}
-                onBlur={handleAliasSubmit}
-                onKeyDown={handleKeyDown}
-                placeholder={providerText(t, "aliasInputPlaceholder", "alias name")}
-                aria-label={providerText(t, "aliasInputPlaceholder", "alias name")}
-                className="h-5 min-h-0 w-24 px-1 text-[9px]"
-              />
-            ) : (
-              <span
-                className={`min-w-0 truncate text-[10px] italic cursor-pointer hover:text-primary transition-colors ${alias ? "text-primary/80" : "text-text-muted/70"}`}
-                onClick={startEditing}
-                title={
-                  alias
-                    ? providerText(t, "clickToEditAlias", "Alias: {alias} (click to edit)", {
-                        alias,
-                      })
-                    : providerText(t, "clickToSetAlias", "Click to set alias")
-                }
-              >
-                {alias || model.name || providerText(t, "clickToSetAlias", "Click to set alias")}
-              </span>
-            )}
-          </span>
-        )}
-        <div className="ml-auto flex max-w-full flex-wrap items-center gap-1">
-          <ProviderActionsMenu enabled={provider === "codex"}>
-            {onToggleHidden && testStatus === "error" && (
-              <Button
-                variant="ghost"
-                size="sm"
-                icon="block"
-                loading={!!togglingHidden}
-                onClick={() => onToggleHidden(model.id, true)}
-                disabled={togglingHidden}
-                className="h-6 min-h-0 gap-1 rounded px-1 text-[11px] text-error"
-                title={providerText(
-                  t,
-                  "blacklistModelTooltip",
-                  "Blacklist this model — hide it from the catalog"
-                )}
-              >
-                <span>{providerText(t, "blacklistModel", "Blacklist")}</span>
-              </Button>
-            )}
-            {onTestModel && (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={() => onTestModel(model.id, fullModel)}
-                disabled={testingModel}
-                className={`size-6 min-h-6 rounded ${testStatus === "ok" ? "text-success" : testStatus === "quota" ? "text-warning" : testStatus === "error" ? "text-error" : "text-text-muted"}`}
-                title={
-                  testingModel
-                    ? t("testingModel")
-                    : testStatus === "ok"
-                      ? "OK"
-                      : testStatus === "quota"
-                        ? t("modelTestQuotaTooltip")
-                        : testStatus === "error"
-                          ? providerText(t, "errorShort", "Error")
-                          : t("testModel")
-                }
-                aria-label={
-                  testingModel
-                    ? t("testingModel")
-                    : testStatus === "ok"
-                      ? "OK"
-                      : testStatus === "quota"
-                        ? t("modelTestQuotaTooltip")
-                        : testStatus === "error"
-                          ? providerText(t, "errorShort", "Error")
-                          : t("testModel")
-                }
-              >
-                {testingModel ? (
-                  <Icon name="progress_activity" size={14} className="animate-spin" />
-                ) : testStatus === "ok" ? (
-                  <Icon name="check_circle" size={14} />
-                ) : testStatus === "quota" ? (
-                  <Icon name="warning" size={14} />
-                ) : testStatus === "error" ? (
-                  <Icon name="error" size={14} />
-                ) : (
-                  <Icon name="play_circle" size={14} />
-                )}
-                {provider === "codex" && <span>{t("testModel")}</span>}
-              </Button>
-            )}
-            {onToggleHidden && (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                icon={isHidden ? "visibility_off" : "visibility"}
-                onClick={() => onToggleHidden(model.id, !isHidden)}
-                disabled={togglingHidden}
-                className="size-6 min-h-6 rounded text-text-muted"
-                title={
-                  isHidden
-                    ? providerText(t, "showModel", "Show model")
-                    : providerText(t, "hideModel", "Hide model")
-                }
-                aria-label={
-                  isHidden
-                    ? providerText(t, "showModel", "Show model")
-                    : providerText(t, "hideModel", "Hide model")
-                }
-              >
-                {provider === "codex" && (
-                  <span>
-                    {isHidden
-                      ? providerText(t, "showModel", "Show model")
-                      : providerText(t, "hideModel", "Hide model")}
-                  </span>
-                )}
-              </Button>
-            )}
-            <ModelCompatPopover
-              t={t}
-              providerId={provider}
-              modelId={model.id}
-              effectiveModelNormalize={(p) => effectiveModelNormalize(model.id, p)}
-              effectiveModelPreserveDeveloper={(p) => effectiveModelPreserveDeveloper(model.id, p)}
-              getUpstreamHeadersRecord={getUpstreamHeadersRecord}
-              onCompatPatch={(protocol, payload) =>
-                saveModelCompatFlags(model.id, { compatByProtocol: { [protocol]: payload } })
-              }
-              showDeveloperToggle={showDeveloperToggle}
-              disabled={compatDisabled}
-            />
-          </ProviderActionsMenu>
-        </div>
-      </div>
-      {/* Line 3: endpoint capability tags (#16929) wrap freely, so line 2 stays one row. */}
-      {endpointInfo && (
-        <div className="min-w-0 pl-6 lg:col-span-2">
-          <ModelEndpointTagsEditor provider={provider} modelId={model.id} t={t} {...endpointInfo} />
-        </div>
-      )}
+      {identity}
+      {metadata}
+      <div className="min-w-0 pl-6 lg:col-span-2">{endpoints}</div>
     </div>
   );
 }

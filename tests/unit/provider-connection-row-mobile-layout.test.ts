@@ -153,7 +153,7 @@ test("toggle thumb is vertically centred in its track", () => {
 test("provider models use the symmetric AutoGrid", () => {
   assert.match(
     read(`${providerComponents}/ProviderModelsSection.tsx`),
-    /operationalList \? "div" : AutoGrid/
+    /operationalList \? CollectionLayout : AutoGrid/
   );
   assert.match(
     read("src/shared/components/AutoGrid.tsx"),
