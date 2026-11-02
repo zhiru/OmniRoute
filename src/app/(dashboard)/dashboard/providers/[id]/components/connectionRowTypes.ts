@@ -35,6 +35,7 @@ export interface ConnectionRowConnection {
 }
 
 export interface ConnectionRowProps {
+  codexViewMode?: "list" | "cards" | "table";
   connection: ConnectionRowConnection;
   isOAuth: boolean;
   isClaude?: boolean;
