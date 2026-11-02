@@ -24,6 +24,7 @@ import { getCodexEffectiveServiceTier } from "@/lib/providers/codexFastTier";
 import { normalizeCodexLimitPolicy, providerText } from "../providerPageHelpers";
 import { getCodexPlanLabel } from "../codexPlanLabel";
 import CodexAccountDetails from "./CodexAccountDetails";
+import CodexOperationalRow from "./CodexOperationalRow";
 import ConnectionQuotaPanel from "./ConnectionQuotaPanel";
 import ConnectionIdChip from "./ConnectionIdChip";
 import {
@@ -87,7 +88,19 @@ function CooldownTimer({ until }: CooldownTimerProps) {
 // ConnectionRow
 // ---------------------------------------------------------------------------
 
-export default function ConnectionRow({
+export default function ConnectionRow(props: ConnectionRowProps) {
+  if (props.isCodex) {
+    return (
+      <CodexOperationalRow {...props}>
+        <ConnectionRowContent {...props} detailsOnly />
+      </CodexOperationalRow>
+    );
+  }
+  return <ConnectionRowContent {...props} />;
+}
+
+function ConnectionRowContent({
+  detailsOnly = false,
   connection,
   isOAuth,
   isClaude,
@@ -140,7 +153,7 @@ export default function ConnectionRow({
   quotaCache,
   quotaRefreshing,
   onRefreshQuota,
-}: ConnectionRowProps) {
+}: ConnectionRowProps & { detailsOnly?: boolean }) {
   const t = useTranslations("providers");
   const locale = useLocale();
   const emailsVisible = useEmailPrivacyStore((s) => s.emailsVisible);
@@ -323,6 +336,23 @@ export default function ConnectionRow({
         .filter(Boolean)
         .join(" — ")
     : "";
+
+  const supplementalQuotaCache =
+    detailsOnly && quotaCache
+      ? {
+          ...quotaCache,
+          quotas: Object.fromEntries(
+            Object.entries(quotaCache.quotas ?? {}).filter(
+              ([key]) => key !== "session" && key !== "weekly"
+            )
+          ),
+        }
+      : quotaCache;
+  const hasSupplementalQuota =
+    Object.keys(supplementalQuotaCache?.quotas ?? {}).length > 0 ||
+    Object.keys(supplementalQuotaCache?.modelQuotas ?? {}).length > 0 ||
+    Boolean(supplementalQuotaCache?.message) ||
+    (supplementalQuotaCache?.bankedResetCredits ?? 0) > 0;
 
   return (
     <div
@@ -883,15 +913,15 @@ export default function ConnectionRow({
       </div>
       {isCodex && connection.codexAccountPool ? (
         <div className="basis-full min-w-0">
-          <CodexAccountDetails pool={connection.codexAccountPool} />
+          <CodexAccountDetails pool={connection.codexAccountPool} hideQuota={detailsOnly} />
         </div>
       ) : null}
-      {quotaPanelSupported ? (
+      {quotaPanelSupported && (!detailsOnly || hasSupplementalQuota) ? (
         <div className="basis-full min-w-0">
           <ConnectionQuotaPanel
             providerId={String(connection.provider || "")}
             connection={connection}
-            cache={quotaCache}
+            cache={supplementalQuotaCache}
             refreshing={quotaRefreshing}
             onRefresh={onRefreshQuota}
           />

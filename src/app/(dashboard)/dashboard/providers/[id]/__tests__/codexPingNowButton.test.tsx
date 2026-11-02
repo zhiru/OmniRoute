@@ -32,6 +32,13 @@ function render(props: ConnectionRowProps) {
   document.body.appendChild(el);
   const root = createRoot(el);
   act(() => root.render(<ConnectionRow {...props} />));
+  if (props.isCodex) {
+    const details = el.querySelector<HTMLButtonElement>(
+      'button[aria-expanded="false"][aria-controls]'
+    );
+    expect(details).not.toBeNull();
+    act(() => details?.click());
+  }
   roots.push({ root, el });
 }
 

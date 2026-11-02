@@ -6973,7 +6973,12 @@
     "chatgptConnectorLabel": "Conector personalizado do ChatGPT",
     "doctorChecking": "Verificando status…",
     "doctorCheck": "Verificar status do doctor",
-    "fallbackRetryBackendTitle": "Backend de nova tentativa de fallback"
+    "fallbackRetryBackendTitle": "Backend de nova tentativa de fallback",
+    "accountDetailsActions": "Detalhes e ações",
+    "quotaResetsAtShort": "Renova",
+    "providerAdvancedControls": "Configurações avançadas do provedor",
+    "catalogPreviousPage": "Página anterior",
+    "catalogNextPage": "Próxima página"
   },
   "settings": {
     "title": "Configurações",

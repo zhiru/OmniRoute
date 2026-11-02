@@ -7050,7 +7050,12 @@
     "chatgptConnectorLabel": "ChatGPT custom connector",
     "doctorChecking": "Checking status…",
     "doctorCheck": "Check doctor status",
-    "fallbackRetryBackendTitle": "Fallback retry backend"
+    "fallbackRetryBackendTitle": "Fallback retry backend",
+    "accountDetailsActions": "Details & actions",
+    "quotaResetsAtShort": "Resets",
+    "providerAdvancedControls": "Advanced provider settings",
+    "catalogPreviousPage": "Previous page",
+    "catalogNextPage": "Next page"
   },
   "settings": {
     "title": "Settings",

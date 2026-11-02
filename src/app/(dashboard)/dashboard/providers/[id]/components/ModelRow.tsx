@@ -336,12 +336,14 @@ export default function ModelRow({
 
   return (
     <div
-      className={`relative flex h-full w-full min-w-0 flex-col gap-1.5 rounded-lg border border-border px-3 py-2 hover:bg-sidebar/50 transition-opacity ${
+      className={`relative flex h-full w-full min-w-0 flex-col gap-2 ${provider === "codex" ? "px-4 py-3 lg:grid lg:grid-cols-[minmax(220px,1fr)_minmax(280px,1fr)] lg:gap-x-6" : "rounded-lg border border-border px-3 py-2"} hover:bg-sidebar/50 transition-opacity ${
         isHidden ? "opacity-50" : ""
       }`}
     >
       {/* Line 1: icon + full model name (wraps, never cut); copy pinned to the top-right corner. */}
-      <div className="flex min-w-0 items-start gap-2 pr-7">
+      <div
+        className={`flex min-w-0 items-start gap-2 pr-7 ${provider === "codex" ? "relative" : ""}`}
+      >
         <Icon
           name="smart_toy"
           size={16}
@@ -350,18 +352,22 @@ export default function ModelRow({
         <code className="min-w-0 break-all pt-px font-mono text-xs leading-5 text-text-main">
           {fullModel}
         </code>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          icon={copied === `model-${model.id}` ? "check" : "content_copy"}
+          onClick={() => onCopy(fullModel, `model-${model.id}`)}
+          className={
+            provider === "codex"
+              ? "absolute right-0 top-0 rounded p-0.5 size-6 min-h-6 text-text-muted"
+              : "absolute right-2 top-2 rounded p-0.5 size-6 min-h-6 text-text-muted"
+          }
+          title={t("copyModel")}
+          aria-label={t("copyModel")}
+        />
       </div>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        icon={copied === `model-${model.id}` ? "check" : "content_copy"}
-        onClick={() => onCopy(fullModel, `model-${model.id}`)}
-        className="absolute right-2 top-2 rounded p-0.5 size-6 min-h-6 text-text-muted"
-        title={t("copyModel")}
-        aria-label={t("copyModel")}
-      />
       {/* Line 2 (never wraps): source, alias (truncates) and the actions, in the name's column. */}
-      <div className="flex min-w-0 items-center gap-2 pl-6">
+      <div className="flex min-w-0 flex-wrap items-center gap-2 pl-6">
         <ModelSourceBadge source={model.source} />
         {combos && combos.length > 0 && <ModelComboBadge combos={combos} t={t} />}
         {onSetAlias && (
@@ -396,7 +402,7 @@ export default function ModelRow({
             )}
           </span>
         )}
-        <div className="ml-auto flex shrink-0 items-center gap-1">
+        <div className="ml-auto flex max-w-full flex-wrap items-center gap-1">
           {onToggleHidden && testStatus === "error" && (
             <Button
               variant="ghost"
@@ -495,7 +501,7 @@ export default function ModelRow({
       </div>
       {/* Line 3: endpoint capability tags (#16929) wrap freely, so line 2 stays one row. */}
       {endpointInfo && (
-        <div className="min-w-0 pl-6">
+        <div className="min-w-0 pl-6 lg:col-span-2">
           <ModelEndpointTagsEditor provider={provider} modelId={model.id} t={t} {...endpointInfo} />
         </div>
       )}

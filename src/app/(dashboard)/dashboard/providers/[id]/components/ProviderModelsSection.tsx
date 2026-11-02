@@ -195,6 +195,7 @@ export default function ProviderModelsSection({
 }: ProviderModelsSectionProps) {
   const [freeFilter, setFreeFilter] = useState<"all" | "free" | "paid">("all");
   const [sortFreeFirst, setSortFreeFirst] = useState(false);
+  const [modelPage, setModelPage] = useState({ key: "", page: 0 });
   const canConfigureAutoFetchModels = connections.some(
     (connection) => connection.isActive !== false && typeof connection.id === "string"
   );
@@ -484,6 +485,17 @@ export default function ProviderModelsSection({
   const displayModels = sortFreeFirst
     ? sortModelsFreeFirst(filteredModels, { isFree: (m) => m.isFree, key: (m) => m.id })
     : filteredModels;
+  const operationalList = providerId === "codex";
+  const modelPageKey = JSON.stringify([modelFilter, visibilityFilter, freeFilter, sortFreeFirst]);
+  const modelPageCount = Math.max(1, Math.ceil(displayModels.length / 25));
+  const currentModelPage = Math.min(
+    modelPage.key === modelPageKey ? modelPage.page : 0,
+    modelPageCount - 1
+  );
+  const pagedModels = operationalList
+    ? displayModels.slice(currentModelPage * 25, (currentModelPage + 1) * 25)
+    : displayModels;
+  const ModelLayout = operationalList ? "div" : AutoGrid;
   const activeCount = modelsWithVisibility.filter((m) => !m.isHidden).length;
   const hiddenFilteredCount = filteredModels.filter((m) => m.isHidden).length;
   const visibleFilteredCount = filteredModels.length - hiddenFilteredCount;
@@ -530,8 +542,12 @@ export default function ProviderModelsSection({
           onSortFreeFirstChange={setSortFreeFirst}
         />
       )}
-      <AutoGrid>
-        {displayModels.map((model) => {
+      <ModelLayout
+        className={
+          operationalList ? "divide-y divide-border rounded-lg border border-border" : undefined
+        }
+      >
+        {pagedModels.map((model) => {
           return (
             <ModelRow
               key={model.id}
@@ -590,7 +606,36 @@ export default function ProviderModelsSection({
             })}
           </p>
         )}
-      </AutoGrid>
+      </ModelLayout>
+      {operationalList && displayModels.length > 0 && (
+        <div className="mt-3 flex items-center justify-between gap-3 text-xs text-text-muted">
+          <span className="tabular-nums">
+            {currentModelPage * 25 + 1}–
+            {Math.min((currentModelPage + 1) * 25, displayModels.length)} / {displayModels.length}
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant="ghost"
+              icon="chevron_left"
+              aria-label={providerText(t, "catalogPreviousPage", "Previous page")}
+              disabled={currentModelPage === 0}
+              onClick={() => setModelPage({ key: modelPageKey, page: currentModelPage - 1 })}
+            />
+            <span className="tabular-nums">
+              {currentModelPage + 1} / {modelPageCount}
+            </span>
+            <Button
+              size="sm"
+              variant="ghost"
+              icon="chevron_right"
+              aria-label={providerText(t, "catalogNextPage", "Next page")}
+              disabled={currentModelPage + 1 >= modelPageCount}
+              onClick={() => setModelPage({ key: modelPageKey, page: currentModelPage + 1 })}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
