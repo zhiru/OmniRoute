@@ -7051,11 +7051,19 @@
     "doctorChecking": "Checking status…",
     "doctorCheck": "Check doctor status",
     "fallbackRetryBackendTitle": "Fallback retry backend",
-    "accountDetailsActions": "Details & actions",
+    "accountDetailsActions": "Details",
     "quotaResetsAtShort": "Resets",
     "providerAdvancedControls": "Advanced provider settings",
     "catalogPreviousPage": "Previous page",
-    "catalogNextPage": "Next page"
+    "catalogNextPage": "Next page",
+    "accountsInactive": "Inactive",
+    "accountsWithResets": "With reset credits",
+    "accountListView": "Account view",
+    "accountViewCompact": "Compact",
+    "accountViewDetailed": "Detailed",
+    "accountPageSize": "Accounts per page",
+    "itemActions": "Actions",
+    "resetCreditsAvailable": "{count} resets"
   },
   "settings": {
     "title": "Settings",

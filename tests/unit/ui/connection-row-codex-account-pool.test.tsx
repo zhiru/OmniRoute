@@ -107,7 +107,9 @@ describe("ConnectionRow Codex account pool", () => {
 
     expect(container.textContent).not.toContain("Codex quota pools");
     expect(container.querySelector("button[title='edit']")).toBeNull();
-    const disclosure = container.querySelector("button[aria-expanded]") as HTMLButtonElement;
+    const disclosure = container.querySelector(
+      "button[aria-controls]:not([aria-haspopup])"
+    ) as HTMLButtonElement;
     expect(disclosure.getAttribute("aria-expanded")).toBe("false");
     expect(container.querySelectorAll('[role="meter"]')).toHaveLength(0);
     act(() => disclosure.click());
@@ -116,12 +118,15 @@ describe("ConnectionRow Codex account pool", () => {
     expect(container.textContent).toContain("Codex");
     expect(container.textContent).not.toContain("Spark");
     expect(container.textContent).not.toContain("codex-parent-id");
-    expect(container.querySelectorAll("button[title='edit']")).toHaveLength(1);
-    expect(container.querySelectorAll("button[title='delete']")).toHaveLength(1);
+    act(() =>
+      (container.querySelector("button[aria-haspopup='dialog']") as HTMLButtonElement).click()
+    );
+    expect(document.querySelectorAll("button[title='edit']")).toHaveLength(1);
+    expect(document.querySelectorAll("button[title='delete']")).toHaveLength(1);
 
     act(() => {
-      (container.querySelector("button[title='edit']") as HTMLButtonElement).click();
-      (container.querySelector("button[title='delete']") as HTMLButtonElement).click();
+      (document.querySelector("button[title='edit']") as HTMLButtonElement).click();
+      (document.querySelector("button[title='delete']") as HTMLButtonElement).click();
     });
     expect(onEdit).toHaveBeenCalledTimes(1);
     expect(onDelete).toHaveBeenCalledTimes(1);

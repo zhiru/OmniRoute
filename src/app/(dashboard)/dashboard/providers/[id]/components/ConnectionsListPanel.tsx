@@ -1,7 +1,7 @@
 "use client";
 
 import Icon from "@/shared/components/Icon";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { type ConnectionRowConnection } from "./ConnectionRow";
 import ConnectionRow from "./ConnectionRow";
@@ -12,9 +12,10 @@ import {
   DistributeProxiesButton,
   FilterPills,
   Input,
+  Select,
 } from "@/shared/components";
 import { pickDisplayValue } from "@/shared/utils/maskEmail";
-import { readBooleanToggle, providerCountText } from "../providerPageHelpers";
+import { readBooleanToggle, providerCountText, providerText } from "../providerPageHelpers";
 import { compareTr } from "@/shared/utils/turkishText";
 import type { CodexGlobalServiceMode } from "@/lib/providers/codexFastTier";
 import { supportsProviderQuota } from "@/shared/utils/providerQuotaVisibility";
@@ -186,6 +187,9 @@ export default function ConnectionsListPanel({
   t,
 }: ConnectionsListPanelProps) {
   const tc = useTranslations("common");
+  const [viewMode, setViewMode] = useState<"compact" | "detailed">("compact");
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
+  const effectivePageSize = providerId === "codex" ? pageSize : PAGE_SIZE;
   const sorted = [...connections].sort((a, b) => (a.priority || 0) - (b.priority || 0));
   const quotaSupported = supportsProviderQuota(providerId);
   const hasAnyTag = sorted.some((c) => c.providerSpecificData?.tag as string | undefined);
@@ -245,6 +249,15 @@ export default function ConnectionsListPanel({
     { value: "all", label: t("filterAll", "All") },
     { value: "active", label: t("filterActive", "Active") },
     { value: "error", label: t("filterError", "Error") },
+    ...(providerId === "codex"
+      ? [
+          { value: "inactive", label: providerText(t, "accountsInactive", "Inactive") },
+          {
+            value: "reset_credits",
+            label: providerText(t, "accountsWithResets", "With reset credits"),
+          },
+        ]
+      : []),
     { value: "banned", label: t("filterBanned", "Banned") },
     {
       value: "credits_exhausted",
@@ -255,6 +268,9 @@ export default function ConnectionsListPanel({
     healthFilter === "all"
       ? sorted
       : sorted.filter((c) => {
+          if (healthFilter === "inactive") return c.isActive === false;
+          if (healthFilter === "reset_credits")
+            return (quotaByConnectionId[c.id]?.bankedResetCredits ?? 0) > 0;
           if (healthFilter === "active") return isHealthy(c);
           if (healthFilter === "error")
             return (
@@ -266,16 +282,20 @@ export default function ConnectionsListPanel({
   // in-memory list (not just the current page).
   const filtered = filterConnectionsByQuery(accountSearch, healthFiltered);
 
-  const totalFilteredPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const totalFilteredPages = Math.max(1, Math.ceil(filtered.length / effectivePageSize));
   const clampedPage = Math.min(page, totalFilteredPages - 1);
-  const pageStart = clampedPage * PAGE_SIZE;
-  const pageEnd = pageStart + PAGE_SIZE;
+  const pageStart = clampedPage * effectivePageSize;
+  const pageEnd = pageStart + effectivePageSize;
 
   const accountSearchInput = (
     <Input
       type="text"
       value={accountSearch}
-      onChange={(e) => setAccountSearch(e.target.value)}
+      onChange={(e) => {
+        setAccountSearch(e.target.value);
+        setPage(0);
+        setSelectedIds(new Set());
+      }}
       placeholder={t("accountSearchPlaceholder", "Search accounts…")}
       aria-label={t("accountSearchPlaceholder", "Search accounts…")}
       icon="search"
@@ -294,6 +314,32 @@ export default function ConnectionsListPanel({
         setSelectedIds(new Set());
       }}
     />
+  );
+
+  const listControls = providerId === "codex" && (
+    <div className="flex flex-wrap items-end gap-3">
+      <Select
+        compact
+        label={providerText(t, "accountListView", "Account view")}
+        value={viewMode}
+        onChange={(e) => setViewMode(e.target.value as "compact" | "detailed")}
+        options={[
+          { value: "compact", label: providerText(t, "accountViewCompact", "Compact") },
+          { value: "detailed", label: providerText(t, "accountViewDetailed", "Detailed") },
+        ]}
+      />
+      <Select
+        compact
+        label={providerText(t, "accountPageSize", "Accounts per page")}
+        value={String(pageSize)}
+        onChange={(e) => {
+          setPageSize(Number(e.target.value));
+          setPage(0);
+          setSelectedIds(new Set());
+        }}
+        options={[10, 25, 50, 100].map((size) => ({ value: String(size), label: String(size) }))}
+      />
+    </div>
   );
 
   const paginationBar =
@@ -376,6 +422,7 @@ export default function ConnectionsListPanel({
             />
             {accountSearchInput}
             {filterPills}
+            {listControls}
           </div>
 
           {bulkActions}
@@ -391,6 +438,7 @@ export default function ConnectionsListPanel({
               <ConnectionRow
                 key={conn.id}
                 connection={conn}
+                codexViewMode={viewMode}
                 isOAuth={conn.authType === "oauth"}
                 isClaude={providerId === "claude"}
                 codexGlobalServiceMode={codexGlobalServiceMode}
@@ -548,6 +596,7 @@ export default function ConnectionsListPanel({
             />
             {accountSearchInput}
             {filterPills}
+            {listControls}
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-2">
@@ -590,6 +639,7 @@ export default function ConnectionsListPanel({
                   <ConnectionRow
                     key={conn.id}
                     connection={conn}
+                    codexViewMode={viewMode}
                     isOAuth={conn.authType === "oauth"}
                     isClaude={providerId === "claude"}
                     codexGlobalServiceMode={codexGlobalServiceMode}

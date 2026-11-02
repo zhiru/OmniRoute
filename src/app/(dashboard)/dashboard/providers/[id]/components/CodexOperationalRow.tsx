@@ -3,6 +3,7 @@
 import { useEffect, useId, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Badge, Button, Checkbox } from "@/shared/components";
+import CodexAccountActions from "./CodexAccountActions";
 import useEmailPrivacyStore from "@/store/emailPrivacyStore";
 import { pickDisplayValue } from "@/shared/utils/maskEmail";
 import { getCodexPlanLabel } from "../codexPlanLabel";
@@ -77,7 +78,8 @@ export default function CodexOperationalRow({
   const t = useTranslations("providers");
   const locale = useLocale();
   const emailsVisible = useEmailPrivacyStore((s) => s.emailsVisible);
-  const [expanded, setExpanded] = useState(false);
+  const [detailsOpen, setExpanded] = useState(false);
+  const expanded = props.codexViewMode === "detailed" || detailsOpen;
   const detailsId = useId();
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
@@ -122,6 +124,13 @@ export default function CodexOperationalRow({
             <p className="mt-1 text-xs text-text-muted">
               <span className="capitalize">{plan || "—"}</span>
               <span className="mx-2 text-border">/</span>#{connection.priority ?? "—"}
+              {visible && (quotaCache?.bankedResetCredits ?? 0) > 0 && (
+                <span className="ml-2 text-text-muted">
+                  {providerText(t, "resetCreditsAvailable", "{count} resets", {
+                    count: quotaCache!.bankedResetCredits!,
+                  })}
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -168,28 +177,19 @@ export default function CodexOperationalRow({
           );
         })}
         <div className="col-span-2 flex items-center justify-end gap-1 xl:col-span-1">
-          {visible && props.onRefreshQuota && (
+          <CodexAccountActions {...props} />
+          {props.codexViewMode !== "detailed" && (
             <Button
-              size="icon-sm"
+              size="sm"
               variant="ghost"
-              icon="refresh"
-              onClick={props.onRefreshQuota}
-              loading={props.quotaRefreshing}
-              disabled={props.quotaRefreshing}
-              aria-label={t("quotaRefresh")}
-              title={t("quotaRefresh")}
-            />
+              icon={expanded ? "expand_less" : "expand_more"}
+              aria-expanded={expanded}
+              aria-controls={detailsId}
+              onClick={() => setExpanded(!expanded)}
+            >
+              {detailsLabel}
+            </Button>
           )}
-          <Button
-            size="sm"
-            variant="ghost"
-            icon={expanded ? "expand_less" : "expand_more"}
-            aria-expanded={expanded}
-            aria-controls={detailsId}
-            onClick={() => setExpanded(!expanded)}
-          >
-            {detailsLabel}
-          </Button>
         </div>
         {shouldShowConnectionLastError(connection) && (
           <p className={`col-span-2 break-words text-xs xl:col-span-5 ${status.errorTextClass}`}>

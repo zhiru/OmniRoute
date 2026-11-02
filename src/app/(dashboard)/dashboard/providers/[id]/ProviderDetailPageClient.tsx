@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { providerText } from "./providerPageHelpers";
 import { Card, Button, CardSkeleton } from "@/shared/components";
 import ProviderTosNotice from "@/shared/components/ProviderTosNotice";
 import {
@@ -631,24 +630,10 @@ export default function ProviderDetailPageClient() {
       )}
       {!isUpstreamProxyProvider && (!isFreeNoAuth || providerSupportsPat) && (
         <Card>
-          {providerId === "codex" ? (
-            <details className="mb-5 rounded-lg border border-border px-4 py-3">
-              <summary className="cursor-pointer text-sm font-medium">
-                {providerText(t, "providerAdvancedControls", "Advanced provider settings")}
-              </summary>
-              <div className="mt-4">
-                <ProviderAccountRoutingCard
-                  providerKey={providerId}
-                  connectionCount={connections.length}
-                />
-              </div>
-            </details>
-          ) : (
-            <ProviderAccountRoutingCard
-              providerKey={providerId}
-              connectionCount={connections.length}
-            />
-          )}
+          <ProviderAccountRoutingCard
+            providerKey={providerId}
+            connectionCount={connections.length}
+          />
           <ConnectionsHeaderToolbar
             providerId={providerId}
             providerInfo={providerInfo}

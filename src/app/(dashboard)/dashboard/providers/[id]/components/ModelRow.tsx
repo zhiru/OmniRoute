@@ -21,6 +21,7 @@ import { providerText } from "../providerPageHelpers";
 import { Input as KitInput } from "@omniroute/ui-kit/input";
 import { Button, Checkbox, FilterPills } from "@/shared/components";
 import ModelComboBadge from "./ModelComboBadge";
+import ProviderActionsMenu from "./ProviderActionsMenu";
 import ModelCompatPopover from "./ModelCompatPopover";
 import ModelEndpointTagsEditor, { type ModelEndpointEditorInfo } from "./ModelEndpointTagsEditor";
 
@@ -403,100 +404,111 @@ export default function ModelRow({
           </span>
         )}
         <div className="ml-auto flex max-w-full flex-wrap items-center gap-1">
-          {onToggleHidden && testStatus === "error" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              icon="block"
-              loading={!!togglingHidden}
-              onClick={() => onToggleHidden(model.id, true)}
-              disabled={togglingHidden}
-              className="h-6 min-h-0 gap-1 rounded px-1 text-[11px] text-error"
-              title={providerText(
-                t,
-                "blacklistModelTooltip",
-                "Blacklist this model — hide it from the catalog"
-              )}
-            >
-              <span>{providerText(t, "blacklistModel", "Blacklist")}</span>
-            </Button>
-          )}
-          {onTestModel && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => onTestModel(model.id, fullModel)}
-              disabled={testingModel}
-              className={`size-6 min-h-6 rounded ${testStatus === "ok" ? "text-success" : testStatus === "quota" ? "text-warning" : testStatus === "error" ? "text-error" : "text-text-muted"}`}
-              title={
-                testingModel
-                  ? t("testingModel")
-                  : testStatus === "ok"
-                    ? "OK"
-                    : testStatus === "quota"
-                      ? t("modelTestQuotaTooltip")
-                      : testStatus === "error"
-                        ? providerText(t, "errorShort", "Error")
-                        : t("testModel")
+          <ProviderActionsMenu enabled={provider === "codex"}>
+            {onToggleHidden && testStatus === "error" && (
+              <Button
+                variant="ghost"
+                size="sm"
+                icon="block"
+                loading={!!togglingHidden}
+                onClick={() => onToggleHidden(model.id, true)}
+                disabled={togglingHidden}
+                className="h-6 min-h-0 gap-1 rounded px-1 text-[11px] text-error"
+                title={providerText(
+                  t,
+                  "blacklistModelTooltip",
+                  "Blacklist this model — hide it from the catalog"
+                )}
+              >
+                <span>{providerText(t, "blacklistModel", "Blacklist")}</span>
+              </Button>
+            )}
+            {onTestModel && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => onTestModel(model.id, fullModel)}
+                disabled={testingModel}
+                className={`size-6 min-h-6 rounded ${testStatus === "ok" ? "text-success" : testStatus === "quota" ? "text-warning" : testStatus === "error" ? "text-error" : "text-text-muted"}`}
+                title={
+                  testingModel
+                    ? t("testingModel")
+                    : testStatus === "ok"
+                      ? "OK"
+                      : testStatus === "quota"
+                        ? t("modelTestQuotaTooltip")
+                        : testStatus === "error"
+                          ? providerText(t, "errorShort", "Error")
+                          : t("testModel")
+                }
+                aria-label={
+                  testingModel
+                    ? t("testingModel")
+                    : testStatus === "ok"
+                      ? "OK"
+                      : testStatus === "quota"
+                        ? t("modelTestQuotaTooltip")
+                        : testStatus === "error"
+                          ? providerText(t, "errorShort", "Error")
+                          : t("testModel")
+                }
+              >
+                {testingModel ? (
+                  <Icon name="progress_activity" size={14} className="animate-spin" />
+                ) : testStatus === "ok" ? (
+                  <Icon name="check_circle" size={14} />
+                ) : testStatus === "quota" ? (
+                  <Icon name="warning" size={14} />
+                ) : testStatus === "error" ? (
+                  <Icon name="error" size={14} />
+                ) : (
+                  <Icon name="play_circle" size={14} />
+                )}
+                {provider === "codex" && <span>{t("testModel")}</span>}
+              </Button>
+            )}
+            {onToggleHidden && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                icon={isHidden ? "visibility_off" : "visibility"}
+                onClick={() => onToggleHidden(model.id, !isHidden)}
+                disabled={togglingHidden}
+                className="size-6 min-h-6 rounded text-text-muted"
+                title={
+                  isHidden
+                    ? providerText(t, "showModel", "Show model")
+                    : providerText(t, "hideModel", "Hide model")
+                }
+                aria-label={
+                  isHidden
+                    ? providerText(t, "showModel", "Show model")
+                    : providerText(t, "hideModel", "Hide model")
+                }
+              >
+                {provider === "codex" && (
+                  <span>
+                    {isHidden
+                      ? providerText(t, "showModel", "Show model")
+                      : providerText(t, "hideModel", "Hide model")}
+                  </span>
+                )}
+              </Button>
+            )}
+            <ModelCompatPopover
+              t={t}
+              providerId={provider}
+              modelId={model.id}
+              effectiveModelNormalize={(p) => effectiveModelNormalize(model.id, p)}
+              effectiveModelPreserveDeveloper={(p) => effectiveModelPreserveDeveloper(model.id, p)}
+              getUpstreamHeadersRecord={getUpstreamHeadersRecord}
+              onCompatPatch={(protocol, payload) =>
+                saveModelCompatFlags(model.id, { compatByProtocol: { [protocol]: payload } })
               }
-              aria-label={
-                testingModel
-                  ? t("testingModel")
-                  : testStatus === "ok"
-                    ? "OK"
-                    : testStatus === "quota"
-                      ? t("modelTestQuotaTooltip")
-                      : testStatus === "error"
-                        ? providerText(t, "errorShort", "Error")
-                        : t("testModel")
-              }
-            >
-              {testingModel ? (
-                <Icon name="progress_activity" size={14} className="animate-spin" />
-              ) : testStatus === "ok" ? (
-                <Icon name="check_circle" size={14} />
-              ) : testStatus === "quota" ? (
-                <Icon name="warning" size={14} />
-              ) : testStatus === "error" ? (
-                <Icon name="error" size={14} />
-              ) : (
-                <Icon name="play_circle" size={14} />
-              )}
-            </Button>
-          )}
-          {onToggleHidden && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              icon={isHidden ? "visibility_off" : "visibility"}
-              onClick={() => onToggleHidden(model.id, !isHidden)}
-              disabled={togglingHidden}
-              className="size-6 min-h-6 rounded text-text-muted"
-              title={
-                isHidden
-                  ? providerText(t, "showModel", "Show model")
-                  : providerText(t, "hideModel", "Hide model")
-              }
-              aria-label={
-                isHidden
-                  ? providerText(t, "showModel", "Show model")
-                  : providerText(t, "hideModel", "Hide model")
-              }
-            ></Button>
-          )}
-          <ModelCompatPopover
-            t={t}
-            providerId={provider}
-            modelId={model.id}
-            effectiveModelNormalize={(p) => effectiveModelNormalize(model.id, p)}
-            effectiveModelPreserveDeveloper={(p) => effectiveModelPreserveDeveloper(model.id, p)}
-            getUpstreamHeadersRecord={getUpstreamHeadersRecord}
-            onCompatPatch={(protocol, payload) =>
-              saveModelCompatFlags(model.id, { compatByProtocol: { [protocol]: payload } })
-            }
-            showDeveloperToggle={showDeveloperToggle}
-            disabled={compatDisabled}
-          />
+              showDeveloperToggle={showDeveloperToggle}
+              disabled={compatDisabled}
+            />
+          </ProviderActionsMenu>
         </div>
       </div>
       {/* Line 3: endpoint capability tags (#16929) wrap freely, so line 2 stays one row. */}
