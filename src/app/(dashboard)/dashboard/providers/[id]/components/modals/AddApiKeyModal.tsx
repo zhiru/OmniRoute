@@ -3,7 +3,6 @@
 import Icon from "@/shared/components/Icon";
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { getErrorMessage } from "@/shared/utils/api";
 import {
   Button,
   Badge,
@@ -272,33 +271,28 @@ export default function AddApiKeyModal({
     setValidating(true);
     setSaveError(null);
     try {
-      const res = await fetch(
-        provider === "anthropic" ? "/api/providers/anthropic/validate" : "/api/providers/validate",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            provider,
-            apiKey: resolveCredentialInput(),
-            validationModelId: formData.validationModelId || undefined,
-            customUserAgent: formData.customUserAgent.trim() || undefined,
-            baseUrl: formData.baseUrl.trim() || undefined,
-            region: isAwsPolly
-              ? formData.region.trim() || "us-east-1"
-              : showsRegion
-                ? formData.region.trim() || defaultRegion
-                : undefined,
-            accessKeyId: isAwsPolly ? formData.awsAccessKeyId.trim() || undefined : undefined,
-            sessionToken: isAwsPolly ? formData.awsSessionToken.trim() || undefined : undefined,
-            cx: formData.cx.trim() || undefined,
-            runtimeKey: isChatGptWebCodex ? formData.runtimeKey.trim() || undefined : undefined,
-            tunnelId: isChatGptWebCodex ? formData.tunnelId.trim() || undefined : undefined,
-            connectorName: isChatGptWebCodex
-              ? formData.connectorName.trim() || undefined
+      const res = await fetch("/api/providers/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          provider,
+          apiKey: resolveCredentialInput(),
+          validationModelId: formData.validationModelId || undefined,
+          customUserAgent: formData.customUserAgent.trim() || undefined,
+          baseUrl: formData.baseUrl.trim() || undefined,
+          region: isAwsPolly
+            ? formData.region.trim() || "us-east-1"
+            : showsRegion
+              ? formData.region.trim() || defaultRegion
               : undefined,
-          }),
-        }
-      );
+          accessKeyId: isAwsPolly ? formData.awsAccessKeyId.trim() || undefined : undefined,
+          sessionToken: isAwsPolly ? formData.awsSessionToken.trim() || undefined : undefined,
+          cx: formData.cx.trim() || undefined,
+          runtimeKey: isChatGptWebCodex ? formData.runtimeKey.trim() || undefined : undefined,
+          tunnelId: isChatGptWebCodex ? formData.tunnelId.trim() || undefined : undefined,
+          connectorName: isChatGptWebCodex ? formData.connectorName.trim() || undefined : undefined,
+        }),
+      });
       const data = await res.json();
       const ok = !!data.valid;
       const unsupported = !!data.unsupported;
@@ -307,11 +301,9 @@ export default function AddApiKeyModal({
         ok && data.capabilities && typeof data.capabilities === "object" ? data.capabilities : null
       );
       // #5088: surface backend reason (e.g. TLS/EACCES) instead of bare "invalid".
-      if (!ok && !unsupported && (!res.ok || data.error)) {
-        setSaveError(
-          validationErrorMessage(data.error) ||
-            getErrorMessage(data, res.status, credentialValidationFailedMessage)
-        );
+      const reason = validationErrorMessage(data.error);
+      if (!ok && !unsupported && reason) {
+        setSaveError(reason);
       }
     } catch {
       setValidationResult("failed");
@@ -365,42 +357,36 @@ export default function AddApiKeyModal({
         try {
           setValidating(true);
           setValidationResult(null);
-          const res = await fetch(
-            provider === "anthropic"
-              ? "/api/providers/anthropic/validate"
-              : "/api/providers/validate",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                provider,
-                apiKey: credentialInput,
-                validationModelId: formData.validationModelId || undefined,
-                customUserAgent: formData.customUserAgent.trim() || undefined,
-                baseUrl: formData.baseUrl.trim() || undefined,
-                region: isAwsPolly
-                  ? formData.region.trim() || "us-east-1"
-                  : showsRegion
-                    ? formData.region.trim() || defaultRegion
-                    : undefined,
-                accessKeyId: isAwsPolly ? formData.awsAccessKeyId.trim() || undefined : undefined,
-                sessionToken: isAwsPolly ? formData.awsSessionToken.trim() || undefined : undefined,
-                cx: formData.cx.trim() || undefined,
-                runtimeKey: isChatGptWebCodex ? formData.runtimeKey.trim() || undefined : undefined,
-                tunnelId: isChatGptWebCodex ? formData.tunnelId.trim() || undefined : undefined,
-                connectorName: isChatGptWebCodex
-                  ? formData.connectorName.trim() || undefined
+          const res = await fetch("/api/providers/validate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              provider,
+              apiKey: credentialInput,
+              validationModelId: formData.validationModelId || undefined,
+              customUserAgent: formData.customUserAgent.trim() || undefined,
+              baseUrl: formData.baseUrl.trim() || undefined,
+              region: isAwsPolly
+                ? formData.region.trim() || "us-east-1"
+                : showsRegion
+                  ? formData.region.trim() || defaultRegion
                   : undefined,
-              }),
-            }
-          );
+              accessKeyId: isAwsPolly ? formData.awsAccessKeyId.trim() || undefined : undefined,
+              sessionToken: isAwsPolly ? formData.awsSessionToken.trim() || undefined : undefined,
+              cx: formData.cx.trim() || undefined,
+              runtimeKey: isChatGptWebCodex ? formData.runtimeKey.trim() || undefined : undefined,
+              tunnelId: isChatGptWebCodex ? formData.tunnelId.trim() || undefined : undefined,
+              connectorName: isChatGptWebCodex
+                ? formData.connectorName.trim() || undefined
+                : undefined,
+            }),
+          });
           const data = await res.json();
           isValid = !!data.valid;
           isUnsupported = !!data.unsupported;
-          if (!isValid && (!res.ok || data.error)) {
-            validationError =
-              validationErrorMessage(data.error) ||
-              getErrorMessage(data, res.status, credentialValidationFailedMessage);
+          const submitReason = validationErrorMessage(data.error);
+          if (!isValid && submitReason) {
+            validationError = submitReason;
           }
           if (
             isValid &&
