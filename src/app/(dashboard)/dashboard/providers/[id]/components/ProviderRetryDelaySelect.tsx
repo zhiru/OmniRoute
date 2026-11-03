@@ -152,11 +152,11 @@ export default function ProviderRetryDelaySelect({ providerId }: ProviderRetryDe
 
   return (
     <Card>
-      <div className="flex items-center gap-3">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center">
         <div className="inline-flex shrink-0 items-center justify-center w-10 h-10 rounded-full bg-warning/10 text-warning">
           <Icon name="timer" size={20} />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0">
           <h2 className="text-sm font-semibold">{title}</h2>
           <p className="text-sm text-text-muted">
             {providerText(
@@ -169,7 +169,7 @@ export default function ProviderRetryDelaySelect({ providerId }: ProviderRetryDe
         <Select
           aria-label={title}
           compact
-          className="shrink-0"
+          className="col-span-2 w-full sm:col-span-1 sm:w-auto"
           value={selected}
           disabled={!loaded || saving}
           options={[
