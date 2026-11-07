@@ -36,7 +36,7 @@ Completion: selected scope, target, ownership and permitted actions are explicit
 ## 2. Build the diagnostic board
 
 Pin the approved live base and record the ordered PR heads. Use one owned branch
-and worktree under `.claude/worktrees/`, with active hooks and dependencies
+and worktree under `.worktrees/`, with active hooks and dependencies
 matching the candidate lockfile. Verify dependency identity instead of assuming a
 copy from the shared checkout is current. Do not install over shared hard links.
 

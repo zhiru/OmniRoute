@@ -121,7 +121,7 @@ if [ "$PLAN" = "1" ]; then
   echo "[merge-train] PLAN (${MODE}) — base=origin/${BASE} prs=${PRS[*]}"
   echo "[merge-train]    0. PREFLIGHT (fail-fast, before any worktree): node_modules/.bin/tsc executable;"
   echo "[merge-train]       no stray node_modules/node_modules; node_modules/.bin/bun --version works"
-  echo "[merge-train] 1. worktree add .claude/worktrees/merge-train-<ts> --detach origin/${BASE}"
+  echo "[merge-train] 1. worktree add .worktrees/merge-train-<ts> --detach origin/${BASE}"
   for N in "${PRS[@]}"; do
     echo "[merge-train] 2. fetch origin pull/${N}/head && merge (conflict → EJECT #${N}, continue)"
   done
@@ -180,7 +180,7 @@ preflight_env() {
 preflight_env
 
 TS="$(date +%Y%m%d-%H%M%S)"
-WT="$ROOT/.claude/worktrees/merge-train-$TS"
+WT="$ROOT/.worktrees/merge-train-$TS"
 LOG="$WT-suite.log"
 
 BASE_WT="$WT-base"

@@ -94,7 +94,7 @@ if [ -z "$BASE" ]; then
   echo "base não informada — usando a release ativa: $BASE"
 fi
 
-DIR=".claude/worktrees/${BRANCH##*/}"
+DIR=".worktrees/${BRANCH##*/}"
 [ -e "$DIR" ] && { echo "já existe: $DIR" >&2; exit 1; }
 
 git fetch origin "$BASE" --quiet
