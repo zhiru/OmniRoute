@@ -9,16 +9,16 @@ to Claude Code — operational refinements of rules already defined in `AGENTS.m
 
 ## Worktree isolation — Claude Code specifics
 
-The full mandatory worktree protocol (base-branch confirmation, `.claude/worktrees/` canonical
+The full mandatory worktree protocol (base-branch confirmation, `.worktrees/` canonical
 path, `cp -al` node_modules, teardown rules) is in
 [`docs/ops/WORKTREE_ISOLATION.md`](docs/ops/WORKTREE_ISOLATION.md) (summarized in `AGENTS.md` →
 Git Workflow → "Worktree isolation"). Claude-Code-specific points:
 
 - Confirm the base branch with the operator via `AskUserQuestion` (Hard Rule #19) unless they
   already told you.
-- Prefer the native `EnterWorktree` tool — it already creates worktrees under
-  `.claude/worktrees/` (the canonical path). Create the worktree with the documented `git
-worktree add` command, then call `EnterWorktree` with its `path`.
+- Create the worktree with the documented `git worktree add` command under `.worktrees/`, then
+  call `EnterWorktree` with its `path`. Only a worktree the desktop app itself creates for a
+  session may sit in `.claude/worktrees/` (also excluded from the build); never create one there.
 
 ## Cross-session safety — Claude Code specifics
 

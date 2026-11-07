@@ -286,6 +286,7 @@ const nextConfig = {
       "**/tests/**",
       "**/logs/**",
       "**/.claude/**",
+      "**/.worktrees/**",
       "**/.opencode/**",
       "**/.scratch/**",
       "**/.agents/**",

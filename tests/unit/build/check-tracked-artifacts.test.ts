@@ -103,6 +103,11 @@ test("checkTrackedArtifacts: root underscore FILE is flagged; nested underscore 
   assert.deepEqual(nested, []);
 });
 
+test("checkTrackedArtifacts: .worktrees/ prefix is flagged", () => {
+  const result = checkTrackedArtifacts([".worktrees/fix-123/src/app.ts"]);
+  assert.equal(result.length, 1);
+});
+
 test("checkTrackedArtifacts: .claude/worktrees/ prefix is flagged", () => {
   const result = checkTrackedArtifacts([".claude/worktrees/fix-123/src/app.ts"]);
   assert.equal(result.length, 1);
