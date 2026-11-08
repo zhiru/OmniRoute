@@ -1,6 +1,7 @@
 "use client";
 
 import Icon from "@/shared/components/Icon";
+import { Spinner } from "@/shared/components/Loading";
 /**
  * ModelRow — Issue #3501 Phase 1e
  *
@@ -497,7 +498,7 @@ export default function ModelRow({
               }
             >
               {testingModel ? (
-                <Icon name="progress_activity" size={14} className="animate-spin" />
+                <Spinner decorative size="xs" />
               ) : testStatus === "ok" ? (
                 <Icon name="check_circle" size={14} />
               ) : testStatus === "quota" ? (
