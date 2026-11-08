@@ -13,7 +13,7 @@
 //   - _tasks (exato E prefixo) — repo git SEPARADO; o blob symlink rastreado causou DOIS
 //     wipes do diretório real (2026-08-08 e 2026-08-10; Hard Rule #23)
 //   - _references/ _mono_repo/ _ideia/ _cache/ — diretórios privados de raiz (regra /_*/)
-//   - .claude/worktrees/ — worktrees de sessão nunca entram no repo
+//   - .worktrees/ .claude/worktrees/ — worktrees de sessão nunca entram no repo
 //   - docs/superpowers/ — artefatos de planejamento vivem em _tasks/, não em docs/
 //   - .eslintcache* .fakebin-* dist/ .build/ .artifacts/ logs/ — caches e outputs gerados
 //
@@ -30,6 +30,7 @@ const FORBIDDEN_PREFIXES = [
   // "_" na raiz é GENÉRICO (regra abaixo em checkTrackedArtifacts): _tasks/, _references/,
   // _mono_repo/, _ideia/, _cache/ e qualquer _<novo>/ futuro — dirs privados, alguns com
   // repo git próprio (_tasks). Nunca rastrear nada dentro deles (Hard Rule #23).
+  ".worktrees/",
   ".claude/worktrees/",
   "docs/superpowers/",
   ".eslintcache", // matches .eslintcache, .eslintcache-complexity, .eslintcache-probe, …

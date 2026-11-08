@@ -84,7 +84,7 @@ function rowProps(overrides: Partial<ConnectionRowProps> = {}): ConnectionRowPro
   };
 }
 
-function refreshButtons(el: HTMLElement) {
+function refreshButtons(el: ParentNode) {
   return Array.from(el.querySelectorAll<HTMLButtonElement>("button")).filter(
     (b) =>
       b.textContent?.includes("Refresh current quota") || b.textContent?.includes("Checking quota…")
@@ -166,7 +166,47 @@ function listProps(tagged: boolean): Parameters<typeof ConnectionsListPanel>[0] 
   };
 }
 
+async function openAccountActions(el: HTMLElement) {
+  const trigger = el.querySelector<HTMLButtonElement>("button[aria-haspopup='dialog']");
+  expect(trigger).not.toBeNull();
+  await act(async () => trigger!.click());
+  return document.querySelector<HTMLElement>("[role='dialog']")!;
+}
+
 describe("#16161 quota row action", () => {
+  it.each(["list", "cards", "table"] as const)(
+    "keeps one diagnostic refresh action with details expanded in %s",
+    async (codexViewMode) => {
+      const click = vi.fn();
+      const row = (
+        <ConnectionRow
+          {...rowProps({
+            codexViewMode,
+            onRefreshQuota: click,
+            quotaRefreshState: { status: "partial", missingWindows: ["weekly"] },
+          })}
+        />
+      );
+      const el = await mount(
+        codexViewMode === "table" ? (
+          <table>
+            <tbody>{row}</tbody>
+          </table>
+        ) : (
+          row
+        )
+      );
+      await act(async () => {
+        el.querySelector<HTMLButtonElement>("button[aria-controls]:not([aria-haspopup])")!.click();
+      });
+      const menu = await openAccountActions(el);
+      expect(refreshButtons(document)).toHaveLength(1);
+      expect(menu.querySelector("[role='status']")?.textContent).toContain("7d quota unavailable");
+      act(() => refreshButtons(menu)[0].click());
+      expect(click).toHaveBeenCalledTimes(1);
+    }
+  );
+
   it.each([true, false])(
     "A10 provides exactly one Codex action when quotaVisible=%s",
     async (quotaVisible) => {
@@ -176,7 +216,8 @@ describe("#16161 quota row action", () => {
           {...rowProps({ connection: { ...account, quotaVisible }, onRefreshQuota: click })}
         />
       );
-      const buttons = refreshButtons(el);
+      const menu = await openAccountActions(el);
+      const buttons = refreshButtons(menu);
       expect(buttons).toHaveLength(1);
       expect(buttons[0].title).toContain("without spending reset credits");
       expect(el.querySelector("button[title='Refresh usage']")).toBeNull();
@@ -197,11 +238,12 @@ describe("#16161 quota row action", () => {
         })}
       />
     );
-    const buttons = refreshButtons(el);
+    const menu = await openAccountActions(el);
+    const buttons = refreshButtons(menu);
     expect(buttons).toHaveLength(1);
     expect(buttons[0].disabled).toBe(true);
     expect(buttons[0].getAttribute("aria-busy")).toBe("true");
-    expect(el.querySelector("[role='status']")?.textContent).toContain("Checking quota");
+    expect(document.querySelector("[role='status']")?.textContent).toContain("Checking quota");
     act(() => buttons[0].click());
     expect(click).not.toHaveBeenCalled();
   });
@@ -210,14 +252,15 @@ describe("#16161 quota row action", () => {
     "A10 renders a safe %s result without claiming recovery",
     async (status) => {
       const el = await mount(<ConnectionRow {...rowProps({ quotaRefreshState: { status } })} />);
-      expect(el.querySelector("[role='status']")?.textContent).toContain(
+      await openAccountActions(el);
+      expect(document.querySelector("[role='status']")?.textContent).toContain(
         status === "stale"
           ? "old quota"
           : status === "error"
             ? "check failed"
             : "determined by the server"
       );
-      expect(el.textContent).not.toContain("recovered");
+      expect(document.body.textContent).not.toContain("recovered");
     }
   );
 
@@ -229,7 +272,8 @@ describe("#16161 quota row action", () => {
           {...rowProps({ quotaRefreshState: { status: "partial", missingWindows: [missing] } })}
         />
       );
-      expect(el.querySelector("[role='status']")?.textContent).toContain(
+      await openAccountActions(el);
+      expect(document.querySelector("[role='status']")?.textContent).toContain(
         `${missing === "session" ? "5h" : "7d"} quota unavailable`
       );
     }
@@ -241,7 +285,8 @@ describe("#16161 quota row action", () => {
         {...rowProps({ quotaRefreshState: { status: "fresh", connectionsRefreshFailed: true } })}
       />
     );
-    expect(el.querySelector("[role='status']")?.textContent).toContain(
+    await openAccountActions(el);
+    expect(document.querySelector("[role='status']")?.textContent).toContain(
       "account list could not be refreshed"
     );
   });
@@ -253,9 +298,10 @@ describe("#16161 quota row action", () => {
       const props = listProps(tagged);
       props.handleRefreshQuota = click;
       const el = await mount(<ConnectionsListPanel {...props} />);
-      expect(el.querySelector("[role='status']")?.textContent).toContain("old quota");
-      expect(refreshButtons(el)).toHaveLength(1);
-      act(() => refreshButtons(el)[0].click());
+      await openAccountActions(el);
+      expect(document.querySelector("[role='status']")?.textContent).toContain("old quota");
+      expect(refreshButtons(document)).toHaveLength(1);
+      act(() => refreshButtons(document)[0].click());
       expect(click).toHaveBeenCalledExactlyOnceWith("a");
     }
   );

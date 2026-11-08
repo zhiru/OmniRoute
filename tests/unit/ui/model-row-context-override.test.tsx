@@ -11,7 +11,8 @@
  */
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
-import { describe, it, expect, vi, afterEach } from "vitest";
+import type { ModelRowProps } from "@/app/(dashboard)/dashboard/providers/[id]/components/ModelRow";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 
 vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
@@ -43,12 +44,12 @@ const setInputValue = (input: HTMLInputElement, value: string) => {
 
 const containers: Array<{ root: ReturnType<typeof createRoot>; el: HTMLDivElement }> = [];
 
-function mount(props: Record<string, unknown> = {}) {
+function mount(props: Partial<ModelRowProps> = {}) {
   const el = document.createElement("div");
   document.body.appendChild(el);
   const root = createRoot(el);
   act(() => {
-    root.render(
+    const row = (
       <ModelRow
         model={{ id: "gpt-5", name: "GPT 5", source: "system" }}
         fullModel="openai/gpt-5"
@@ -59,8 +60,17 @@ function mount(props: Record<string, unknown> = {}) {
         effectiveModelPreserveDeveloper={() => false}
         saveModelCompatFlags={noop}
         getUpstreamHeadersRecord={() => ({})}
-        {...(props as any)}
+        {...props}
       />
+    );
+    root.render(
+      props.collectionView === "table" ? (
+        <table>
+          <tbody>{row}</tbody>
+        </table>
+      ) : (
+        row
+      )
     );
   });
   containers.push({ root, el });
@@ -80,6 +90,10 @@ const pressKey = async (input: HTMLInputElement, key: string) => {
     input.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
   });
 };
+
+beforeEach(() => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+});
 
 afterEach(() => {
   for (const { root, el } of containers.splice(0)) {
@@ -170,4 +184,51 @@ describe("catalog ModelRow context-window override", () => {
     expect(el.querySelector("input")).toBeNull();
     expect(el.textContent).toContain("8,000");
   });
+});
+
+describe("Codex model actions across collection views", () => {
+  it.each(["list", "cards", "table"] as const)(
+    "keeps copy, visibility, testing and context editing usable in %s",
+    async (collectionView) => {
+      const onCopy = vi.fn();
+      const onTestModel = vi.fn(async () => {});
+      const onToggleHidden = vi.fn(async () => {});
+      const onSaveContextWindowOverride = vi.fn(async () => {});
+      const el = mount({
+        provider: "codex",
+        fullModel: "codex/gpt-5",
+        collectionView,
+        contextWindowOverride: 128000,
+        onSaveContextWindowOverride,
+        onCopy,
+        onTestModel,
+        onToggleHidden,
+      });
+      expect(overrideBadge(el)?.textContent).toBe("128,000");
+      if (collectionView === "table") expect(el.querySelectorAll("td")).toHaveLength(3);
+      act(() => el.querySelector<HTMLButtonElement>('button[title="copyModel"]')!.click());
+      expect(onCopy).toHaveBeenCalledWith("codex/gpt-5", "model-gpt-5");
+      expect(overrideButton(el)).toBeUndefined();
+      await act(async () => {
+        el.querySelector<HTMLButtonElement>("button[aria-haspopup='dialog']")!.click();
+      });
+      const menu = document.querySelector<HTMLElement>("[role='dialog']")!;
+      expect(menu).not.toBeNull();
+      await act(async () => {
+        menu.querySelector<HTMLButtonElement>('button[title="testModel"]')!.click();
+        menu.querySelector<HTMLButtonElement>('button[title="Hide model"]')!.click();
+      });
+      expect(onTestModel).toHaveBeenCalledWith("gpt-5", "codex/gpt-5");
+      expect(onToggleHidden).toHaveBeenCalledWith("gpt-5", true);
+      await act(async () => overrideButton(menu)!.click());
+      const input = el.querySelector<HTMLInputElement>(
+        'input[aria-label="contextWindowOverrideLabel"]'
+      )!;
+      expect(input.value).toBe("128000");
+      await act(async () => setInputValue(input, "200000"));
+      await pressKey(input, "Enter");
+      expect(onSaveContextWindowOverride).toHaveBeenCalledWith("gpt-5", 200000);
+      expect(el.querySelector("input")).toBeNull();
+    }
+  );
 });
