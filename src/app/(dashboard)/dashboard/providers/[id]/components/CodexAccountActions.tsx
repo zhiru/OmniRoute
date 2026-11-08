@@ -6,6 +6,7 @@ import type { ConnectionRowProps } from "./connectionRowTypes";
 import ProviderActionsMenu from "./ProviderActionsMenu";
 import CodexResetCreditsAction from "./CodexResetCreditsAction";
 import CodexPingNowButton from "./CodexPingNowButton";
+import ConnectionQuotaRefreshButton from "./ConnectionQuotaRefreshButton";
 
 export default function CodexAccountActions(props: ConnectionRowProps) {
   const t = useTranslations("providers");
@@ -13,17 +14,12 @@ export default function CodexAccountActions(props: ConnectionRowProps) {
   const disabled = connection.isActive === false;
   return (
     <ProviderActionsMenu>
-      {connection.quotaVisible !== false && props.onRefreshQuota && (
-        <Button
-          size="sm"
-          variant="ghost"
-          icon="refresh"
-          onClick={props.onRefreshQuota}
-          loading={props.quotaRefreshing}
-          disabled={props.quotaRefreshing}
-        >
-          {t("quotaRefresh")}
-        </Button>
+      {props.onRefreshQuota && (
+        <ConnectionQuotaRefreshButton
+          refreshing={props.quotaRefreshing}
+          state={props.quotaRefreshState}
+          onRefresh={props.onRefreshQuota}
+        />
       )}
       {connection.quotaVisible !== false && (
         <CodexResetCreditsAction
