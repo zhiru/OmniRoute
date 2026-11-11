@@ -259,7 +259,7 @@ export function ModelVisibilityToolbar({
   if (collectionControls)
     return (
       <>
-        <div className="mb-3 flex flex-wrap items-start gap-3 rounded-xl border border-border bg-surface p-3">
+        <div className="mb-3 grid grid-cols-1 items-center gap-3 rounded-xl border border-border bg-surface p-3 lg:grid-cols-[minmax(0,1fr)_auto_auto]">
           {search}
           <details className="relative rounded-lg border border-border px-3 py-2 text-sm">
             <summary className="cursor-pointer font-medium">
@@ -396,7 +396,7 @@ export default function ModelRow({
         onClick={() => onCopy(fullModel, `model-${model.id}`)}
         className={
           provider === "codex"
-            ? "absolute right-0 top-0 rounded p-0.5 size-6 min-h-6 text-text-muted"
+            ? `absolute ${collectionView === "cards" ? "right-8" : "right-0"} top-0 rounded p-0.5 size-6 min-h-6 text-text-muted`
             : "absolute right-2 top-2 rounded p-0.5 size-6 min-h-6 text-text-muted"
         }
         title={t("copyModel")}
@@ -440,7 +440,13 @@ export default function ModelRow({
           )}
         </span>
       )}
-      <div className="ml-auto flex max-w-full flex-wrap items-center gap-1">
+      <div
+        className={
+          provider === "codex" && collectionView === "cards"
+            ? "absolute right-3 top-3 z-10"
+            : "ml-auto flex max-w-full flex-wrap items-center gap-1"
+        }
+      >
         <ProviderActionsMenu enabled={provider === "codex"}>
           {onToggleHidden && testStatus === "error" && (
             <Button

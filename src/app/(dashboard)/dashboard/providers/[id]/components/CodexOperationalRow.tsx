@@ -174,7 +174,7 @@ export default function CodexOperationalRow({
   });
   const actions = (
     <div className="col-span-2 flex items-center justify-end gap-1 xl:col-span-1">
-      <CodexAccountActions {...props} />
+      {props.codexViewMode !== "cards" && <CodexAccountActions {...props} />}
       <Button
         size="sm"
         variant="ghost"
@@ -231,14 +231,19 @@ export default function CodexOperationalRow({
     );
   const cards = props.codexViewMode === "cards";
   return (
-    <div className={`min-w-0 ${props.isSelected ? "bg-primary/5" : "bg-surface"}`}>
+    <div className={`relative min-w-0 ${props.isSelected ? "bg-primary/5" : "bg-surface"}`}>
+      {cards && (
+        <div className="absolute right-3 top-3 z-10">
+          <CodexAccountActions {...props} />
+        </div>
+      )}
       <div
         className={`grid grid-cols-2 items-center gap-x-5 gap-y-3 px-4 py-3 ${cards ? "" : "xl:grid-cols-[minmax(180px,1.6fr)_minmax(110px,.8fr)_minmax(150px,1fr)_minmax(150px,1fr)_auto]"}`}
       >
         {cells.map((cell, index) => (
           <div
             key={index}
-            className={`min-w-0 ${index === 4 ? (cards ? "col-span-2" : "col-span-2 xl:col-span-1") : cards && (index === 0 || index === 1) ? "col-span-2" : ""}`}
+            className={`min-w-0 ${index === 4 ? (cards ? "col-span-2" : "col-span-2 xl:col-span-1") : cards && index === 0 ? "col-span-2 pr-10" : cards && index === 1 ? "col-span-2" : ""}`}
           >
             {cell}
           </div>

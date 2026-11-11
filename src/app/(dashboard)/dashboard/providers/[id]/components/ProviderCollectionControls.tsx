@@ -22,7 +22,7 @@ export function CollectionViewControls({
 }) {
   const t = useTranslations("providers");
   return (
-    <div className="flex shrink-0 flex-wrap items-center gap-2">
+    <div className="flex shrink-0 flex-wrap items-center gap-2 lg:flex-nowrap">
       <div
         role="group"
         aria-label={providerText(t, "collectionView", "View")}
@@ -50,7 +50,7 @@ export function CollectionViewControls({
       {view === "cards" && (
         <Select
           compact
-          className="!w-auto"
+          className="!flex !w-auto !flex-nowrap !justify-start whitespace-nowrap"
           label={providerText(t, "cardsPerRow", "Cards per row")}
           value={String(columns)}
           onChange={(e) => onColumnsChange(Number(e.target.value))}
