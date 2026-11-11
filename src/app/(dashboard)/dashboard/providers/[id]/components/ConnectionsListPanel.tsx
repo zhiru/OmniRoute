@@ -198,13 +198,13 @@ export default function ConnectionsListPanel({
   const [pageSize, setPageSize] = useState<CollectionPageSize>(PAGE_SIZE);
   const [columns, setColumns] = useState(3);
   const [sortOrder, setSortOrder] = useState("priority");
-  const effectivePageSize =
-    providerId === "codex"
-      ? pageSize === "all"
-        ? Math.max(1, connections.length)
-        : pageSize
-      : PAGE_SIZE;
-  const RowsLayout = providerId === "codex" ? CollectionLayout : "div";
+  const usesCollectionLayout = providerId === "codex" || providerId === "claude";
+  const effectivePageSize = usesCollectionLayout
+    ? pageSize === "all"
+      ? Math.max(1, connections.length)
+      : pageSize
+    : PAGE_SIZE;
+  const RowsLayout = usesCollectionLayout ? CollectionLayout : "div";
   const layoutProps = {
     view: viewMode,
     columns,
@@ -216,7 +216,7 @@ export default function ConnectionsListPanel({
     ],
   };
   const sorted = [...connections].sort((a, b) =>
-    sortOrder === "name" && providerId === "codex"
+    sortOrder === "name" && usesCollectionLayout
       ? String(a.name || a.email || a.id).localeCompare(String(b.name || b.email || b.id))
       : (a.priority || 0) - (b.priority || 0)
   );
@@ -278,9 +278,11 @@ export default function ConnectionsListPanel({
     { value: "all", label: t("filterAll", "All") },
     { value: "active", label: t("filterActive", "Active") },
     { value: "error", label: t("filterError", "Error") },
+    ...(usesCollectionLayout
+      ? [{ value: "inactive", label: providerText(t, "accountsInactive", "Inactive") }]
+      : []),
     ...(providerId === "codex"
       ? [
-          { value: "inactive", label: providerText(t, "accountsInactive", "Inactive") },
           {
             value: "reset_credits",
             label: providerText(t, "accountsWithResets", "With reset credits"),
@@ -329,7 +331,7 @@ export default function ConnectionsListPanel({
       aria-label={t("accountSearchPlaceholder", "Search accounts…")}
       icon="search"
       className={
-        providerId === "codex"
+        usesCollectionLayout
           ? "w-full min-w-0 flex-1"
           : "w-full sm:w-auto sm:min-w-[160px] sm:max-w-[220px]"
       }
@@ -357,7 +359,7 @@ export default function ConnectionsListPanel({
       onColumnsChange={setColumns}
     />
   );
-  const sortControl = providerId === "codex" && (
+  const sortControl = usesCollectionLayout && (
     <Select
       compact
       label={providerText(t, "accountSort", "Sort accounts")}
@@ -372,14 +374,14 @@ export default function ConnectionsListPanel({
       ]}
     />
   );
-  const searchToolbar = providerId === "codex" && (
+  const searchToolbar = usesCollectionLayout && (
     <div className="mb-3 grid grid-cols-1 items-center gap-3 rounded-xl border border-border bg-surface p-3 lg:grid-cols-[minmax(0,1fr)_auto_auto]">
       {accountSearchInput}
       <details className="relative rounded-lg border border-border px-3 py-2 text-sm">
         <summary className="cursor-pointer font-medium">
           {providerText(t, "collectionFilters", "Filters")}
         </summary>
-        <div className="absolute right-0 top-full z-30 mt-2 flex w-72 max-w-[calc(100vw-3rem)] flex-wrap gap-2 rounded-xl border border-border bg-surface p-3 shadow-xl">
+        <div className="absolute left-0 top-full lg:left-auto lg:right-0 z-30 mt-2 flex w-72 max-w-[calc(100vw-3rem)] flex-wrap gap-2 rounded-xl border border-border bg-surface p-3 shadow-xl">
           {filterPills}
         </div>
       </details>
@@ -387,47 +389,46 @@ export default function ConnectionsListPanel({
     </div>
   );
 
-  const paginationBar =
-    providerId === "codex" ? (
-      <CollectionPagination
-        total={filtered.length}
-        page={clampedPage}
-        pageSize={pageSize}
-        onPage={setPage}
-        onPageSize={(size) => {
-          setPageSize(size);
-          setPage(0);
-          setSelectedIds(new Set());
-        }}
-      />
-    ) : totalFilteredPages > 1 ? (
-      <div className="flex items-center justify-between px-3 py-2 border-t border-border">
-        <span className="text-xs text-text-muted">
-          {pageStart + 1}–{Math.min(pageEnd, filtered.length)} / {filtered.length}
+  const paginationBar = usesCollectionLayout ? (
+    <CollectionPagination
+      total={filtered.length}
+      page={clampedPage}
+      pageSize={pageSize}
+      onPage={setPage}
+      onPageSize={(size) => {
+        setPageSize(size);
+        setPage(0);
+        setSelectedIds(new Set());
+      }}
+    />
+  ) : totalFilteredPages > 1 ? (
+    <div className="flex items-center justify-between px-3 py-2 border-t border-border">
+      <span className="text-xs text-text-muted">
+        {pageStart + 1}–{Math.min(pageEnd, filtered.length)} / {filtered.length}
+      </span>
+      <div className="flex items-center gap-1">
+        <Button
+          variant="ghost"
+          size="sm"
+          icon="chevron_left"
+          aria-label={tc("previousPage")}
+          disabled={clampedPage === 0}
+          onClick={() => setPage((p) => Math.max(0, p - 1))}
+        />
+        <span className="text-xs text-text-muted min-w-[4rem] text-center">
+          {clampedPage + 1} / {totalFilteredPages}
         </span>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            icon="chevron_left"
-            aria-label={tc("previousPage")}
-            disabled={clampedPage === 0}
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-          />
-          <span className="text-xs text-text-muted min-w-[4rem] text-center">
-            {clampedPage + 1} / {totalFilteredPages}
-          </span>
-          <Button
-            variant="ghost"
-            size="sm"
-            icon="chevron_right"
-            aria-label={tc("nextPage")}
-            disabled={clampedPage >= totalFilteredPages - 1}
-            onClick={() => setPage((p) => Math.min(totalFilteredPages - 1, p + 1))}
-          />
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          icon="chevron_right"
+          aria-label={tc("nextPage")}
+          disabled={clampedPage >= totalFilteredPages - 1}
+          onClick={() => setPage((p) => Math.min(totalFilteredPages - 1, p + 1))}
+        />
       </div>
-    ) : null;
+    </div>
+  ) : null;
 
   if (!hasAnyTag) {
     const pageConnections = filtered.slice(pageStart, pageEnd);
@@ -460,7 +461,7 @@ export default function ConnectionsListPanel({
               }}
               label={
                 <span className="text-sm font-medium text-text-muted">
-                  {providerId === "codex" && (
+                  {usesCollectionLayout && (
                     <span className="mr-3">
                       {providerText(t, "selectPageAccounts", "Select this page")}
                     </span>
@@ -483,7 +484,7 @@ export default function ConnectionsListPanel({
                 </span>
               }
             />
-            {providerId !== "codex" && (
+            {!usesCollectionLayout && (
               <>
                 {accountSearchInput}
                 {filterPills}
@@ -498,9 +499,7 @@ export default function ConnectionsListPanel({
         </div>
         {paginationBar}
         <RowsLayout
-          {...(providerId === "codex"
-            ? { ...layoutProps, empty: pageConnections.length === 0 }
-            : {})}
+          {...(usesCollectionLayout ? { ...layoutProps, empty: pageConnections.length === 0 } : {})}
           className="flex flex-col divide-y divide-border border border-t-0 border-border rounded-b-lg overflow-hidden"
         >
           {pageConnections.length === 0 ? (
@@ -609,7 +608,7 @@ export default function ConnectionsListPanel({
             ))
           )}
         </RowsLayout>
-        {providerId !== "codex" && paginationBar}
+        {!usesCollectionLayout && paginationBar}
       </>
     );
   }
@@ -647,19 +646,19 @@ export default function ConnectionsListPanel({
           <div className="flex w-full items-center gap-2 flex-wrap sm:w-auto">
             <Checkbox
               checked={
-                providerId === "codex"
+                usesCollectionLayout
                   ? pageConnectionsTagged.length > 0 &&
                     pageConnectionsTagged.every((c) => selectedIds.has(c.id))
                   : allSelected
               }
               indeterminate={
-                providerId === "codex"
+                usesCollectionLayout
                   ? pageConnectionsTagged.some((c) => selectedIds.has(c.id)) &&
                     !pageConnectionsTagged.every((c) => selectedIds.has(c.id))
                   : someSelected
               }
               onChange={
-                providerId === "codex"
+                usesCollectionLayout
                   ? () =>
                       setSelectedIds((prev) => {
                         const next = new Set(prev);
@@ -674,7 +673,7 @@ export default function ConnectionsListPanel({
               }
               label={
                 <span className="text-sm font-medium text-text-muted">
-                  {providerId === "codex" && (
+                  {usesCollectionLayout && (
                     <span className="mr-3">
                       {providerText(t, "selectPageAccounts", "Select this page")}
                     </span>
@@ -697,7 +696,7 @@ export default function ConnectionsListPanel({
                 </span>
               }
             />
-            {providerId !== "codex" && (
+            {!usesCollectionLayout && (
               <>
                 {accountSearchInput}
                 {filterPills}
@@ -742,7 +741,7 @@ export default function ConnectionsListPanel({
                 </div>
               )}
               <RowsLayout
-                {...(providerId === "codex" ? layoutProps : {})}
+                {...(usesCollectionLayout ? layoutProps : {})}
                 className="flex flex-col divide-y divide-border"
               >
                 {groupConns.map((conn, index) => (
@@ -854,7 +853,7 @@ export default function ConnectionsListPanel({
           );
         })}
       </div>
-      {providerId !== "codex" && paginationBar}
+      {!usesCollectionLayout && paginationBar}
     </>
   );
 }

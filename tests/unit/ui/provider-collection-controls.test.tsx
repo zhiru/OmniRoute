@@ -143,3 +143,94 @@ describe("Provider collection views and pagination", () => {
     });
   }
 });
+
+describe("Claude collection rows", () => {
+  const claudeProps: ConnectionRowProps = {
+    connection: {
+      id: "claude-account",
+      provider: "claude",
+      name: "Claude account",
+      testStatus: "active",
+    },
+    isClaude: true,
+    isOAuth: true,
+    isFirst: true,
+    isLast: true,
+    onMoveUp: noop,
+    onMoveDown: noop,
+    onRetest: noop,
+    onToggleActive: noop,
+    onToggleRateLimit: noop,
+    onEdit: noop,
+    onDelete: noop,
+  };
+  for (const view of ["list", "cards", "table"] as const) {
+    it(`shows only reported Claude scopes in ${view}`, () => {
+      render(
+        <CollectionLayout
+          view={view}
+          columns={3}
+          headers={["Account", "Status", "Quota", "Actions"]}
+        >
+          <ConnectionRow
+            {...claudeProps}
+            codexViewMode={view}
+            quotaCache={{
+              quotas: {
+                "session (5h)": { used: 0, total: 100, fractionReported: false },
+                "weekly (7d)": { used: 0, total: 100 },
+              },
+              modelQuotas: { "weekly sonnet (7d)": { used: 42, total: 100 } },
+            }}
+          />
+        </CollectionLayout>
+      );
+      expect(screen.getAllByRole("meter")).toHaveLength(2);
+      expect(screen.getByRole("meter", { name: "weekly (7d)" }).getAttribute("aria-valuenow")).toBe(
+        "0"
+      );
+      expect(
+        screen.getByRole("meter", { name: "weekly sonnet (7d)" }).getAttribute("aria-valuenow")
+      ).toBe("42");
+      expect(screen.queryByText("5h")).toBeNull();
+      expect(screen.queryByText("session (5h)")).toBeNull();
+      if (view === "table") expect(screen.getAllByRole("cell")).toHaveLength(4);
+    });
+  }
+  it("offers Claude auth actions in the card menu and preserves extra-usage controls in details", () => {
+    const onApplyClaudeAuthLocal = vi.fn(),
+      onExportClaudeAuthFile = vi.fn(),
+      onToggleClaudeExtraUsage = vi.fn();
+    render(
+      <ConnectionRow
+        {...claudeProps}
+        codexViewMode="cards"
+        onApplyClaudeAuthLocal={onApplyClaudeAuthLocal}
+        onExportClaudeAuthFile={onExportClaudeAuthFile}
+        onToggleClaudeExtraUsage={onToggleClaudeExtraUsage}
+      />
+    );
+    expect(screen.queryAllByRole("meter")).toHaveLength(0);
+    fireEvent.click(screen.getByRole("button", { name: "Actions" }));
+    fireEvent.click(screen.getByRole("button", { name: /Apply auth/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Export auth/i }));
+    expect(onApplyClaudeAuthLocal).toHaveBeenCalledOnce();
+    expect(onExportClaudeAuthFile).toHaveBeenCalledOnce();
+    expect(screen.queryByRole("button", { name: /Codex|reset credits/i })).toBeNull();
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+    fireEvent.click(screen.getByRole("button", { name: "Details" }));
+    fireEvent.click(screen.getByRole("button", { name: /Extra usage/i }));
+    expect(onToggleClaudeExtraUsage).toHaveBeenCalledOnce();
+  });
+  it("does not show quota usage when the account hides it", () => {
+    render(
+      <ConnectionRow
+        {...claudeProps}
+        connection={{ ...claudeProps.connection, quotaVisible: false }}
+        quotaCache={{ quotas: { "session (5h)": { used: 20, total: 100 } } }}
+      />
+    );
+    expect(screen.queryAllByRole("meter")).toHaveLength(0);
+    expect(screen.queryByText("session (5h)")).toBeNull();
+  });
+});

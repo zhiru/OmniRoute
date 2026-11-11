@@ -3,7 +3,7 @@
 import { useEffect, useId, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Badge, Button, Checkbox } from "@/shared/components";
-import CodexAccountActions from "./CodexAccountActions";
+import ProviderAccountActions from "./ProviderAccountActions";
 import useEmailPrivacyStore from "@/store/emailPrivacyStore";
 import { pickDisplayValue } from "@/shared/utils/maskEmail";
 import { getCodexPlanLabel } from "../codexPlanLabel";
@@ -16,6 +16,7 @@ import {
   type OperationalQuota,
 } from "./codexOperationalQuota";
 import type { ConnectionRowProps } from "./connectionRowTypes";
+import { claudeOperationalQuotas } from "./claudeOperationalQuota";
 
 function QuotaCell({
   quota,
@@ -33,9 +34,9 @@ function QuotaCell({
   const percent = quota.usedPercent;
   return (
     <div className="min-w-0 space-y-1.5" aria-label={label}>
-      <div className="flex items-baseline justify-between gap-2 text-xs">
-        <span className="text-text-muted">{label}</span>
-        <span className="font-medium tabular-nums">
+      <div className="flex flex-wrap items-baseline justify-between gap-2 text-xs">
+        <span className="min-w-0 break-words text-text-muted">{label}</span>
+        <span className="shrink-0 font-medium tabular-nums">
           {percent === null ? "—" : `${percent}%`}{" "}
           <span className="font-normal text-text-muted">{percent === null ? "" : usedLabel}</span>
         </span>
@@ -74,7 +75,7 @@ function QuotaCell({
   );
 }
 
-export default function CodexOperationalRow({
+export default function ProviderOperationalRow({
   children,
   ...props
 }: ConnectionRowProps & { children: ReactNode }) {
@@ -104,7 +105,7 @@ export default function CodexOperationalRow({
     t("oauthAccount")
   );
   const plan =
-    getCodexPlanLabel(true, connection.providerSpecificData) ||
+    getCodexPlanLabel(!!props.isCodex, connection.providerSpecificData) ||
     (typeof quotaCache?.plan === "string" ? quotaCache.plan : null);
   const pool = connection.codexAccountPool?.children.find((child) => child.key.scope === "codex");
   const visible = connection.quotaVisible !== false;
@@ -161,30 +162,41 @@ export default function CodexOperationalRow({
       )}
     </div>
   );
-  const quotaCells = codexOperationalWindows(quotaCache).map((window) => {
-    const quota: OperationalQuota = visible
-      ? codexOperationalQuota(connection, quotaCache, window)
-      : { usedPercent: null, resetAt: null };
-    return (
-      <QuotaCell
-        key={window}
-        label={
-          quota.period === "monthly"
-            ? t("quotaWindowMonthly")
-            : quota.period === "weekly"
-              ? "7d"
-              : window
-        }
-        usedLabel={t("codexPoolUsed")}
-        resetLabel={providerText(t, "quotaResetsAtShort", "Resets")}
-        locale={locale}
-        quota={quota}
-      />
-    );
-  });
+  const quotaCells = props.isClaude
+    ? (visible ? claudeOperationalQuotas(quotaCache) : []).map((quota) => (
+        <QuotaCell
+          key={quota.name}
+          label={quota.label}
+          usedLabel={t("codexPoolUsed")}
+          resetLabel={providerText(t, "quotaResetsAtShort", "Resets")}
+          locale={locale}
+          quota={quota}
+        />
+      ))
+    : codexOperationalWindows(quotaCache).map((window) => {
+        const quota: OperationalQuota = visible
+          ? codexOperationalQuota(connection, quotaCache, window)
+          : { usedPercent: null, resetAt: null };
+        return (
+          <QuotaCell
+            key={window}
+            label={
+              quota.period === "monthly"
+                ? t("quotaWindowMonthly")
+                : quota.period === "weekly"
+                  ? "7d"
+                  : window
+            }
+            usedLabel={t("codexPoolUsed")}
+            resetLabel={providerText(t, "quotaResetsAtShort", "Resets")}
+            locale={locale}
+            quota={quota}
+          />
+        );
+      });
   const actions = (
     <div className="col-span-2 flex items-center justify-end gap-1 xl:col-span-1">
-      {props.codexViewMode !== "cards" && <CodexAccountActions {...props} />}
+      {props.codexViewMode !== "cards" && <ProviderAccountActions {...props} />}
       <Button
         size="sm"
         variant="ghost"
@@ -219,8 +231,14 @@ export default function CodexOperationalRow({
     </div>
   );
   const quotaSummary = (
-    <div className={`grid gap-5 ${quotaCells.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
-      {quotaCells}
+    <div
+      className={`grid gap-5 ${quotaCells.length > 1 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}
+    >
+      {quotaCells.length ? (
+        quotaCells
+      ) : (
+        <span className="text-xs text-text-muted">{visible ? t("quotaNoData") : "—"}</span>
+      )}
     </div>
   );
   const cells = [identity, statusCell, quotaSummary, actions];
@@ -249,7 +267,7 @@ export default function CodexOperationalRow({
     <div className={`relative min-w-0 ${props.isSelected ? "bg-primary/5" : "bg-surface"}`}>
       {cards && (
         <div className="absolute right-3 top-3 z-10">
-          <CodexAccountActions {...props} />
+          <ProviderAccountActions {...props} />
         </div>
       )}
       <div

@@ -110,13 +110,13 @@ export default function ConnectionsHeaderToolbar({
 }: ConnectionsHeaderToolbarProps) {
   return (
     <div
-      className={`mb-4 flex flex-col gap-3 ${providerId === "codex" ? "" : "sm:flex-row sm:items-center sm:justify-between"}`}
+      className={`mb-4 flex flex-col gap-3 ${providerId === "codex" || providerId === "claude" ? "" : "sm:flex-row sm:items-center sm:justify-between"}`}
     >
       <div className="flex min-w-0 flex-wrap items-center gap-2">
         <h2 className="text-lg font-semibold">{t("connections")}</h2>
         {providerId === "claude" && (
           <div
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-bg-subtle px-2 py-1 text-xs font-medium text-text-muted"
+            className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg border border-border bg-bg-subtle px-2 py-1 text-xs font-medium text-text-muted"
             title={providerText(
               t,
               "preferClaudeCodeForUnprefixedClaudeModelsTooltip",
@@ -255,7 +255,7 @@ export default function ConnectionsHeaderToolbar({
             : t("providerProxy")}
         </Button>
       </div>
-      <ActionBar align={providerId === "codex" ? "start" : "end"}>
+      <ActionBar align={providerId === "codex" || providerId === "claude" ? "start" : "end"}>
         {connections.length > 0 && (
           <DistributeProxiesButton
             onDistribute={async () => {

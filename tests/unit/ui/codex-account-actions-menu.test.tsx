@@ -1,7 +1,7 @@
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import CodexAccountActions from "@/app/(dashboard)/dashboard/providers/[id]/components/CodexAccountActions";
+import ProviderAccountActions from "@/app/(dashboard)/dashboard/providers/[id]/components/ProviderAccountActions";
 import type { ConnectionRowProps } from "@/app/(dashboard)/dashboard/providers/[id]/components/connectionRowTypes";
 afterEach(cleanup);
 describe("Codex account actions menu", () => {
@@ -9,7 +9,7 @@ describe("Codex account actions menu", () => {
     const onEdit = vi.fn(),
       onDelete = vi.fn();
     render(
-      <CodexAccountActions
+      <ProviderAccountActions
         {...({
           connection: { id: "account", isActive: true },
           onEdit,

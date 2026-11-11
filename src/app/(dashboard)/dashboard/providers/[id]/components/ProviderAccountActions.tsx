@@ -7,7 +7,7 @@ import ProviderActionsMenu from "./ProviderActionsMenu";
 import CodexResetCreditsAction from "./CodexResetCreditsAction";
 import CodexPingNowButton from "./CodexPingNowButton";
 
-export default function CodexAccountActions(props: ConnectionRowProps) {
+export default function ProviderAccountActions(props: ConnectionRowProps) {
   const t = useTranslations("providers");
   const { connection } = props;
   const disabled = connection.isActive === false;
@@ -25,7 +25,7 @@ export default function CodexAccountActions(props: ConnectionRowProps) {
           {t("quotaRefresh")}
         </Button>
       )}
-      {connection.quotaVisible !== false && (
+      {props.isCodex && connection.quotaVisible !== false && (
         <CodexResetCreditsAction
           connectionId={connection.id}
           count={props.quotaCache?.bankedResetCredits}
@@ -81,6 +81,30 @@ export default function CodexAccountActions(props: ConnectionRowProps) {
           loading={props.isExportingCodexAuthFile}
         >
           {t("exportCodexAuthFile")}
+        </Button>
+      )}
+      {props.isClaude && props.onApplyClaudeAuthLocal && (
+        <Button
+          variant="ghost"
+          size="sm"
+          icon="download_done"
+          onClick={props.onApplyClaudeAuthLocal}
+          disabled={props.isApplyingClaudeAuthLocal}
+          loading={props.isApplyingClaudeAuthLocal}
+        >
+          {t("applyClaudeAuthLocal")}
+        </Button>
+      )}
+      {props.isClaude && props.onExportClaudeAuthFile && (
+        <Button
+          variant="ghost"
+          size="sm"
+          icon="download"
+          onClick={props.onExportClaudeAuthFile}
+          disabled={props.isExportingClaudeAuthFile}
+          loading={props.isExportingClaudeAuthFile}
+        >
+          {t("exportClaudeAuthFile")}
         </Button>
       )}
       {props.onReauth && (

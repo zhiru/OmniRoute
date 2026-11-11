@@ -24,7 +24,7 @@ import { getCodexEffectiveServiceTier } from "@/lib/providers/codexFastTier";
 import { normalizeCodexLimitPolicy, providerText } from "../providerPageHelpers";
 import { getCodexPlanLabel } from "../codexPlanLabel";
 import CodexAccountDetails from "./CodexAccountDetails";
-import CodexOperationalRow from "./CodexOperationalRow";
+import ProviderOperationalRow from "./ProviderOperationalRow";
 import ConnectionQuotaPanel from "./ConnectionQuotaPanel";
 import ConnectionIdChip from "./ConnectionIdChip";
 import {
@@ -89,11 +89,11 @@ function CooldownTimer({ until }: CooldownTimerProps) {
 // ---------------------------------------------------------------------------
 
 export default function ConnectionRow(props: ConnectionRowProps) {
-  if (props.isCodex) {
+  if (props.isCodex || props.isClaude) {
     return (
-      <CodexOperationalRow {...props}>
+      <ProviderOperationalRow {...props}>
         <ConnectionRowContent {...props} detailsOnly />
-      </CodexOperationalRow>
+      </ProviderOperationalRow>
     );
   }
   return <ConnectionRowContent {...props} />;
@@ -338,7 +338,7 @@ function ConnectionRowContent({
     : "";
 
   const supplementalQuotaCache =
-    detailsOnly && quotaCache
+    detailsOnly && isCodex && quotaCache
       ? {
           ...quotaCache,
           quotas: Object.fromEntries(
@@ -356,13 +356,13 @@ function ConnectionRowContent({
 
   return (
     <div
-      className={`group flex ${isCodex ? "flex-col items-stretch gap-3" : "flex-wrap items-center justify-between gap-x-3 gap-y-2"} p-3 rounded-lg hover:bg-bg-subtle transition-colors ${connection.isActive === false ? "opacity-60" : ""}`}
+      className={`group flex ${isCodex || isClaude ? "flex-col items-stretch gap-3" : "flex-wrap items-center justify-between gap-x-3 gap-y-2"} p-3 rounded-lg hover:bg-bg-subtle transition-colors ${connection.isActive === false ? "opacity-60" : ""}`}
     >
       {/* basis-64 lets the action bar drop to its own line on narrow screens instead of
           pushing the row past the viewport (the page clips x-overflow, so buttons vanished).
           Codex rows stack vertically (#16248), where a 16rem basis would become a height. */}
       <div
-        className={`flex items-center gap-2 sm:gap-3 flex-1 min-w-0 ${isCodex ? "" : "basis-64"}`}
+        className={`flex items-center gap-2 sm:gap-3 flex-1 min-w-0 ${isCodex || isClaude ? "" : "basis-64"}`}
       >
         {onToggleSelect && (
           <Checkbox checked={isSelected} onChange={onToggleSelect} className="shrink-0" />
@@ -926,7 +926,7 @@ function ConnectionRowContent({
           <CodexAccountDetails pool={connection.codexAccountPool} hideQuota={detailsOnly} />
         </div>
       ) : null}
-      {quotaPanelSupported && (!detailsOnly || hasSupplementalQuota) ? (
+      {quotaPanelSupported && (!detailsOnly || isClaude || hasSupplementalQuota) ? (
         <div className="basis-full min-w-0">
           <ConnectionQuotaPanel
             providerId={String(connection.provider || "")}
