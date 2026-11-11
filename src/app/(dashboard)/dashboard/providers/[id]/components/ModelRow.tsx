@@ -360,8 +360,8 @@ export default function ModelRow({
         title={t("copyModel")}
         aria-label={t("copyModel")}
       />
-      {/* Line 2 (never wraps): source, alias (truncates) and the actions, in the name's column. */}
-      <div className="flex min-w-0 items-center gap-2 pl-6">
+      {/* Metadata and actions wrap independently of the model name. */}
+      <div className="flex min-w-0 flex-wrap items-center gap-2 pl-6">
         <ModelSourceBadge source={model.source} />
         {combos && combos.length > 0 && <ModelComboBadge combos={combos} t={t} />}
         {onSetAlias && (

@@ -6,6 +6,8 @@ import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Card, Button, CardSkeleton } from "@/shared/components";
+import { Tabs, TabsList, TabsTrigger } from "@omniroute/ui-kit/tabs";
+import ProviderDetailSection from "./components/ProviderDetailSection";
 import ProviderTosNotice from "@/shared/components/ProviderTosNotice";
 import {
   NOAUTH_PROVIDERS,
@@ -577,7 +579,15 @@ export default function ProviderDetailPageClient() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <Tabs
+      defaultValue="connections"
+      variant="underline"
+      className={
+        providerId === "codex"
+          ? "mx-auto flex w-full max-w-[1440px] flex-col gap-6 [&_h1]:text-3xl"
+          : "flex flex-col gap-8"
+      }
+    >
       <ProviderPageHeader
         providerId={providerId}
         providerInfo={{ ...providerInfo, website: providerHeaderWebsite }}
@@ -590,6 +600,14 @@ export default function ProviderDetailPageClient() {
       />
 
       <ProviderTosNotice providerId={providerId} />
+
+      {providerId === "codex" && (
+        <TabsList aria-label={providerInfo.name} className="max-w-full overflow-x-auto">
+          <TabsTrigger value="connections">{t("connections")}</TabsTrigger>
+          <TabsTrigger value="models">{t("availableModels")}</TabsTrigger>
+          <TabsTrigger value="advanced">{t("advancedSettings")}</TabsTrigger>
+        </TabsList>
+      )}
 
       {providerId === "zed" && (
         <ZedImportCard fetchConnections={fetchConnections} notify={notify} />
@@ -629,254 +647,269 @@ export default function ProviderDetailPageClient() {
         />
       )}
       {!isUpstreamProxyProvider && (!isFreeNoAuth || providerSupportsPat) && (
-        <Card>
-          <ProviderAccountRoutingCard
-            providerKey={providerId}
-            connectionCount={connections.length}
-          />
-          <ConnectionsHeaderToolbar
-            providerId={providerId}
-            providerInfo={providerInfo}
-            isCompatible={isCompatible}
-            isCommandCode={isCommandCode}
-            isOAuth={isOAuth}
-            supportsDualAuth={supportsDualAuth}
-            providerSupportsPat={providerSupportsPat}
-            connections={connections}
-            batchTesting={batchTesting}
-            batchRetesting={batchRetesting}
-            retestingId={retestingId}
-            distributingProxies={distributingProxies}
-            proxyConfig={proxyConfig}
-            reorderingByAvailability={reorderingByAvailability}
-            handleReorderByAvailability={handleReorderByAvailability}
-            preferClaudeCodeForUnprefixedClaudeModels={preferClaudeCodeForUnprefixedClaudeModels}
-            claudeRoutingSettingsLoaded={claudeRoutingSettingsLoaded}
-            claudeRoutingSettingsLoadError={claudeRoutingSettingsLoadError}
-            savingClaudeRoutingPreference={savingClaudeRoutingPreference}
-            handleToggleClaudeRoutingPreference={handleToggleClaudeRoutingPreference}
-            loadClaudeRoutingSettings={loadClaudeRoutingSettings}
-            codexGlobalServiceMode={codexGlobalServiceMode}
-            codexGlobalServiceModeOptions={codexGlobalServiceModeOptions}
-            codexSettingsLoaded={codexSettingsLoaded}
-            codexSettingsLoadError={codexSettingsLoadError}
-            savingCodexGlobalServiceMode={savingCodexGlobalServiceMode}
-            handleChangeCodexGlobalServiceMode={handleChangeCodexGlobalServiceMode}
-            loadCodexSettings={loadCodexSettings}
-            onSetProxyTarget={setProxyTarget}
-            handleDistributeProxies={handleDistributeProxies}
-            onAccountProxiesReset={async () => {
-              await fetchConnections();
-              await refreshProxyState();
-            }}
-            handleBatchTestAll={handleBatchTestAll}
-            gateConnectionFlow={gateConnectionFlow}
-            openApiKeyAddFlow={openApiKeyAddFlow}
-            openPrimaryAddFlow={openPrimaryAddFlow}
-            connectVolcengineAccount={connectVolcengineAccount}
-            connectingVolcengineAccount={connectingVolcengineAccount}
-            openExternalLinkFlow={openExternalLinkFlow}
-            handleOpenCommandCodeConnect={handleOpenCommandCodeConnect}
-            commandCodeAuthState={commandCodeAuthState}
-            onOpenOAuthModal={() => setShowOAuthModal(true)}
-            onOpenCodexCliGuide={() => setCodexCliGuideOpen(true)}
-            onOpenImportCodex={() => setImportCodexModalOpen(true)}
-            onOpenImportClaude={() => setImportClaudeModalOpen(true)}
-            onOpenImportGemini={() => setImportGeminiModalOpen(true)}
-            onOpenImportGrokCli={() => setImportGrokCliModalOpen(true)}
-            t={t}
-          />
-
-          {connections.length === 0 ? (
-            <EmptyConnectionsPlaceholder
-              isOAuth={isOAuth}
+        <ProviderDetailSection enabled={providerId === "codex"} value="connections">
+          <Card>
+            {providerId !== "codex" && (
+              <ProviderAccountRoutingCard
+                providerKey={providerId}
+                connectionCount={connections.length}
+              />
+            )}
+            <ConnectionsHeaderToolbar
+              providerId={providerId}
+              providerInfo={providerInfo}
               isCompatible={isCompatible}
               isCommandCode={isCommandCode}
-              providerId={providerId}
+              isOAuth={isOAuth}
               supportsDualAuth={supportsDualAuth}
               providerSupportsPat={providerSupportsPat}
-              commandCodeAuthState={commandCodeAuthState}
+              connections={connections}
+              batchTesting={batchTesting}
+              batchRetesting={batchRetesting}
+              retestingId={retestingId}
+              distributingProxies={distributingProxies}
+              proxyConfig={proxyConfig}
+              reorderingByAvailability={reorderingByAvailability}
+              handleReorderByAvailability={handleReorderByAvailability}
+              preferClaudeCodeForUnprefixedClaudeModels={preferClaudeCodeForUnprefixedClaudeModels}
+              claudeRoutingSettingsLoaded={claudeRoutingSettingsLoaded}
+              claudeRoutingSettingsLoadError={claudeRoutingSettingsLoadError}
+              savingClaudeRoutingPreference={savingClaudeRoutingPreference}
+              handleToggleClaudeRoutingPreference={handleToggleClaudeRoutingPreference}
+              loadClaudeRoutingSettings={loadClaudeRoutingSettings}
+              codexGlobalServiceMode={codexGlobalServiceMode}
+              codexGlobalServiceModeOptions={codexGlobalServiceModeOptions}
+              codexSettingsLoaded={codexSettingsLoaded}
+              codexSettingsLoadError={codexSettingsLoadError}
+              savingCodexGlobalServiceMode={savingCodexGlobalServiceMode}
+              handleChangeCodexGlobalServiceMode={handleChangeCodexGlobalServiceMode}
+              loadCodexSettings={loadCodexSettings}
+              onSetProxyTarget={setProxyTarget}
+              handleDistributeProxies={handleDistributeProxies}
+              onAccountProxiesReset={async () => {
+                await fetchConnections();
+                await refreshProxyState();
+              }}
+              handleBatchTestAll={handleBatchTestAll}
               gateConnectionFlow={gateConnectionFlow}
               openApiKeyAddFlow={openApiKeyAddFlow}
               openPrimaryAddFlow={openPrimaryAddFlow}
+              connectVolcengineAccount={connectVolcengineAccount}
+              connectingVolcengineAccount={connectingVolcengineAccount}
+              openExternalLinkFlow={openExternalLinkFlow}
               handleOpenCommandCodeConnect={handleOpenCommandCodeConnect}
+              commandCodeAuthState={commandCodeAuthState}
               onOpenOAuthModal={() => setShowOAuthModal(true)}
+              onOpenCodexCliGuide={() => setCodexCliGuideOpen(true)}
               onOpenImportCodex={() => setImportCodexModalOpen(true)}
               onOpenImportClaude={() => setImportClaudeModalOpen(true)}
               onOpenImportGemini={() => setImportGeminiModalOpen(true)}
               onOpenImportGrokCli={() => setImportGrokCliModalOpen(true)}
               t={t}
             />
-          ) : (
-            <>
-              <ConnectionPinTip />
-              <CoolingConnectionsPanel
-                connections={connections}
-                onClearCooldown={handleClearCooldown}
-                clearingCooldownId={clearingCooldownId}
-              />
-              <ConnectionsListPanel
-                connections={connections}
-                providerId={providerId}
-                isCcCompatible={isCcCompatible}
+
+            {connections.length === 0 ? (
+              <EmptyConnectionsPlaceholder
                 isOAuth={isOAuth}
-                codexGlobalServiceMode={codexGlobalServiceMode}
-                selectedIds={selectedIds}
-                batchUpdating={batchUpdating}
-                batchRetesting={batchRetesting}
-                batchDeleting={batchDeleting}
-                batchTesting={batchTesting}
-                retestingId={retestingId}
-                refreshingId={refreshingId}
-                distributingProxies={distributingProxies}
-                healthFilter={healthFilter}
-                page={page}
-                accountSearch={accountSearch}
-                PAGE_SIZE={PAGE_SIZE}
-                connProxyMap={connProxyMap}
-                proxyConfig={proxyConfig}
-                applyingCodexAuthId={applyingCodexAuthId}
-                exportingCodexAuthId={exportingCodexAuthId}
-                applyingClaudeAuthId={applyingClaudeAuthId}
-                exportingClaudeAuthId={exportingClaudeAuthId}
-                emailsVisible={emailsVisible}
-                setSelectedIds={setSelectedIds}
-                setPage={setPage}
-                setHealthFilter={setHealthFilter}
-                setAccountSearch={setAccountSearch}
-                deleteConfirm={deleteConfirm}
-                handleUpdateConnectionStatus={handleUpdateConnectionStatus}
-                handleToggleRateLimit={handleToggleRateLimit}
-                handleToggleQuotaVisibility={handleToggleQuotaVisibility}
-                handleToggleClaudeExtraUsage={handleToggleClaudeExtraUsage}
-                handleToggleCodexPaidCredits={handleToggleCodexPaidCredits}
-                canAutoSync={!usesCuratedModelsOnly && compatibleSupportsModelImport}
-                handleToggleConnectionAutoSync={handleToggleConnectionAutoSync}
-                handleToggleCliproxyapiMode={handleToggleCliproxyapiMode}
-                handleSetUpstreamProxyMode={handleSetUpstreamProxyMode}
-                upstreamProxyMode={upstreamProxyMode}
-                upstreamProxyFallbackBackend={upstreamProxyFallbackBackend}
-                handleToggleCodexLimit={handleToggleCodexLimit}
-                handleToggleProxyEnabled={handleToggleProxyEnabled}
-                handleTogglePerKeyProxyEnabled={handleTogglePerKeyProxyEnabled}
-                handleRetestConnection={handleRetestConnection}
-                handleRefreshToken={handleRefreshToken}
-                handleSwapPriority={handleSwapPriority}
-                handleBatchSetActive={handleBatchSetActive}
-                handleBatchDeleteOpenModal={handleBatchDeleteOpenModal}
-                handleBatchRetest={handleBatchRetest}
-                handleToggleSelectOne={handleToggleSelectOne}
-                handleToggleSelectAll={handleToggleSelectAll}
-                handleDistributeProxies={handleDistributeProxies}
-                cpaProviderEnabled={cpaProviderEnabled}
-                quotaByConnectionId={quotaByConnectionId}
-                quotaRefreshingIds={quotaRefreshingIds}
-                handleRefreshQuota={handleRefreshQuota}
-                onOpenEditModal={(conn) => {
-                  setSelectedConnection(conn);
-                  setShowEditModal(true);
-                }}
-                onOpenOAuth={(conn) => gateConnectionFlow(() => setShowOAuthModal(true, conn))}
-                onSetProxyTarget={setProxyTarget}
-                onOpenApplyCodexModal={setApplyCodexModalConnectionId}
-                onExportCodexAuthFile={handleExportCodexAuthFile}
-                onOpenApplyClaudeModal={setApplyClaudeModalConnectionId}
-                onExportClaudeAuthFile={handleExportClaudeAuthFile}
+                isCompatible={isCompatible}
+                isCommandCode={isCommandCode}
+                providerId={providerId}
+                supportsDualAuth={supportsDualAuth}
+                providerSupportsPat={providerSupportsPat}
+                commandCodeAuthState={commandCodeAuthState}
                 gateConnectionFlow={gateConnectionFlow}
+                openApiKeyAddFlow={openApiKeyAddFlow}
+                openPrimaryAddFlow={openPrimaryAddFlow}
+                handleOpenCommandCodeConnect={handleOpenCommandCodeConnect}
+                onOpenOAuthModal={() => setShowOAuthModal(true)}
+                onOpenImportCodex={() => setImportCodexModalOpen(true)}
+                onOpenImportClaude={() => setImportClaudeModalOpen(true)}
+                onOpenImportGemini={() => setImportGeminiModalOpen(true)}
+                onOpenImportGrokCli={() => setImportGrokCliModalOpen(true)}
                 t={t}
               />
-            </>
-          )}
-        </Card>
+            ) : (
+              <>
+                {providerId !== "codex" && <ConnectionPinTip />}
+                <CoolingConnectionsPanel
+                  connections={connections}
+                  onClearCooldown={handleClearCooldown}
+                  clearingCooldownId={clearingCooldownId}
+                />
+                <ConnectionsListPanel
+                  connections={connections}
+                  providerId={providerId}
+                  isCcCompatible={isCcCompatible}
+                  isOAuth={isOAuth}
+                  codexGlobalServiceMode={codexGlobalServiceMode}
+                  selectedIds={selectedIds}
+                  batchUpdating={batchUpdating}
+                  batchRetesting={batchRetesting}
+                  batchDeleting={batchDeleting}
+                  batchTesting={batchTesting}
+                  retestingId={retestingId}
+                  refreshingId={refreshingId}
+                  distributingProxies={distributingProxies}
+                  healthFilter={healthFilter}
+                  page={page}
+                  accountSearch={accountSearch}
+                  PAGE_SIZE={PAGE_SIZE}
+                  connProxyMap={connProxyMap}
+                  proxyConfig={proxyConfig}
+                  applyingCodexAuthId={applyingCodexAuthId}
+                  exportingCodexAuthId={exportingCodexAuthId}
+                  applyingClaudeAuthId={applyingClaudeAuthId}
+                  exportingClaudeAuthId={exportingClaudeAuthId}
+                  emailsVisible={emailsVisible}
+                  setSelectedIds={setSelectedIds}
+                  setPage={setPage}
+                  setHealthFilter={setHealthFilter}
+                  setAccountSearch={setAccountSearch}
+                  deleteConfirm={deleteConfirm}
+                  handleUpdateConnectionStatus={handleUpdateConnectionStatus}
+                  handleToggleRateLimit={handleToggleRateLimit}
+                  handleToggleQuotaVisibility={handleToggleQuotaVisibility}
+                  handleToggleClaudeExtraUsage={handleToggleClaudeExtraUsage}
+                  handleToggleCodexPaidCredits={handleToggleCodexPaidCredits}
+                  canAutoSync={!usesCuratedModelsOnly && compatibleSupportsModelImport}
+                  handleToggleConnectionAutoSync={handleToggleConnectionAutoSync}
+                  handleToggleCliproxyapiMode={handleToggleCliproxyapiMode}
+                  handleSetUpstreamProxyMode={handleSetUpstreamProxyMode}
+                  upstreamProxyMode={upstreamProxyMode}
+                  upstreamProxyFallbackBackend={upstreamProxyFallbackBackend}
+                  handleToggleCodexLimit={handleToggleCodexLimit}
+                  handleToggleProxyEnabled={handleToggleProxyEnabled}
+                  handleTogglePerKeyProxyEnabled={handleTogglePerKeyProxyEnabled}
+                  handleRetestConnection={handleRetestConnection}
+                  handleRefreshToken={handleRefreshToken}
+                  handleSwapPriority={handleSwapPriority}
+                  handleBatchSetActive={handleBatchSetActive}
+                  handleBatchDeleteOpenModal={handleBatchDeleteOpenModal}
+                  handleBatchRetest={handleBatchRetest}
+                  handleToggleSelectOne={handleToggleSelectOne}
+                  handleToggleSelectAll={handleToggleSelectAll}
+                  handleDistributeProxies={handleDistributeProxies}
+                  cpaProviderEnabled={cpaProviderEnabled}
+                  quotaByConnectionId={quotaByConnectionId}
+                  quotaRefreshingIds={quotaRefreshingIds}
+                  handleRefreshQuota={handleRefreshQuota}
+                  onOpenEditModal={(conn) => {
+                    setSelectedConnection(conn);
+                    setShowEditModal(true);
+                  }}
+                  onOpenOAuth={(conn) => gateConnectionFlow(() => setShowOAuthModal(true, conn))}
+                  onSetProxyTarget={setProxyTarget}
+                  onOpenApplyCodexModal={setApplyCodexModalConnectionId}
+                  onExportCodexAuthFile={handleExportCodexAuthFile}
+                  onOpenApplyClaudeModal={setApplyClaudeModalConnectionId}
+                  onExportClaudeAuthFile={handleExportClaudeAuthFile}
+                  gateConnectionFlow={gateConnectionFlow}
+                  t={t}
+                />
+              </>
+            )}
+          </Card>
+        </ProviderDetailSection>
       )}
       {isUpstreamProxyProvider && <UpstreamProxyCard t={t} />}
 
       {/* Models — hidden for search providers (they don't have models) */}
       {!isSearchProvider && !isUpstreamProxyProvider && (
-        <Card>
-          <h2 className="text-lg font-semibold mb-4">{t("availableModels")}</h2>
-          <ProviderModelsSection
-            providerId={providerId}
-            providerAlias={providerAlias}
-            providerStorageAlias={providerStorageAlias}
-            providerDisplayAlias={providerDisplayAlias}
-            providerInfo={providerInfo}
-            isCcCompatible={isCcCompatible}
-            isAnthropicCompatible={isAnthropicCompatible}
-            isAnthropicProtocolCompatible={isAnthropicProtocolCompatible}
-            isManagedAvailableModelsProvider={isCompatible || providerId === "openrouter"}
-            compatibleSupportsModelImport={compatibleSupportsModelImport}
-            allowModelImport={!usesCuratedModelsOnly}
-            models={models}
-            modelMeta={modelMeta}
-            modelAliases={modelAliases}
-            comboUsage={comboUsage}
-            syncedAvailableModels={syncedAvailableModels}
-            syncedCatalogAuthoritative={syncedCatalogAuthoritative}
-            compatibleFallbackModels={compatibleFallbackModels}
-            copied={copied}
-            onCopy={copy}
-            onSetAlias={handleSetAlias}
-            onDeleteAlias={handleDeleteAlias}
-            fetchProviderModelMeta={fetchProviderModelMeta}
-            connections={connections}
-            selectedConnection={selectedConnection}
-            canImportModels={canImportModels}
-            importingModels={importingModels}
-            handleImportModels={handleImportModels}
-            isAutoSyncEnabled={isAutoSyncEnabled}
-            togglingAutoSync={togglingAutoSync}
-            handleToggleAutoSync={handleToggleAutoSync}
-            isAutoFetchModelsEnabled={isAutoFetchModelsEnabled}
-            togglingAutoFetchModels={togglingAutoFetchModels}
-            handleToggleAutoFetchModels={handleToggleAutoFetchModels}
-            handleCompatibleImportWithProgress={handleCompatibleImportWithProgress}
-            compatSavingModelId={compatSavingModelId}
-            togglingModelId={togglingModelId}
-            bulkVisibilityAction={bulkVisibilityAction}
-            clearingModels={clearingModels}
-            modelFilter={modelFilter}
-            testingModelId={testingModelId}
-            modelTestStatus={modelTestStatus}
-            onModelTestStatusChange={onModelTestStatusChange}
-            testingAll={testingAll}
-            testProgress={testProgress}
-            autoHideFailed={autoHideFailed}
-            visibilityFilter={visibilityFilter}
-            providerAliasEntries={providerAliasEntries}
-            setModelFilter={setModelFilter}
-            setAutoHideFailed={setAutoHideFailed}
-            setVisibilityFilter={setVisibilityFilter}
-            saveModelCompatFlags={saveModelCompatFlags}
-            handleToggleModelHidden={handleToggleModelHidden}
-            handleBulkToggleModelHidden={handleBulkToggleModelHidden}
-            handleClearAllModels={handleClearAllModels}
-            onTestModel={onTestModel}
-            handleTestAll={handleTestAll}
-            effectiveModelNormalize={effectiveModelNormalize}
-            effectiveModelPreserveDeveloper={effectiveModelPreserveDeveloper}
-            effectiveModelHidden={effectiveModelHidden}
-            getUpstreamHeadersRecordForModel={getUpstreamHeadersRecordForModel}
-            t={t}
-          />
+        <ProviderDetailSection enabled={providerId === "codex"} value="models">
+          <Card>
+            <h2 className="text-lg font-semibold mb-4">{t("availableModels")}</h2>
+            <ProviderModelsSection
+              providerId={providerId}
+              providerAlias={providerAlias}
+              providerStorageAlias={providerStorageAlias}
+              providerDisplayAlias={providerDisplayAlias}
+              providerInfo={providerInfo}
+              isCcCompatible={isCcCompatible}
+              isAnthropicCompatible={isAnthropicCompatible}
+              isAnthropicProtocolCompatible={isAnthropicProtocolCompatible}
+              isManagedAvailableModelsProvider={isCompatible || providerId === "openrouter"}
+              compatibleSupportsModelImport={compatibleSupportsModelImport}
+              allowModelImport={!usesCuratedModelsOnly}
+              models={models}
+              modelMeta={modelMeta}
+              modelAliases={modelAliases}
+              comboUsage={comboUsage}
+              syncedAvailableModels={syncedAvailableModels}
+              syncedCatalogAuthoritative={syncedCatalogAuthoritative}
+              compatibleFallbackModels={compatibleFallbackModels}
+              copied={copied}
+              onCopy={copy}
+              onSetAlias={handleSetAlias}
+              onDeleteAlias={handleDeleteAlias}
+              fetchProviderModelMeta={fetchProviderModelMeta}
+              connections={connections}
+              selectedConnection={selectedConnection}
+              canImportModels={canImportModels}
+              importingModels={importingModels}
+              handleImportModels={handleImportModels}
+              isAutoSyncEnabled={isAutoSyncEnabled}
+              togglingAutoSync={togglingAutoSync}
+              handleToggleAutoSync={handleToggleAutoSync}
+              isAutoFetchModelsEnabled={isAutoFetchModelsEnabled}
+              togglingAutoFetchModels={togglingAutoFetchModels}
+              handleToggleAutoFetchModels={handleToggleAutoFetchModels}
+              handleCompatibleImportWithProgress={handleCompatibleImportWithProgress}
+              compatSavingModelId={compatSavingModelId}
+              togglingModelId={togglingModelId}
+              bulkVisibilityAction={bulkVisibilityAction}
+              clearingModels={clearingModels}
+              modelFilter={modelFilter}
+              testingModelId={testingModelId}
+              modelTestStatus={modelTestStatus}
+              onModelTestStatusChange={onModelTestStatusChange}
+              testingAll={testingAll}
+              testProgress={testProgress}
+              autoHideFailed={autoHideFailed}
+              visibilityFilter={visibilityFilter}
+              providerAliasEntries={providerAliasEntries}
+              setModelFilter={setModelFilter}
+              setAutoHideFailed={setAutoHideFailed}
+              setVisibilityFilter={setVisibilityFilter}
+              saveModelCompatFlags={saveModelCompatFlags}
+              handleToggleModelHidden={handleToggleModelHidden}
+              handleBulkToggleModelHidden={handleBulkToggleModelHidden}
+              handleClearAllModels={handleClearAllModels}
+              onTestModel={onTestModel}
+              handleTestAll={handleTestAll}
+              effectiveModelNormalize={effectiveModelNormalize}
+              effectiveModelPreserveDeveloper={effectiveModelPreserveDeveloper}
+              effectiveModelHidden={effectiveModelHidden}
+              getUpstreamHeadersRecordForModel={getUpstreamHeadersRecordForModel}
+              t={t}
+            />
 
-          {/* Custom Models — available for all providers */}
-          <CustomModelsSection
-            providerId={providerId}
-            providerAlias={providerDisplayAlias}
-            copied={copied}
-            onCopy={copy}
-            onModelsChanged={fetchProviderModelMeta}
-            syncedModelIds={syncedAvailableModels.map((model) => model.id)}
-          />
-        </Card>
+            {/* Custom Models — available for all providers */}
+            <CustomModelsSection
+              providerId={providerId}
+              providerAlias={providerDisplayAlias}
+              copied={copied}
+              onCopy={copy}
+              onModelsChanged={fetchProviderModelMeta}
+              syncedModelIds={syncedAvailableModels.map((model) => model.id)}
+            />
+          </Card>
+        </ProviderDetailSection>
       )}
 
       {/* Search provider info */}
       {isSearchProvider && <SearchProviderCard providerId={providerId} t={t} />}
 
       {/* Playground + param filters — extracted to components/ProviderExtraPanels.tsx (#6649) */}
-      <ProviderExtraPanels providerId={providerId} />
+      <ProviderDetailSection enabled={providerId === "codex"} value="advanced">
+        {providerId === "codex" && (
+          <ProviderAccountRoutingCard
+            providerKey={providerId}
+            connectionCount={connections.length}
+          />
+        )}
+        {providerId === "codex" && <ConnectionPinTip />}
+        <ProviderExtraPanels providerId={providerId} />
+      </ProviderDetailSection>
 
       <ProviderModalsPanel
         providerId={providerId}
@@ -969,6 +1002,6 @@ export default function ProviderDetailPageClient() {
         notify={notify}
         t={t}
       />
-    </div>
+    </Tabs>
   );
 }

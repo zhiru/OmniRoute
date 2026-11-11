@@ -585,7 +585,13 @@ export default function ConnectionsListPanel({
                   <span className="text-[10px] text-text-muted/40">{groupTotal}</span>
                 </div>
               )}
-              <div className="flex flex-col divide-y divide-border">
+              <div
+                className={
+                  providerId === "codex"
+                    ? "flex flex-col gap-3 p-3"
+                    : "flex flex-col divide-y divide-border"
+                }
+              >
                 {groupConns.map((conn, index) => (
                   <ConnectionRow
                     key={conn.id}

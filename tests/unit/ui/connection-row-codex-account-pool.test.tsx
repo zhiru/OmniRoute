@@ -105,6 +105,11 @@ describe("ConnectionRow Codex account pool", () => {
       );
     });
 
+    const disclosure = container.querySelector<HTMLButtonElement>(
+      'button[aria-expanded="false"][aria-controls]'
+    );
+    expect(disclosure).not.toBeNull();
+    act(() => disclosure?.click());
     expect(container.textContent).toContain("Codex quota pools");
     expect(container.textContent).toContain("Codex");
     expect(container.textContent).not.toContain("Spark");
@@ -116,7 +121,7 @@ describe("ConnectionRow Codex account pool", () => {
     expect(row.classList.contains("flex-col")).toBe(true);
     expect(row.classList.contains("items-stretch")).toBe(true);
     // #15532: the actions live in a full-width wrapper; the wrapping flex bar is its child.
-    const actionBar = row.children[1].firstElementChild as HTMLElement;
+    const actionBar = row.querySelector('[id$="-actions"] > div') as HTMLElement;
     expect(actionBar.classList.contains("flex-wrap")).toBe(true);
 
     act(() => {

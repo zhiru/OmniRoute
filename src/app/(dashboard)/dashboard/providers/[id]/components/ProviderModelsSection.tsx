@@ -530,7 +530,7 @@ export default function ProviderModelsSection({
           onSortFreeFirstChange={setSortFreeFirst}
         />
       )}
-      <AutoGrid>
+      <AutoGrid min={providerId === "codex" ? "340px" : undefined}>
         {displayModels.map((model) => {
           return (
             <ModelRow

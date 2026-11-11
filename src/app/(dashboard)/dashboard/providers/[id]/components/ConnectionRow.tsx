@@ -10,7 +10,7 @@ import ConnectionTestButton from "@/shared/components/ConnectionTestButton";
 // getStatusPresentation) moved out of ProviderDetailPageClient.tsx.
 
 import { readCookieExpiresAt } from "@/shared/utils/webCookieExpiry";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Badge, Button, Checkbox, ReorderControl, Select, Toggle } from "@/shared/components";
 import { pickDisplayValue } from "@/shared/utils/maskEmail";
@@ -324,9 +324,16 @@ export default function ConnectionRow({
         .join(" — ")
     : "";
 
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const detailsId = useId();
+  const showDetails = !isCodex || detailsOpen;
+  const codexPoolLimited = connection.codexAccountPool?.children.some(
+    (child) => child.key.scope === "codex" && child.unavailable
+  );
+
   return (
     <div
-      className={`group flex ${isCodex ? "flex-col items-stretch gap-3" : "flex-wrap items-center justify-between gap-x-3 gap-y-2"} p-3 rounded-lg hover:bg-bg-subtle transition-colors ${connection.isActive === false ? "opacity-60" : ""}`}
+      className={`group flex ${isCodex ? "flex-col items-stretch gap-3 border border-border p-4 sm:p-5" : "flex-wrap items-center justify-between gap-x-3 gap-y-2 p-3"} rounded-xl hover:bg-bg-subtle transition-colors ${connection.isActive === false ? "opacity-60" : ""}`}
     >
       {/* basis-64 lets the action bar drop to its own line on narrow screens instead of
           pushing the row past the viewport (the page clips x-overflow, so buttons vanished).
@@ -427,295 +434,328 @@ export default function ConnectionRow({
               </Badge>
             )}
             {/* Rate Limit Protection — inline toggle with label */}
-            <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              icon="shield"
-              onClick={() => onToggleRateLimit(!rateLimitEnabled)}
-              className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
-                rateLimitShielded
-                  ? "bg-success/15 text-success hover:bg-success/25"
-                  : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
-              }`}
-              title={
-                rateLimitEnabled ? t("disableRateLimitProtection") : t("enableRateLimitProtection")
-              }
-            >
-              {rateLimitShielded ? t("rateLimitProtected") : t("rateLimitUnprotected")}
-            </Button>
-            {onToggleQuotaVisibility && (
-              <ProviderQuotaVisibilityToggle
-                visible={quotaVisible}
-                onToggle={onToggleQuotaVisibility}
-              />
-            )}
-            {onToggleAutoSync && (
-              <>
+            {showDetails && (
+              <div id={`${detailsId}-settings`} className="contents">
                 <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
                 <Button
                   variant="ghost"
                   size="sm"
-                  icon="sync"
-                  onClick={() => onToggleAutoSync?.(!autoSyncEnabled)}
-                  disabled={connection.isActive === false}
-                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed ${
-                    autoSyncEnabled
+                  icon="shield"
+                  onClick={() => onToggleRateLimit(!rateLimitEnabled)}
+                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
+                    rateLimitShielded
                       ? "bg-success/15 text-success hover:bg-success/25"
                       : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
                   }`}
-                  title={t("autoSyncTooltip")}
-                >
-                  {t("autoSyncShort")}
-                </Button>
-                <span
-                  className="text-xs text-text-muted"
                   title={
-                    validSync ? new Date(lastSync).toLocaleString(locale) : t("autoSyncNeverSynced")
+                    rateLimitEnabled
+                      ? t("disableRateLimitProtection")
+                      : t("enableRateLimitProtection")
                   }
-                  data-testid="connection-last-model-sync"
                 >
-                  {validSync && syncAgeLabel
-                    ? t("autoSyncLastSynced", { time: syncAgeLabel })
-                    : t("autoSyncNeverSynced")}
-                </span>
-              </>
-            )}
-            {discoveryFailed && discoveryAgeLabel && (
-              <span
-                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium bg-warning/15 text-warning"
-                title={discoveryTitle}
-                data-testid="connection-discovery-state"
-              >
-                <Icon name="warning" size={11} />
-                {t("discoveryDegradedStatus", { time: discoveryAgeLabel })}
-                {discoveryCause && (
-                  <span className="font-mono opacity-80" data-testid="connection-discovery-cause">
-                    {discoveryCause}
+                  {rateLimitShielded ? t("rateLimitProtected") : t("rateLimitUnprotected")}
+                </Button>
+                {onToggleQuotaVisibility && (
+                  <ProviderQuotaVisibilityToggle
+                    visible={quotaVisible}
+                    onToggle={onToggleQuotaVisibility}
+                  />
+                )}
+                {onToggleAutoSync && (
+                  <>
+                    <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon="sync"
+                      onClick={() => onToggleAutoSync?.(!autoSyncEnabled)}
+                      disabled={connection.isActive === false}
+                      className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed ${
+                        autoSyncEnabled
+                          ? "bg-success/15 text-success hover:bg-success/25"
+                          : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
+                      }`}
+                      title={t("autoSyncTooltip")}
+                    >
+                      {t("autoSyncShort")}
+                    </Button>
+                    <span
+                      className="text-xs text-text-muted"
+                      title={
+                        validSync
+                          ? new Date(lastSync).toLocaleString(locale)
+                          : t("autoSyncNeverSynced")
+                      }
+                      data-testid="connection-last-model-sync"
+                    >
+                      {validSync && syncAgeLabel
+                        ? t("autoSyncLastSynced", { time: syncAgeLabel })
+                        : t("autoSyncNeverSynced")}
+                    </span>
+                  </>
+                )}
+                {discoveryFailed && discoveryAgeLabel && (
+                  <span
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium bg-warning/15 text-warning"
+                    title={discoveryTitle}
+                    data-testid="connection-discovery-state"
+                  >
+                    <Icon name="warning" size={11} />
+                    {t("discoveryDegradedStatus", { time: discoveryAgeLabel })}
+                    {discoveryCause && (
+                      <span
+                        className="font-mono opacity-80"
+                        data-testid="connection-discovery-cause"
+                      >
+                        {discoveryCause}
+                      </span>
+                    )}
                   </span>
                 )}
-              </span>
-            )}
-            {isClaude && (
-              <>
-                <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon="payments"
-                  onClick={() => onToggleClaudeExtraUsage?.(!claudeBlockExtraUsageEnabled)}
-                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
-                    !claudeBlockExtraUsageEnabled
-                      ? "bg-warning/15 text-warning hover:bg-warning/25"
-                      : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
-                  }`}
-                  title={t("claudeExtraUsageToggleTitle")}
-                >
-                  {t("claudeExtraUsageShort")}{" "}
-                  {!claudeBlockExtraUsageEnabled ? t("toggleOnShort") : t("toggleOffShort")}
-                </Button>
-              </>
-            )}
-            {isCodex && connection.provider === "codex" && onToggleCodexPaidCredits && (
-              <>
-                <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon="payments"
-                  onClick={() => onToggleCodexPaidCredits(!codexPaidCreditsEnabled)}
-                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
-                    codexPaidCreditsEnabled
-                      ? "bg-warning/15 text-warning hover:bg-warning/25"
-                      : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
-                  }`}
-                  title={t("codexPaidCreditsToggleTitle")}
-                  aria-pressed={codexPaidCreditsEnabled}
-                >
-                  {t("codexPaidCreditsShort")}{" "}
-                  {codexPaidCreditsEnabled ? t("toggleOnShort") : t("toggleOffShort")}
-                </Button>
-              </>
-            )}
-            {/* #dario: upstream proxy routing selector. Gated on isClaude (the
+                {isClaude && (
+                  <>
+                    <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon="payments"
+                      onClick={() => onToggleClaudeExtraUsage?.(!claudeBlockExtraUsageEnabled)}
+                      className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
+                        !claudeBlockExtraUsageEnabled
+                          ? "bg-warning/15 text-warning hover:bg-warning/25"
+                          : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
+                      }`}
+                      title={t("claudeExtraUsageToggleTitle")}
+                    >
+                      {t("claudeExtraUsageShort")}{" "}
+                      {!claudeBlockExtraUsageEnabled ? t("toggleOnShort") : t("toggleOffShort")}
+                    </Button>
+                  </>
+                )}
+                {isCodex && connection.provider === "codex" && onToggleCodexPaidCredits && (
+                  <>
+                    <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon="payments"
+                      onClick={() => onToggleCodexPaidCredits(!codexPaidCreditsEnabled)}
+                      className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
+                        codexPaidCreditsEnabled
+                          ? "bg-warning/15 text-warning hover:bg-warning/25"
+                          : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
+                      }`}
+                      title={t("codexPaidCreditsToggleTitle")}
+                      aria-pressed={codexPaidCreditsEnabled}
+                    >
+                      {t("codexPaidCreditsShort")}{" "}
+                      {codexPaidCreditsEnabled ? t("toggleOnShort") : t("toggleOffShort")}
+                    </Button>
+                  </>
+                )}
+                {/* #dario: upstream proxy routing selector. Gated on isClaude (the
                 real, built-in "claude" provider — the primary intended use
                 case for CLIProxyAPI/Dario failover) OR isCcCompatible (a
                 custom Claude-Code-protocol-compatible node). Previously this
                 only checked isCcCompatible, which never covered the built-in
                 Claude provider at all — the control was unreachable for the
                 one connection type it was actually built for. */}
-            {(isClaude || isCcCompatible) && (
-              <>
-                <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
-                <Select
-                  compact
-                  value={effectiveUpstreamProxyMode}
-                  onChange={(e) =>
-                    onSetUpstreamProxyMode?.(
-                      e.target.value as "native" | "cliproxyapi" | "dario" | "fallback"
-                    )
-                  }
-                  className="w-auto"
-                  selectClassName="text-xs font-medium"
-                  title={t("claudeCodeRoutingTitle")}
-                >
-                  <option value="native">{t("routingNative")}</option>
-                  <option value="cliproxyapi">CLIProxyAPI</option>
-                  <option value="dario">Dario</option>
-                  <option value="fallback">{t("routingFallback")}</option>
-                </Select>
-                {effectiveUpstreamProxyMode === "fallback" && (
-                  <Select
-                    compact
-                    value={upstreamProxyFallbackBackend ?? "cliproxyapi"}
-                    onChange={(e) =>
-                      onSetUpstreamProxyMode?.(
-                        "fallback",
-                        e.target.value as "cliproxyapi" | "dario"
-                      )
-                    }
-                    className="w-auto"
-                    selectClassName="text-xs font-medium"
-                    title={t("fallbackRetryBackendTitle")}
-                  >
-                    <option value="cliproxyapi">→ CLIProxyAPI</option>
-                    <option value="dario">→ Dario</option>
-                  </Select>
+                {(isClaude || isCcCompatible) && (
+                  <>
+                    <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
+                    <Select
+                      compact
+                      value={effectiveUpstreamProxyMode}
+                      onChange={(e) =>
+                        onSetUpstreamProxyMode?.(
+                          e.target.value as "native" | "cliproxyapi" | "dario" | "fallback"
+                        )
+                      }
+                      className="w-auto"
+                      selectClassName="text-xs font-medium"
+                      title={t("claudeCodeRoutingTitle")}
+                    >
+                      <option value="native">{t("routingNative")}</option>
+                      <option value="cliproxyapi">CLIProxyAPI</option>
+                      <option value="dario">Dario</option>
+                      <option value="fallback">{t("routingFallback")}</option>
+                    </Select>
+                    {effectiveUpstreamProxyMode === "fallback" && (
+                      <Select
+                        compact
+                        value={upstreamProxyFallbackBackend ?? "cliproxyapi"}
+                        onChange={(e) =>
+                          onSetUpstreamProxyMode?.(
+                            "fallback",
+                            e.target.value as "cliproxyapi" | "dario"
+                          )
+                        }
+                        className="w-auto"
+                        selectClassName="text-xs font-medium"
+                        title={t("fallbackRetryBackendTitle")}
+                      >
+                        <option value="cliproxyapi">→ CLIProxyAPI</option>
+                        <option value="dario">→ Dario</option>
+                      </Select>
+                    )}
+                  </>
                 )}
-              </>
-            )}
-            {isCodex && (
-              <>
-                <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
-                {codexServiceTierBadge && (
-                  <span
-                    className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${codexServiceTierBadge.className}`}
-                    title={codexServiceTierBadge.title}
-                  >
-                    <Icon name={codexServiceTierBadge.icon} size={13} />
-                    {codexServiceTierBadge.label}
-                  </span>
+                {isCodex && (
+                  <>
+                    <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
+                    {codexServiceTierBadge && (
+                      <span
+                        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium ${codexServiceTierBadge.className}`}
+                        title={codexServiceTierBadge.title}
+                      >
+                        <Icon name={codexServiceTierBadge.icon} size={13} />
+                        {codexServiceTierBadge.label}
+                      </span>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon="timer"
+                      onClick={() => onToggleCodex5h?.(!codex5hEnabled)}
+                      className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
+                        codex5hEnabled
+                          ? "bg-info/15 text-info hover:bg-info/25"
+                          : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
+                      }`}
+                      title={t("codex5hToggleTitle")}
+                    >
+                      5h {codex5hEnabled ? t("toggleOnShort") : t("toggleOffShort")}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon="date_range"
+                      onClick={() => onToggleCodexWeekly?.(!codexWeeklyEnabled)}
+                      className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
+                        codexWeeklyEnabled
+                          ? "bg-chart-3/15 text-chart-3 hover:bg-chart-3/25"
+                          : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
+                      }`}
+                      title={t("codexWeeklyToggleTitle")}
+                    >
+                      {t("weeklyShort")}{" "}
+                      {codexWeeklyEnabled ? t("toggleOnShort") : t("toggleOffShort")}
+                    </Button>
+                  </>
                 )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon="timer"
-                  onClick={() => onToggleCodex5h?.(!codex5hEnabled)}
-                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
-                    codex5hEnabled
-                      ? "bg-info/15 text-info hover:bg-info/25"
-                      : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
-                  }`}
-                  title={t("codex5hToggleTitle")}
-                >
-                  5h {codex5hEnabled ? t("toggleOnShort") : t("toggleOffShort")}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon="date_range"
-                  onClick={() => onToggleCodexWeekly?.(!codexWeeklyEnabled)}
-                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
-                    codexWeeklyEnabled
-                      ? "bg-chart-3/15 text-chart-3 hover:bg-chart-3/25"
-                      : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
-                  }`}
-                  title={t("codexWeeklyToggleTitle")}
-                >
-                  {t("weeklyShort")} {codexWeeklyEnabled ? t("toggleOnShort") : t("toggleOffShort")}
-                </Button>
-              </>
-            )}
-            {onToggleProxyEnabled && (
-              <>
-                <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon="vpn_lock"
-                  onClick={() => onToggleProxyEnabled(!proxyEnabled)}
-                  aria-label={proxyEnabled ? t("proxyEnabledTitle") : t("proxyDisabledTitle")}
-                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
-                    proxyEnabled
-                      ? "bg-success/15 text-success hover:bg-success/25"
-                      : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
-                  }`}
-                  title={proxyEnabled ? t("proxyEnabledTitle") : t("proxyDisabledTitle")}
-                >
-                  {proxyEnabled ? <span className="sr-only">{t("proxyOn")}</span> : t("proxyOff")}
-                </Button>
-              </>
-            )}
-            {onTogglePerKeyProxyEnabled && (
-              <>
-                <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon="key"
-                  onClick={() => onTogglePerKeyProxyEnabled(!perKeyProxyEnabled)}
-                  aria-label={
-                    perKeyProxyEnabled
-                      ? t("perKeyProxyEnabledTitle")
-                      : t("perKeyProxyDisabledTitle")
-                  }
-                  className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
-                    perKeyProxyEnabled
-                      ? "bg-chart-3/15 text-chart-3 hover:bg-chart-3/25"
-                      : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
-                  }`}
-                  title={
-                    perKeyProxyEnabled
-                      ? t("perKeyProxyEnabledTitle")
-                      : t("perKeyProxyDisabledTitle")
-                  }
-                >
-                  {perKeyProxyEnabled ? (
-                    t("perKeyProxyOn")
-                  ) : (
-                    <span className="sr-only">{t("perKeyProxyOff")}</span>
-                  )}
-                </Button>
-              </>
-            )}
-            {hasProxy &&
-              (() => {
-                const colorClass =
-                  proxySource === "global"
-                    ? "bg-success/15 text-success"
-                    : proxySource === "provider"
-                      ? "bg-warning/15 text-warning"
-                      : "bg-info/15 text-info";
-                const label =
-                  proxySource === "global"
-                    ? t("proxySourceGlobal")
-                    : proxySource === "provider"
-                      ? t("proxySourceProvider")
-                      : t("proxySourceKey");
-                return (
+                {onToggleProxyEnabled && (
                   <>
                     <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
                     <Button
                       variant="ghost"
                       size="sm"
                       icon="vpn_lock"
-                      onClick={onProxy}
-                      disabled={!onProxy}
-                      className={`h-auto min-h-0 gap-0.5 rounded px-1.5 py-0.5 text-xs font-medium ${colorClass}`}
-                      title={t("proxyConfiguredBySource", {
-                        source: label,
-                        host: proxyHost || t("configured"),
-                      })}
+                      onClick={() => onToggleProxyEnabled(!proxyEnabled)}
+                      aria-label={proxyEnabled ? t("proxyEnabledTitle") : t("proxyDisabledTitle")}
+                      className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
+                        proxyEnabled
+                          ? "bg-success/15 text-success hover:bg-success/25"
+                          : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
+                      }`}
+                      title={proxyEnabled ? t("proxyEnabledTitle") : t("proxyDisabledTitle")}
                     >
-                      {proxyName || proxyHost || t("proxy")}
+                      {proxyEnabled ? (
+                        <span className="sr-only">{t("proxyOn")}</span>
+                      ) : (
+                        t("proxyOff")
+                      )}
                     </Button>
                   </>
-                );
-              })()}
+                )}
+                {onTogglePerKeyProxyEnabled && (
+                  <>
+                    <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon="key"
+                      onClick={() => onTogglePerKeyProxyEnabled(!perKeyProxyEnabled)}
+                      aria-label={
+                        perKeyProxyEnabled
+                          ? t("perKeyProxyEnabledTitle")
+                          : t("perKeyProxyDisabledTitle")
+                      }
+                      className={`h-auto min-h-0 gap-1 rounded px-1.5 py-0.5 text-xs font-medium ${
+                        perKeyProxyEnabled
+                          ? "bg-chart-3/15 text-chart-3 hover:bg-chart-3/25"
+                          : "bg-bg-subtle text-text-muted/50 hover:text-text-muted hover:bg-bg-subtle"
+                      }`}
+                      title={
+                        perKeyProxyEnabled
+                          ? t("perKeyProxyEnabledTitle")
+                          : t("perKeyProxyDisabledTitle")
+                      }
+                    >
+                      {perKeyProxyEnabled ? (
+                        t("perKeyProxyOn")
+                      ) : (
+                        <span className="sr-only">{t("perKeyProxyOff")}</span>
+                      )}
+                    </Button>
+                  </>
+                )}
+                {hasProxy &&
+                  (() => {
+                    const colorClass =
+                      proxySource === "global"
+                        ? "bg-success/15 text-success"
+                        : proxySource === "provider"
+                          ? "bg-warning/15 text-warning"
+                          : "bg-info/15 text-info";
+                    const label =
+                      proxySource === "global"
+                        ? t("proxySourceGlobal")
+                        : proxySource === "provider"
+                          ? t("proxySourceProvider")
+                          : t("proxySourceKey");
+                    return (
+                      <>
+                        <span className="hidden text-text-muted/30 select-none sm:inline">|</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          icon="vpn_lock"
+                          onClick={onProxy}
+                          disabled={!onProxy}
+                          className={`h-auto min-h-0 gap-0.5 rounded px-1.5 py-0.5 text-xs font-medium ${colorClass}`}
+                          title={t("proxyConfiguredBySource", {
+                            source: label,
+                            host: proxyHost || t("configured"),
+                          })}
+                        >
+                          {proxyName || proxyHost || t("proxy")}
+                        </Button>
+                      </>
+                    );
+                  })()}
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <div className="basis-full min-w-0 xl:basis-auto">
+      {isCodex && (
+        <Button
+          size="sm"
+          variant="ghost"
+          className="self-start"
+          icon={detailsOpen ? "expand_less" : "tune"}
+          aria-expanded={detailsOpen}
+          aria-controls={`${detailsId}-settings ${detailsId}-actions`}
+          onClick={() => setDetailsOpen(!detailsOpen)}
+        >
+          {t("advancedSettings")}
+        </Button>
+      )}
+      <div
+        id={`${detailsId}-actions`}
+        hidden={!showDetails}
+        className="basis-full min-w-0 xl:basis-auto"
+      >
         <div className="flex w-full flex-wrap items-center justify-between gap-0.5 sm:gap-1 xl:justify-end [&>button]:grow-0">
           <ConnectionTestButton
             connectionId={connection.id}
@@ -881,7 +921,7 @@ export default function ConnectionRow({
           </div>
         </div>
       </div>
-      {isCodex && connection.codexAccountPool ? (
+      {isCodex && (showDetails || codexPoolLimited) && connection.codexAccountPool ? (
         <div className="basis-full min-w-0">
           <CodexAccountDetails pool={connection.codexAccountPool} />
         </div>

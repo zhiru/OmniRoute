@@ -151,7 +151,7 @@ test("toggle thumb is vertically centred in its track", () => {
 });
 
 test("provider models use the symmetric AutoGrid", () => {
-  assert.match(read(`${providerComponents}/ProviderModelsSection.tsx`), /<AutoGrid>/);
+  assert.match(read(`${providerComponents}/ProviderModelsSection.tsx`), /<AutoGrid\s/);
   assert.match(
     read("src/shared/components/AutoGrid.tsx"),
     /repeat\(auto-fill,minmax\(var\(--auto-grid-min\),1fr\)\)/
@@ -163,7 +163,7 @@ test("model card: icon + full name on top, copy pinned top-right, details below"
   const row = read(`${providerComponents}/ModelRow.tsx`);
   assert.match(row, /relative flex h-full w-full min-w-0 flex-col gap-1\.5/);
   assert.match(row, /<code className="min-w-0 break-all pt-px font-mono/);
-  assert.match(row, /<div className="flex min-w-0 items-center gap-2 pl-6">/);
+  assert.match(row, /<div className="flex min-w-0 flex-wrap items-center gap-2 pl-6">/);
   assert.match(
     read(`${providerComponents}/ModelCompatPopover.tsx`),
     /<span className="hidden sm:inline">\{t\("compatButtonLabel"\)\}<\/span>/
