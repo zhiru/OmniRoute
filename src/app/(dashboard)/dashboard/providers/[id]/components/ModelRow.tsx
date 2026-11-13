@@ -424,9 +424,8 @@ export default function ModelRow({
     </div>
   );
   const metadata = (
-    <div className="flex min-w-0 flex-wrap items-center gap-2 pl-6">
+    <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 pl-6">
       <ModelSourceBadge source={model.source} />
-      {combos && combos.length > 0 && <ModelComboBadge combos={combos} t={t} />}
       {onSaveContextWindowOverride && (
         <ContextWindowOverrideField
           editor={contextEditor}
@@ -436,7 +435,7 @@ export default function ModelRow({
         />
       )}
       {onSetAlias && (
-        <span className="flex min-w-0 flex-1 items-center text-[10px] gap-1">
+        <span className="flex min-w-0 flex-1 basis-16 items-center text-[10px] gap-1">
           {editing ? (
             <KitInput
               ref={inputRef}
@@ -471,7 +470,7 @@ export default function ModelRow({
         className={
           provider === "codex" && collectionView === "cards"
             ? "absolute right-3 top-3 z-10"
-            : "ml-auto flex max-w-full flex-wrap items-center gap-1"
+            : "ml-auto flex max-w-full shrink-0 flex-wrap items-center gap-1"
         }
       >
         <ProviderActionsMenu enabled={provider === "codex"}>
@@ -585,8 +584,10 @@ export default function ModelRow({
       </div>
     </div>
   );
+  // Combo badges get their own line: several of them never fit beside the actions (#19543).
   const endpoints = (
-    <div className="min-w-0">
+    <div className="flex min-w-0 flex-col gap-2">
+      {combos && combos.length > 0 && <ModelComboBadge combos={combos} t={t} />}
       {endpointInfo && (
         <ModelEndpointTagsEditor provider={provider} modelId={model.id} t={t} {...endpointInfo} />
       )}
