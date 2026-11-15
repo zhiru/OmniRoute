@@ -23,10 +23,14 @@ describe("Codex account actions menu", () => {
     fireEvent.click(screen.getByRole("button", { name: "Actions" }));
     expect(screen.getByRole("dialog", { name: "Actions" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    const deleteButton = screen.getByRole("button", { name: "Delete" });
+    expect(deleteButton.getAttribute("title")).toBe("Delete");
+    expect(deleteButton.getAttribute("data-variant")).toBe("destructive-ghost");
+    fireEvent.click(deleteButton);
     expect(onEdit).toHaveBeenCalledOnce();
     expect(onDelete).toHaveBeenCalledOnce();
     fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     expect(screen.queryByRole("button", { name: "Edit" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Delete" })).toBeNull();
   });
 });

@@ -110,13 +110,12 @@ export default function CodexAccountActions(props: ConnectionRowProps) {
       )}
       <div className="my-1 border-t border-border" />
       <Button
-        variant="ghost"
+        variant="destructive-ghost"
         size="sm"
         icon="delete"
         aria-label={t("delete")}
         title={t("delete")}
         onClick={props.onDelete}
-        className="text-error"
       >
         {t("delete")}
       </Button>
