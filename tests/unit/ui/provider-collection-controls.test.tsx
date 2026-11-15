@@ -118,6 +118,7 @@ describe("Provider collection views and pagination", () => {
         isCodex: true,
         isOAuth: false,
         codexViewMode: view,
+        codexGlobalServiceMode: "ultrafast",
         quotaCache: {
           quotas: {
             session: { used: 50, total: 100, windowSeconds: 604800, displayName: "Weekly" },
@@ -140,6 +141,9 @@ describe("Provider collection views and pagination", () => {
       expect(screen.getAllByRole("meter")).toHaveLength(1);
       expect(screen.getByRole("meter", { name: "7d" }).getAttribute("aria-valuenow")).toBe("50");
       expect(screen.queryByText("5h")).toBeNull();
+      fireEvent.click(screen.getByRole("button", { name: "Details" }));
+      expect(screen.getByText("Ultrafast")).toBeTruthy();
+      expect(screen.getAllByRole("meter")).toHaveLength(1);
     });
   }
 });

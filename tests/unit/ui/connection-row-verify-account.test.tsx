@@ -84,6 +84,41 @@ describe("ConnectionRow Verify account link", () => {
     expect(await render(connectionWith(undefined))).toBeNull();
   });
 
+  it("keeps one verification link and one of each action with their callbacks", async () => {
+    const onReauth = vi.fn();
+    const onEdit = vi.fn();
+    const onProxy = vi.fn();
+    const onDelete = vi.fn();
+    await act(async () => {
+      root.render(
+        <ConnectionRow
+          {...rowProps}
+          connection={connectionWith({ verificationUrl: VERIFY_URL })}
+          onReauth={onReauth}
+          onEdit={onEdit}
+          onProxy={onProxy}
+          onDelete={onDelete}
+        />
+      );
+    });
+    expect(container.querySelectorAll("a[data-testid='connection-verify-account']")).toHaveLength(
+      1
+    );
+    for (const [label, callback] of [
+      ["reauthenticateConnection", onReauth],
+      ["edit", onEdit],
+      ["proxyConfig", onProxy],
+      ["delete", onDelete],
+    ] as const) {
+      const buttons = container.querySelectorAll<HTMLButtonElement>(
+        `button[aria-label="${label}"]`
+      );
+      expect(buttons).toHaveLength(1);
+      await act(async () => buttons[0].click());
+      expect(callback).toHaveBeenCalledOnce();
+    }
+  });
+
   it("refuses non-Google or non-https URLs", async () => {
     expect(await render(connectionWith({ verificationUrl: "https://evil.com/x" }))).toBeNull();
     expect(
