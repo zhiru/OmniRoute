@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                              |         v3.8.50          | **v3.8.51** |       `v3.8.54+`       |
+|                              |         v3.8.50          | **v3.8.51** |       `v3.8.55+`       |
 | ---------------------------- | :----------------------: | :---------: | :--------------------: |
 | 🌐 Àwọn olùpèsè              |           352            |   **358**   |          394           |
 | 🧠 Àwọn ID awoṣe ìjíròrò ọ̀tọ̀ |           1320           |  **1374**   |          1491          |
@@ -94,6 +94,7 @@
 [![ẹ̀dà npm](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM lóṣù] (https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
 [![Iwe-aṣẹ: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 ![Àwọn ìgbàsílẹ̀ Docker] (https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Àwọn ìgbàsílẹ̀ Electron] (https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
 
@@ -598,7 +599,7 @@ tẹlifíṣọ̀nù lílò, tàbí ipò ìkọ̀sílẹ̀ ìkéde abẹ́lẹ̀
 
 </div>
 
-> Àwọn àkíyèsí pàtàkì láti **v3.8.20 → v3.8.54**. Wo ìtàn kíkún nínú [`CHANGELOG.md`](CHANGELOG.md).
+> Àwọn àkíyèsí pàtàkì láti **v3.8.20 → v3.8.55**. Wo ìtàn kíkún nínú [`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ Ìṣàdarí `quota-weighted`** — ọgbọ́n combo kẹ́ẹ̀dógún yìí máa fo àwọn àkántì tí quota wọn ti tán, lẹ́yìn náà ó máa yan láàárín àwọn tó kù ní ìbámu pẹ̀lú quota tó ṣẹ́kù ÷ ẹrù tó ń lọ, ó sì ń jẹ́ kí àwọn ìjíròrò tó wà tẹ̀síwájú wà lórí àkántì kan náà. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 Àyè headless** — `omniroute serve --headless` (tàbí `OMNIROUTE_HEADLESS=1`) máa ń ṣiṣẹ́ engine proxy `/v1/*` nìkan, pẹ̀lú dashboard àti àwọn subsystems tó jẹ́ ti dashboard nìkan tí a pa. → [Àyè Headless](docs/guides/HEADLESS.md)
@@ -786,7 +787,7 @@ nínú ìtàn shell rẹ. → [Àwọn Ìṣọ̀kan CLI](docs/guides/CLI-INTEGR
   <tr><th align="left">Pẹpẹ</th><th align="left">Fifi sílẹ̀</th><th align="left">Àwọn àǹfààní pàtàkì</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (global)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">Àṣẹ kan ṣoṣo, OS èyíkéyìí</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (global)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">Tarball registry kan náà, fifi sílẹ̀ yára síi</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Desktop (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Ferese abinibi + system tray — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Menu-bar (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Ó ń bójú tó olupin, ó sì ń ṣe imudojùìwọ̀n fúnra rẹ̀ — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>native <code>arm64</code></td><td align="left">Raspberry Pi, àwọn olupin ARM, Apple Silicon</td></tr>
@@ -1048,7 +1049,7 @@ omniroute
 ```
 
 > 💡 Ṣé o rí `npm warn ERESOLVE` tàbí ìkìlọ̀ peer-dep? [Wọ́n kò léwu](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **Ṣé o ń lo npm 11 tàbí tuntun jù bẹ́ẹ̀ lọ?** npm lè dí àwọn script ìgbésí-ayé package dúró bí a kò bá fún wọn ní àṣẹ. `postinstall` OmniRoute (`node scripts/build/postinstall.mjs`) ṣe pàtàkì láti pèsè àwọn fáìlì runtime abinibi rẹ̀. Fún àwọn package tí a dárúkọ nínú ìkìlọ̀ npm ní àṣẹ nígbà tí o bá ń fi OmniRoute sílẹ̀ ní gbogbogbòò. Fún àkójọpọ̀ package tí OmniRoute 3.8.54 ròyìn:
+> **Ṣé o ń lo npm 11 tàbí tuntun jù bẹ́ẹ̀ lọ?** npm lè dí àwọn script ìgbésí-ayé package dúró bí a kò bá fún wọn ní àṣẹ. `postinstall` OmniRoute (`node scripts/build/postinstall.mjs`) ṣe pàtàkì láti pèsè àwọn fáìlì runtime abinibi rẹ̀. Fún àwọn package tí a dárúkọ nínú ìkìlọ̀ npm ní àṣẹ nígbà tí o bá ń fi OmniRoute sílẹ̀ ní gbogbogbòò. Fún àkójọpọ̀ package tí OmniRoute 3.8.55 ròyìn:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1110,7 +1111,7 @@ Lo àwọn wọ̀nyí nìkan fún àwọn client tí kò lè so `Authorization: 
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` ń tẹ̀lé SemVer stable tí a **tẹ̀jáde** jù lọ. Kò tẹ̀lé git `main`. Lo `:X.Y.Z` gẹ́gẹ́ bí àmi dídúróṣinṣin fún GitOps. Wo [Àwọn ikanni ìtúsílẹ̀ Docker](docs/guides/DOCKER_GUIDE.md#release-channels). Àwòrán náà pin **`OMNIROUTE_MEMORY_MB=1024`**. Èyí tó fún dashboard àti ìjíròrò kékeré. **Àwọn aṣojú kóòdù** (`POST /v1/responses` láti Claude Code, Codex, Grok, …) nílò V8 heap tó tóbi púpọ̀, bí bẹ́ẹ̀ kọ́ process náà máa `FATAL ERROR`s ní nǹkan bíi ~12 GiB lábẹ́ àwọn àyíká long context méjì tí ń bára wọn lélẹ̀. Ṣètò container náà ju heap lọ (àwọn native buffer wà lẹ́yìn V8):
@@ -1124,7 +1125,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Tábìlì kíkún: [Ìtọ́sọ́nà Docker — RAM ní àkókò ìṣiṣẹ́](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1324,7 +1325,7 @@ Fún runtime headless tí kò ní dashboard, lo profaili Docker `base` (lókè) 
   <tr><td nowrap><b>Àkókò ìṣiṣẹ́</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Èdè</b></td><td>TypeScript 6.0 — <b>TypeScript 100%</b> káàkiri <code>src/</code> àti <code>open-sse/</code> (kò sí <code>any</code> nínú mojútò láti ìgbà v2.0)</td></tr>
   <tr><td nowrap><b>Framework</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>Àkójọpọ̀ dátà</b></td><td>better-sqlite3 (SQLite, ìwé-àkọsílẹ̀ WAL) + LowDB (JSON àjọṣe àtijọ́) — àwọn modúlù àgbègbè 147, àwọn ìṣípadà 240</td></tr>
+  <tr><td nowrap><b>Àkójọpọ̀ dátà</b></td><td>better-sqlite3 (SQLite, ìwé-àkọsílẹ̀ WAL) + LowDB (JSON àjọṣe àtijọ́) — àwọn modúlù àgbègbè 147, àwọn ìṣípadà 244</td></tr>
   <tr><td nowrap><b>Ìrántí</b></td><td>SQLite FTS5 fún wíwá nínú gbogbo ọ̀rọ̀ + àwọn ìṣàpẹẹrẹ fekito tí a ṣe ìwọ̀n sí int8, ìdíndínà tí a tẹ̀wé</td></tr>
   <tr><td nowrap><b>Àwọn ètò àgbékalẹ̀</b></td><td>Zod 4 — ìmúdájú I/O irinṣẹ́ MCP + àwọn àdéhùn API</td></tr>
   <tr><td nowrap><b>Àwọn ìlànà</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1337,7 +1338,7 @@ Fún runtime headless tí kò ní dashboard, lo profaili Docker `base` (lókè) 
   <tr><td nowrap><b>Ìdánwò</b></td><td>Olùṣàdánwò Node.js + Vitest — <b>àwọn ìkéde ìdánwò aimi tó ju 60,000 lọ</b> káàkiri àwọn fáìlì ìdánwò tó lé ní 8,400 (unit, integration, E2E, security, ecosystem)</td></tr>
   <tr><td nowrap><b>Àwọn pèpéle</b></td><td>Kọ̀ǹpútà (Electron) · Android (Termux) · PWA (àwọ̀n aṣàwákiri èyíkéyìí)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — títẹ̀jáde npm aládàáṣiṣẹ́ + Docker Hub nígbà ìtújáde</td></tr>
-  <tr><td nowrap><b>Àwọn ìjápọ̀</b></td><td><a href="https://omniroute.online">Wẹ́ẹ̀bù</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Àwọn ìjápọ̀</b></td><td><a href="https://omniroute.online">Wẹ́ẹ̀bù</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1837,7 +1838,7 @@ OmniRoute dúró lórí àyà àwọn òmìrán. Ó bẹ̀rẹ̀ gẹ́gẹ́ b�
 
 **[⬆ Padà sí òkè](#-omniroute)** · A fi ❤️ kọ́ ọ́ fún àwùjọ AI orísun-ìmọ̀.
 
-<sub>Ẹni tó dá a sílẹ̀ ni <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Ìwé-aṣẹ MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Ẹni tó dá a sílẹ̀ ni <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Ìwé-aṣẹ MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- GitHub Discussions ti ṣiṣẹ́ fún Ìbéèrè àti Ìdáhùn àwùjọ -->

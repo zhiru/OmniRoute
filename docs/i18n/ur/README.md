@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                          |        v3.8.50        | **v3.8.51** |      `v3.8.54+`       |
+|                          |        v3.8.50        | **v3.8.51** |      `v3.8.55+`       |
 | ------------------------ | :-------------------: | :---------: | :-------------------: |
 | 🌐 فراہم کنندگان         |          352          |   **358**   |          394          |
 | 🧠 منفرد چیٹ ماڈل IDs    |         1320          |  **1374**   |         1491          |
@@ -93,7 +93,7 @@
 
 [![npm ورژن](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM ماہانہ](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 ![لائسنس: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Docker ڈاؤن لوڈز](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Electron ڈاؤن لوڈز](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -594,7 +594,7 @@ Radar اختیاری ہے اور صرف GET استعمال کرتا ہے۔ OmniR
 
 </div>
 
-> **v3.8.20 → v3.8.54** کی حالیہ جھلکیاں۔ مکمل تاریخ [`CHANGELOG.md`](CHANGELOG.md) میں ہے۔
+> **v3.8.20 → v3.8.55** کی حالیہ جھلکیاں۔ مکمل تاریخ [`CHANGELOG.md`](CHANGELOG.md) میں ہے۔
 
 - **⚖️ `quota-weighted` routing** — 20ویں کومبو حکمتِ عملی ختم شدہ اکاؤنٹس کو نظرانداز کرتی ہے، پھر باقی اکاؤنٹس میں بچ جانے والے کوٹے ÷ زیرِ عمل لوڈ کے تناسب سے انتخاب کرتی ہے، جبکہ موجودہ گفتگوؤں کو اسی اکاؤنٹ سے منسلک رکھتی ہے۔ → [آٹو-کومبو](docs/routing/AUTO-COMBO.md)
 - **🧰 ہیڈ لیس موڈ** — `omniroute serve --headless` (یا `OMNIROUTE_HEADLESS=1`) صرف `/v1/*` پراکسی انجن چلاتا ہے، جبکہ ڈیش بورڈ اور صرف ڈیش بورڈ سے متعلق ذیلی نظام بند رہتے ہیں۔ → [ہیڈ لیس موڈ](docs/guides/HEADLESS.md)
@@ -781,7 +781,7 @@ omniroute configure codex          # یہ بھی: claude opencode qwen aider goo
   <tr><th align="left">پلیٹ فارم</th><th align="left">انسٹالیشن</th><th align="left">نمایاں خصوصیات</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (عالمی)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">ایک کمانڈ، کوئی بھی OS</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (عالمی)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">وہی رجسٹری tarball، زیادہ تیز انسٹالیشنز</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">ملٹی آرک <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">ملٹی آرک <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>ڈیسک ٹاپ (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">نیٹو ونڈو + سسٹم ٹرے — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>مینو بار (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">سرور کی نگرانی اور خودکار اپ ڈیٹ — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>نیٹو <code>arm64</code></td><td align="left">Raspberry Pi، ARM سرورز، Apple Silicon</td></tr>
@@ -1041,7 +1041,7 @@ omniroute
 ```
 
 > 💡 `npm warn ERESOLVE` یا peer-dep warnings نظر آ رہی ہیں؟ [یہ بے ضرر ہیں](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated)۔
-> **npm 11 یا بعد کا ورژن استعمال کر رہے ہیں؟** npm package lifecycle scripts کو روک سکتا ہے، جب تک انہیں اجازت نہ دی جائے۔ OmniRoute کا `postinstall` (`node scripts/build/postinstall.mjs`) اس کی native runtime files تیار کرنے کے لیے ضروری ہے۔ globally انسٹال کرتے وقت npm کی warning میں نام زد packages کو اجازت دیں۔ OmniRoute 3.8.54 کی جانب سے رپورٹ کردہ package set کے لیے:
+> **npm 11 یا بعد کا ورژن استعمال کر رہے ہیں؟** npm package lifecycle scripts کو روک سکتا ہے، جب تک انہیں اجازت نہ دی جائے۔ OmniRoute کا `postinstall` (`node scripts/build/postinstall.mjs`) اس کی native runtime files تیار کرنے کے لیے ضروری ہے۔ globally انسٹال کرتے وقت npm کی warning میں نام زد packages کو اجازت دیں۔ OmniRoute 3.8.55 کی جانب سے رپورٹ کردہ package set کے لیے:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1103,7 +1103,7 @@ Ollama tags:      http://localhost:20128/vscode/YOUR_KEY/api/tags
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` سب سے زیادہ **شائع شدہ** مستحکم SemVer کی پیروی کرتا ہے۔ یہ git `main` کو ٹریک نہیں کرتا۔ GitOps کے لیے `:X.Y.Z` کو پن کریں۔ [Docker ریلیز چینلز](docs/guides/DOCKER_GUIDE.md#release-channels) دیکھیں۔ اس امیج میں **`OMNIROUTE_MEMORY_MB=1024`** مقرر ہے۔ یہ ڈیش بورڈ اور ہلکی چیٹ کے لیے کافی ہے۔ **کوڈنگ ایجنٹس** (`POST /v1/responses`، Claude Code، Codex، Grok، … سے) کو کہیں زیادہ بڑے V8 heap کی ضرورت ہوتی ہے، ورنہ دو باہم متداخل طویل سیاق و سباق کے تحت تقریباً 12 GiB پر عمل `FATAL ERROR` دے دیتا ہے۔ کنٹینر کا سائز heap سے زیادہ رکھیں (native buffers، V8 کے باہر ہوتے ہیں):
@@ -1117,7 +1117,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 مکمل جدول: [Docker گائیڈ — رن ٹائم RAM](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents)۔
@@ -1315,7 +1315,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1 بھی اسے چ�
   <tr><td nowrap><b>رن ٹائم</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>زبان</b></td><td>TypeScript 6.0 — <b>100% TypeScript</b> <code>src/</code> اور <code>open-sse/</code> میں (v2.0 سے کور میں صفر <code>any</code>)</td></tr>
   <tr><td nowrap><b>فریم ورک</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>ڈیٹابیس</b></td><td>better-sqlite3 (SQLite، WAL جرنلنگ) + LowDB (JSON لیگیسی) — 147 ڈومین ماڈیولز، 240 مائیگریشنز</td></tr>
+  <tr><td nowrap><b>ڈیٹابیس</b></td><td>better-sqlite3 (SQLite، WAL جرنلنگ) + LowDB (JSON لیگیسی) — 147 ڈومین ماڈیولز، 244 مائیگریشنز</td></tr>
   <tr><td nowrap><b>میموری</b></td><td>SQLite FTS5 مکمل متن + int8-quantized ویکٹر ایمبیڈنگز، ٹائپڈ ڈیکے</td></tr>
   <tr><td nowrap><b>اسکیماز</b></td><td>Zod 4 — MCP ٹول I/O توثیق + API معاہدے</td></tr>
   <tr><td nowrap><b>پروٹوکولز</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1328,7 +1328,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1 بھی اسے چ�
   <tr><td nowrap><b>ٹیسٹنگ</b></td><td>Node.js ٹیسٹ رنر + Vitest — 8,400+ ٹریک شدہ ٹیسٹ فائلز میں <b>60,000+ جامد ٹیسٹ اعلانات</b> (یونٹ، انٹیگریشن، E2E، سیکیورٹی، ایکوسسٹم)</td></tr>
   <tr><td nowrap><b>پلیٹ فارمز</b></td><td>ڈیسک ٹاپ (Electron) · Android (Termux) · PWA (کوئی بھی براؤزر)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — ریلیز پر خودکار npm پبلش + Docker Hub</td></tr>
-  <tr><td nowrap><b>روابط</b></td><td><a href="https://omniroute.online">ویب سائٹ</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>روابط</b></td><td><a href="https://omniroute.online">ویب سائٹ</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1828,7 +1828,7 @@ MIT لائسنس - تفصیلات کے لیے [LICENSE](LICENSE) دیکھیں۔
 
 **[⬆ اوپر واپس جائیں](#-omniroute)** · اوپن سورس AI کمیونٹی کے لیے ❤️ سے تیار کیا گیا۔
 
-<sub><a href="https://github.com/diegosouzapw">Diego Souza</a> کی جانب سے تیار کردہ · OmniRoute v3.8.54 · Node ≥22.22.2 · MIT لائسنس · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub><a href="https://github.com/diegosouzapw">Diego Souza</a> کی جانب سے تیار کردہ · OmniRoute v3.8.55 · Node ≥22.22.2 · MIT لائسنس · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- کمیونٹی کے سوال و جواب کے لیے GitHub Discussions فعال ہیں -->

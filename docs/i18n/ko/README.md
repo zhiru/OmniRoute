@@ -71,7 +71,7 @@ OMNIROUTE가 비용을 절약하고 업무를 더 쉽게 만드는 데 도움이
 
 <div align="center">
 
-|                        |          v3.8.50          | **v3.8.51** |      `v3.8.54+`       |
+|                        |          v3.8.50          | **v3.8.51** |      `v3.8.55+`       |
 | ---------------------- | :-----------------------: | :---------: | :-------------------: |
 | 🌐 제공업체            |            352            |   **358**   |          394          |
 | 🧠 고유 채팅 모델 ID   |           1320            |  **1374**   |         1491          |
@@ -93,7 +93,7 @@ OMNIROUTE가 비용을 절약하고 업무를 더 쉽게 만드는 데 도움이
 
 [![npm version](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM Monthly](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Docker Pulls](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Electron Downloads](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -590,7 +590,7 @@ Radar는 선택적으로 사용할 수 있으며 GET 전용입니다. OmniRoute 
 
 </div>
 
-> **v3.8.20 → v3.8.54**의 주요 업데이트입니다. 전체 변경 이력은 [`CHANGELOG.md`](CHANGELOG.md)에서 확인할 수 있습니다.
+> **v3.8.20 → v3.8.55**의 주요 업데이트입니다. 전체 변경 이력은 [`CHANGELOG.md`](CHANGELOG.md)에서 확인할 수 있습니다.
 
 - **⚖️ `quota-weighted` 라우팅** — 20번째 콤보 전략으로, 소진된 계정을 건너뛴 다음 남은 할당량 ÷ 진행 중인 부하에 비례해 나머지 계정 중에서 선택하며, 기존 대화는 계속 고정합니다. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 헤드리스 모드** — `omniroute serve --headless`(또는 `OMNIROUTE_HEADLESS=1`)는 대시보드와 대시보드 전용 하위 시스템을 끄고 `/v1/*` 프록시 엔진만 실행합니다. → [Headless Mode](docs/guides/HEADLESS.md)
@@ -778,7 +778,7 @@ omniroute configure codex          # 또한: claude opencode qwen aider goose ge
   <tr><th align="left">플랫폼</th><th align="left">설치</th><th align="left">주요 기능</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (전역)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">명령 하나로 모든 OS에서 사용</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (전역)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">동일한 레지스트리 tarball, 더 빠른 설치</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">멀티 아키텍처 <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">멀티 아키텍처 <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>데스크톱 (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">네이티브 창 + 시스템 트레이 — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>메뉴 막대 (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">서버 감독 및 자동 업데이트 — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>네이티브 <code>arm64</code></td><td align="left">Raspberry Pi, ARM 서버, Apple Silicon</td></tr>
@@ -1038,7 +1038,7 @@ omniroute
 ```
 
 > 💡 `npm warn ERESOLVE` 또는 peer-dep 경고가 표시되나요? [무해한 경고입니다](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **npm 11 이상을 사용하시나요?** npm은 허용되지 않은 패키지 라이프사이클 스크립트를 차단할 수 있습니다. OmniRoute의 `postinstall` (`node scripts/build/postinstall.mjs`)은 네이티브 런타임 파일을 준비하는 데 필요합니다. 전역 설치 시 npm 경고에 표시된 패키지 이름을 허용하세요. OmniRoute 3.8.54에서 보고된 패키지 집합은 다음과 같습니다.
+> **npm 11 이상을 사용하시나요?** npm은 허용되지 않은 패키지 라이프사이클 스크립트를 차단할 수 있습니다. OmniRoute의 `postinstall` (`node scripts/build/postinstall.mjs`)은 네이티브 런타임 파일을 준비하는 데 필요합니다. 전역 설치 시 npm 경고에 표시된 패키지 이름을 허용하세요. OmniRoute 3.8.55에서 보고된 패키지 집합은 다음과 같습니다.
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1100,7 +1100,7 @@ Ollama tags:      http://localhost:20128/vscode/YOUR_KEY/api/tags
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest`는 가장 높은 **게시된** 안정적인 SemVer를 따릅니다. git `main`은 추적하지 않습니다. GitOps에서는 `:X.Y.Z`를 고정하세요. [Docker 릴리스 채널](docs/guides/DOCKER_GUIDE.md#release-channels)을 참조하세요. 이미지는 **`OMNIROUTE_MEMORY_MB=1024`**로 고정되어 있습니다. 대시보드와 가벼운 채팅에는 충분합니다. **코딩 에이전트**(Claude Code, Codex, Grok 등의 `POST /v1/responses`)는 훨씬 더 큰 V8 힙이 필요하며, 겹치는 긴 컨텍스트 두 개를 처리할 때 프로세스에서 약 12 GiB 지점에 `FATAL ERROR`가 발생합니다. 네이티브 버퍼는 V8 외부에 있으므로 컨테이너 크기는 힙보다 크게 설정하세요.
@@ -1114,7 +1114,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 전체 표: [Docker 가이드 — 런타임 RAM](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1321,7 +1321,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1도 이를 건너�
   <tr><td nowrap><b>런타임</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>언어</b></td><td>TypeScript 6.0 — <code>src/</code> 및 <code>open-sse/</code> 전반에서 <b>100% TypeScript</b> (<code>any</code>는 v2.0 이후 코어에서 0개)</td></tr>
   <tr><td nowrap><b>프레임워크</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>데이터베이스</b></td><td>better-sqlite3 (SQLite, WAL 저널링) + LowDB (JSON 레거시) — 147개 도메인 모듈, 240개 마이그레이션</td></tr>
+  <tr><td nowrap><b>데이터베이스</b></td><td>better-sqlite3 (SQLite, WAL 저널링) + LowDB (JSON 레거시) — 147개 도메인 모듈, 244개 마이그레이션</td></tr>
   <tr><td nowrap><b>메모리</b></td><td>SQLite FTS5 전문 검색 + int8 양자화 벡터 임베딩, 타입 지정 감쇠</td></tr>
   <tr><td nowrap><b>스키마</b></td><td>Zod 4 — MCP 도구 I/O 검증 + API 계약</td></tr>
   <tr><td nowrap><b>프로토콜</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1334,7 +1334,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1도 이를 건너�
   <tr><td nowrap><b>테스트</b></td><td>Node.js 테스트 러너 + Vitest — 8,400개 이상의 추적된 테스트 파일(단위, 통합, E2E, 보안, 생태계)에 걸친 <b>60,000개 이상의 정적 테스트 선언</b></td></tr>
   <tr><td nowrap><b>플랫폼</b></td><td>데스크톱 (Electron) · Android (Termux) · PWA (모든 브라우저)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — 릴리스 시 npm 자동 게시 + Docker Hub 업로드</td></tr>
-  <tr><td nowrap><b>링크</b></td><td><a href="https://omniroute.online">웹사이트</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>링크</b></td><td><a href="https://omniroute.online">웹사이트</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1834,7 +1834,7 @@ MIT 라이선스 - 자세한 내용은 [LICENSE](LICENSE)를 참조하세요.
 
 **[⬆ 맨 위로 돌아가기](#-omniroute)** · 오픈 소스 AI 커뮤니티를 위해 ❤️로 제작되었습니다.
 
-<sub><a href="https://github.com/diegosouzapw">Diego Souza</a> 제작 · OmniRoute v3.8.54 · Node ≥22.22.2 · MIT 라이선스 · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub><a href="https://github.com/diegosouzapw">Diego Souza</a> 제작 · OmniRoute v3.8.55 · Node ≥22.22.2 · MIT 라이선스 · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- 커뮤니티 Q&A를 위한 GitHub Discussions 활성화됨 -->

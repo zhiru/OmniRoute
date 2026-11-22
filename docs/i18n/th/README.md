@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                |            v3.8.50             | **v3.8.51** |      `v3.8.54+`       |
+|                                |            v3.8.50             | **v3.8.51** |      `v3.8.55+`       |
 | ------------------------------ | :----------------------------: | :---------: | :-------------------: |
 | 🌐 ผู้ให้บริการ                |              352               |   **358**   |          394          |
 | 🧠 ID โมเดลแชตที่ไม่ซ้ำกัน     |              1320              |  **1374**   |         1491          |
@@ -93,7 +93,7 @@
 
 [![npm version](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM Monthly](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Docker Pulls](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Electron Downloads](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -590,7 +590,7 @@ Radar เป็นฟีเจอร์ที่ต้องเลือกเ�
 
 </div>
 
-> ไฮไลต์ล่าสุดจาก **v3.8.20 → v3.8.54** ดูประวัติทั้งหมดได้ใน [`CHANGELOG.md`](CHANGELOG.md)
+> ไฮไลต์ล่าสุดจาก **v3.8.20 → v3.8.55** ดูประวัติทั้งหมดได้ใน [`CHANGELOG.md`](CHANGELOG.md)
 
 - **⚖️ การกำหนดเส้นทางแบบ `quota-weighted`** — กลยุทธ์คอมโบลำดับที่ 20 จะข้ามบัญชีที่โควตาหมดแล้ว จากนั้นสุ่มเลือกจากบัญชีที่เหลือตามสัดส่วนของโควตาคงเหลือ ÷ โหลดที่กำลังดำเนินการอยู่ พร้อมตรึงการสนทนาที่มีอยู่กับบัญชีเดิม → [คอมโบอัตโนมัติ](docs/routing/AUTO-COMBO.md)
 - **🧰 โหมด Headless** — `omniroute serve --headless` (หรือ `OMNIROUTE_HEADLESS=1`) จะเรียกใช้เฉพาะเอนจินพร็อกซี `/v1/*` โดยปิดแดชบอร์ดและระบบย่อยที่ใช้เฉพาะแดชบอร์ด → [โหมด Headless](docs/guides/HEADLESS.md)
@@ -778,7 +778,7 @@ omniroute configure codex          # ใช้ได้กับ: claude opencod
   <tr><th align="left">แพลตฟอร์ม</th><th align="left">การติดตั้ง</th><th align="left">จุดเด่น</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (global)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">คำสั่งเดียว ใช้ได้กับทุก OS</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (global)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">tarball จาก registry เดียวกัน ติดตั้งเร็วขึ้น</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">รองรับหลายสถาปัตยกรรม <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">รองรับหลายสถาปัตยกรรม <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>เดสก์ท็อป (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">หน้าต่างแบบเนทีฟ + ถาดระบบ — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>แถบเมนู (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">ดูแลและอัปเดตเซิร์ฟเวอร์อัตโนมัติ — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap><code>arm64</code> แบบเนทีฟ</td><td align="left">Raspberry Pi, เซิร์ฟเวอร์ ARM, Apple Silicon</td></tr>
@@ -1040,7 +1040,7 @@ omniroute
 ```
 
 > 💡 เห็น `npm warn ERESOLVE` หรือคำเตือน peer dependency ใช่ไหม [คำเตือนเหล่านี้ไม่มีอันตราย](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated)
-> **ใช้ npm 11 หรือใหม่กว่าหรือไม่?** npm อาจบล็อกสคริปต์ lifecycle ของแพ็กเกจ เว้นแต่จะอนุญาตให้ทำงาน สคริปต์ `postinstall` ของ OmniRoute (`node scripts/build/postinstall.mjs`) จำเป็นสำหรับเตรียมไฟล์ runtime แบบ native ของระบบ อนุญาตแพ็กเกจที่ระบุในคำเตือนของ npm เมื่อติดตั้งแบบ global สำหรับชุดแพ็กเกจที่ OmniRoute 3.8.54 รายงาน:
+> **ใช้ npm 11 หรือใหม่กว่าหรือไม่?** npm อาจบล็อกสคริปต์ lifecycle ของแพ็กเกจ เว้นแต่จะอนุญาตให้ทำงาน สคริปต์ `postinstall` ของ OmniRoute (`node scripts/build/postinstall.mjs`) จำเป็นสำหรับเตรียมไฟล์ runtime แบบ native ของระบบ อนุญาตแพ็กเกจที่ระบุในคำเตือนของ npm เมื่อติดตั้งแบบ global สำหรับชุดแพ็กเกจที่ OmniRoute 3.8.55 รายงาน:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1102,7 +1102,7 @@ Ollama tags:      http://localhost:20128/vscode/YOUR_KEY/api/tags
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` จะติดตาม SemVer เสถียรที่ **เผยแพร่แล้ว** สูงสุด โดยจะไม่ติดตาม git `main` ให้ระบุ `:X.Y.Z` สำหรับ GitOps ดู [ช่องทางการเผยแพร่ Docker](docs/guides/DOCKER_GUIDE.md#release-channels) อิมเมจนี้กำหนด **`OMNIROUTE_MEMORY_MB=1024`** ซึ่งเพียงพอสำหรับแดชบอร์ดและการแชตขนาดเล็ก **เอเจนต์เขียนโค้ด** (`POST /v1/responses` จาก Claude Code, Codex, Grok, …) ต้องใช้ V8 heap ที่มีขนาดใหญ่กว่านี้มาก มิฉะนั้นกระบวนการจะเกิด `FATAL ERROR` ที่ประมาณ ~12 GiB เมื่อมีบริบทยาวสองรายการทำงานทับซ้อนกัน ควรกำหนดขนาดคอนเทนเนอร์ให้มากกว่าขนาด heap (บัฟเฟอร์ native อยู่นอก V8):
@@ -1116,7 +1116,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 ดูตารางฉบับเต็มได้ที่: [คู่มือ Docker — RAM ขณะรัน](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents)
@@ -1321,7 +1321,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1 จะข้า�
   <tr><td nowrap><b>รันไทม์</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>ภาษา</b></td><td>TypeScript 6.0 — <b>TypeScript 100%</b> ใน <code>src/</code> และ <code>open-sse/</code> (ไม่มี <code>any</code> ในแกนหลักตั้งแต่ v2.0)</td></tr>
   <tr><td nowrap><b>เฟรมเวิร์ก</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>ฐานข้อมูล</b></td><td>better-sqlite3 (SQLite, การบันทึกแบบ WAL) + LowDB (JSON รุ่นเก่า) — โมดูลโดเมน 147 รายการ, migrations 240 รายการ</td></tr>
+  <tr><td nowrap><b>ฐานข้อมูล</b></td><td>better-sqlite3 (SQLite, การบันทึกแบบ WAL) + LowDB (JSON รุ่นเก่า) — โมดูลโดเมน 147 รายการ, migrations 244 รายการ</td></tr>
   <tr><td nowrap><b>หน่วยความจำ</b></td><td>การค้นหาข้อความแบบเต็ม SQLite FTS5 + vector embeddings ที่ผ่านการควอนไทซ์เป็น int8 พร้อมการเสื่อมแบบมีชนิดข้อมูล</td></tr>
   <tr><td nowrap><b>สคีมา</b></td><td>Zod 4 — การตรวจสอบ I/O ของเครื่องมือ MCP + สัญญา API</td></tr>
   <tr><td nowrap><b>โปรโตคอล</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1334,7 +1334,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1 จะข้า�
   <tr><td nowrap><b>การทดสอบ</b></td><td>ตัวรันทดสอบของ Node.js + Vitest — <b>การประกาศการทดสอบแบบสแตติกมากกว่า 60,000 รายการ</b> ในไฟล์ทดสอบที่ติดตามมากกว่า 8,400 ไฟล์ (ยูนิต, อินทิเกรชัน, E2E, ความปลอดภัย, ระบบนิเวศ)</td></tr>
   <tr><td nowrap><b>แพลตฟอร์ม</b></td><td>เดสก์ท็อป (Electron) · Android (Termux) · PWA (เบราว์เซอร์ใดก็ได้)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — เผยแพร่ไปยัง npm โดยอัตโนมัติ + Docker Hub เมื่อออกรีลีส</td></tr>
-  <tr><td nowrap><b>ลิงก์</b></td><td><a href="https://omniroute.online">เว็บไซต์</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>ลิงก์</b></td><td><a href="https://omniroute.online">เว็บไซต์</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1834,7 +1834,7 @@ OmniRoute ยืนอยู่บนไหล่ของยักษ์ให�
 
 **[⬆ กลับไปด้านบน](#-omniroute)** · สร้างขึ้นด้วย ❤️ เพื่อชุมชน AI แบบโอเพนซอร์ส
 
-<sub>สร้างโดย <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · สัญญาอนุญาต MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>สร้างโดย <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · สัญญาอนุญาต MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- เปิดใช้งาน GitHub Discussions สำหรับการถามและตอบของชุมชน -->

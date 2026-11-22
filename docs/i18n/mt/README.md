@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                    |          v3.8.50           | **v3.8.51** |      `v3.8.54+`       |
+|                                    |          v3.8.50           | **v3.8.51** |      `v3.8.55+`       |
 | ---------------------------------- | :------------------------: | :---------: | :-------------------: |
 | 🌐 Fornituri                       |            352             |   **358**   |          394          |
 | 🧠 IDs uniċi tal-mudelli taċ-chat  |            1320            |  **1374**   |         1491          |
@@ -93,7 +93,7 @@
 
 [![Verżjoni npm](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM Kull Xahar](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 [![Liċenzja: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Downloads ta' Docker](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Downloads ta' Electron](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -590,7 +590,7 @@ Radar huwa fakultattiv u juża GET biss. Il-klijent OmniRoute ma jtellax prompts
 
 </div>
 
-> Punti ewlenin reċenti minn **v3.8.20 → v3.8.54**. L-istorja sħiħa tinsab f’[`CHANGELOG.md`](CHANGELOG.md).
+> Punti ewlenin reċenti minn **v3.8.20 → v3.8.55**. L-istorja sħiħa tinsab f’[`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ `quota-weighted` routing** — l-istrateġija kombinata numru 20 taqbeż il-kontijiet eżawriti, imbagħad tagħżel fost il-bqija fi proporzjon għal kwota li fadal ÷ tagħbija fil-proċess, filwaqt li żżomm il-konversazzjonijiet eżistenti marbuta. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 Modalità headless** — `omniroute serve --headless` (jew `OMNIROUTE_HEADLESS=1`) tħaddem biss il-magna proxy `/v1/*`, bid-dashboard u s-sottosistemi esklussivi għad-dashboard mitfija. → [Modalità Headless](docs/guides/HEADLESS.md)
@@ -778,7 +778,7 @@ mill-istorja tas-shell tiegħek. → [CLI Integrations](docs/guides/CLI-INTEGRAT
   <tr><th align="left">Pjattaforma</th><th align="left">Installazzjoni</th><th align="left">Punti ewlenin</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (globali)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">Kmand wieħed, kwalunkwe OS</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (globali)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">L-istess tarball tar-reġistru, installazzjonijiet aktar veloċi</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Desktop (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Tieqa nattiva + system tray — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Menu-bar (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Jissorvelja u jaġġorna s-server awtomatikament — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>native <code>arm64</code></td><td align="left">Raspberry Pi, servers ARM, Apple Silicon</td></tr>
@@ -1039,7 +1039,7 @@ omniroute
 ```
 
 > 💡 Qed tara `npm warn ERESOLVE` jew twissijiet dwar peer dependencies? [Ma jagħmlux ħsara](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **Qed tuża npm 11 jew aktar?** npm jista’ jimblokka l-iskripts taċ-ċiklu tal-ħajja tal-pakketti sakemm jiġu permessi. Il-`postinstall` ta’ OmniRoute (`node scripts/build/postinstall.mjs`) huwa meħtieġ biex jipprepara l-fajls tar-runtime nattiv tiegħu. Ħalli l-pakketti msemmija fit-twissija ta’ npm meta tinstalla globalment. Għas-sett ta’ pakketti rrappurtat minn OmniRoute 3.8.54:
+> **Qed tuża npm 11 jew aktar?** npm jista’ jimblokka l-iskripts taċ-ċiklu tal-ħajja tal-pakketti sakemm jiġu permessi. Il-`postinstall` ta’ OmniRoute (`node scripts/build/postinstall.mjs`) huwa meħtieġ biex jipprepara l-fajls tar-runtime nattiv tiegħu. Ħalli l-pakketti msemmija fit-twissija ta’ npm meta tinstalla globalment. Għas-sett ta’ pakketti rrappurtat minn OmniRoute 3.8.55:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1101,7 +1101,7 @@ Uża dawni biss għal klijenti li ma jistgħux iżidu `Authorization: Bearer ...
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` isegwi l-ogħla SemVer stabbli **ppubblikat**. Ma jsegwix il-`main` ta’ git. Uża `:X.Y.Z` għal GitOps. Ara [Kanali tar-Rilaxx ta’ Docker](docs/guides/DOCKER_GUIDE.md#release-channels). L-immaġni tissettja **`OMNIROUTE_MEMORY_MB=1024`**. Dan huwa biżżejjed għad-dashboard u chat ħafif. **L-aġenti tal-kodifikazzjoni** (`POST /v1/responses` minn Claude Code, Codex, Grok, …) jeħtieġu heap V8 ferm akbar, inkella l-proċess jagħti `FATAL ERROR`s b’madwar 12 GiB taħt żewġ kuntesti twal li jikkoinċidu. Agħti lill-kontenitur daqs akbar mill-heap (il-buffers nattivi jinsabu barra minn V8):
@@ -1115,7 +1115,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Tabella sħiħa: [Gwida ta’ Docker — RAM waqt l-eżekuzzjoni](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1316,7 +1316,7 @@ Metriċi kanoniċi fl-2026-10-18: **1.976 vidjo uniku** · **20.220.289 darba ma
   <tr><td nowrap><b>Ambjent ta' tħaddim</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Lingwa</b></td><td>TypeScript 6.0 — <b>100% TypeScript</b> f'<code>src/</code> u <code>open-sse/</code> (<code>any</code> żero fil-qalba minn v2.0)</td></tr>
   <tr><td nowrap><b>Qafas</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>Bażi tad-dejta</b></td><td>better-sqlite3 (SQLite, ġurnalizzazzjoni WAL) + LowDB (JSON legat) — 147-il modulu tad-dominju, 240 migrazzjoni</td></tr>
+  <tr><td nowrap><b>Bażi tad-dejta</b></td><td>better-sqlite3 (SQLite, ġurnalizzazzjoni WAL) + LowDB (JSON legat) — 147-il modulu tad-dominju, 244 migrazzjoni</td></tr>
   <tr><td nowrap><b>Memorja</b></td><td>SQLite FTS5 għal tfittxija b'test sħiħ + embeddings vettorjali kkwantizzati int8, tnaqqis tipizzat</td></tr>
   <tr><td nowrap><b>Skemi</b></td><td>Zod 4 — validazzjoni tal-I/O tal-għodod MCP + kuntratti tal-API</td></tr>
   <tr><td nowrap><b>Protokolli</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1329,7 +1329,7 @@ Metriċi kanoniċi fl-2026-10-18: **1.976 vidjo uniku** · **20.220.289 darba ma
   <tr><td nowrap><b>Ittestjar</b></td><td>Node.js test runner + Vitest — <b>aktar minn 60,000 dikjarazzjoni ta' test statiċi</b> f'aktar minn 8,400 fajl ta' test irreġistrati (unità, integrazzjoni, E2E, sigurtà, ekosistema)</td></tr>
   <tr><td nowrap><b>Pjattaformi</b></td><td>Desktop (Electron) · Android (Termux) · PWA (kwalunkwe browser)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — pubblikazzjoni awtomatika fuq npm + Docker Hub mar-rilaxx</td></tr>
-  <tr><td nowrap><b>Links</b></td><td><a href="https://omniroute.online">Websajt</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Links</b></td><td><a href="https://omniroute.online">Websajt</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1829,7 +1829,7 @@ Liċenzja MIT - ara [LIĊENZJA](LIĊENZJA) għad-dettalji.
 
 **[⬆ Lura fil-bidu](#-omniroute)** · Mibni b'❤️ għall-komunità tal-IA open-source.
 
-<sub>Maħluq minn <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Liċenzja MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Maħluq minn <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Liċenzja MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- GitHub Discussions attivati għall-mistoqsijiet u t-tweġibiet tal-komunità -->

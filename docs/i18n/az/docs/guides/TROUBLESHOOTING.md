@@ -432,7 +432,7 @@ Təcridi təmin etmək üçün köhnə bağlantını İdarə paneli → Provayde
 2. **Daimi həll:** `docker run` əmrinizdə `-p 127.0.0.1:20128:20128` istifadə edərək açıq şəkildə IPv4 ünvanına bağlayın:
    ```bash
    docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
    ```
    Bu, IPv4 ünvanına bağlanmanı məcburi edir və həmçinin proksinin hostun bütün interfeyslərində əlçatan olmasının qarşısını alır.
 

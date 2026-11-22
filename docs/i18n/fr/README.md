@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                            |          v3.8.50          | **v3.8.51** |        `v3.8.54+`        |
+|                                            |          v3.8.50          | **v3.8.51** |        `v3.8.55+`        |
 | ------------------------------------------ | :-----------------------: | :---------: | :----------------------: |
 | 🌐 Fournisseurs                            |            352            |   **358**   |           394            |
 | 🧠 Identifiants uniques de modèles de chat |           1320            |  **1374**   |           1491           |
@@ -93,7 +93,7 @@
 
 [![npm version](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM Monthly](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Docker Pulls](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Electron Downloads](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -590,7 +590,7 @@ Radar est facultatif et utilise uniquement des requêtes GET. Le client OmniRout
 
 </div>
 
-> Points forts récents de **v3.8.20 → v3.8.54**. Historique complet dans [`CHANGELOG.md`](CHANGELOG.md).
+> Points forts récents de **v3.8.20 → v3.8.55**. Historique complet dans [`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ Routage `quota-weighted`** — la 20e stratégie combo ignore les comptes épuisés, puis sélectionne parmi les autres en proportion du quota restant ÷ de la charge en cours, tout en conservant l’association des conversations existantes. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 Mode sans interface** — `omniroute serve --headless` (ou `OMNIROUTE_HEADLESS=1`) exécute uniquement le moteur proxy `/v1/*`, en désactivant le tableau de bord et les sous-systèmes réservés au tableau de bord. → [Mode sans interface](docs/guides/HEADLESS.md)
@@ -778,7 +778,7 @@ hors de l'historique de votre shell. → [Intégrations CLI](docs/guides/CLI-INT
   <tr><th align="left">Plateforme</th><th align="left">Installation</th><th align="left">Points forts</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (global)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">Une commande, tous les systèmes d’exploitation</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (global)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">Même tarball du registre, installations plus rapides</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Multi-architecture <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Multi-architecture <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Ordinateur de bureau (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Fenêtre native + zone de notification système — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Barre de menus (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Supervise et met à jour automatiquement le serveur — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>native <code>arm64</code></td><td align="left">Raspberry Pi, serveurs ARM, Apple Silicon</td></tr>
@@ -1039,7 +1039,7 @@ omniroute
 ```
 
 > 💡 Vous voyez `npm warn ERESOLVE` ou des avertissements concernant les dépendances peer ? [Ils sont inoffensifs](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **Vous utilisez npm 11 ou une version ultérieure ?** npm peut bloquer les scripts du cycle de vie des paquets tant qu’ils ne sont pas autorisés. Le script `postinstall` d’OmniRoute (`node scripts/build/postinstall.mjs`) est requis pour préparer ses fichiers d’exécution natifs. Autorisez les paquets nommés dans l’avertissement de npm lors de l’installation globale. Pour l’ensemble de paquets signalé par OmniRoute 3.8.54 :
+> **Vous utilisez npm 11 ou une version ultérieure ?** npm peut bloquer les scripts du cycle de vie des paquets tant qu’ils ne sont pas autorisés. Le script `postinstall` d’OmniRoute (`node scripts/build/postinstall.mjs`) est requis pour préparer ses fichiers d’exécution natifs. Autorisez les paquets nommés dans l’avertissement de npm lors de l’installation globale. Pour l’ensemble de paquets signalé par OmniRoute 3.8.55 :
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1101,7 +1101,7 @@ Utilisez-les uniquement avec les clients qui ne peuvent pas joindre `Authorizati
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` suit le SemVer stable **publié** le plus élevé. Il ne suit pas `main` dans git. Épinglez `:X.Y.Z` pour GitOps. Consultez [Canaux de publication Docker](docs/guides/DOCKER_GUIDE.md#release-channels). L’image définit **`OMNIROUTE_MEMORY_MB=1024`**. Cela suffit pour le tableau de bord et une conversation légère. Les **agents de programmation** (`POST /v1/responses` depuis Claude Code, Codex, Grok, …) nécessitent un tas V8 beaucoup plus important, sans quoi le processus génère une `FATAL ERROR` à environ 12 Gio lors de l’exécution de deux contextes longs qui se chevauchent. Dimensionnez le conteneur au-delà du tas (les tampons natifs sont en dehors de V8) :
@@ -1115,7 +1115,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Tableau complet : [Guide Docker — RAM à l’exécution](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1324,7 +1324,7 @@ Métriques canoniques au 2026-10-18 : **1.976 vidéos uniques** · **20.220.289 
   <tr><td nowrap><b>Environnement d’exécution</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Langage</b></td><td>TypeScript 6.0 — <b>100 % TypeScript</b> dans <code>src/</code> et <code>open-sse/</code> (<code>any</code> absent du cœur depuis v2.0)</td></tr>
   <tr><td nowrap><b>Framework</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>Base de données</b></td><td>better-sqlite3 (SQLite, journalisation WAL) + LowDB (JSON historique) — 147 modules métier, 240 migrations</td></tr>
+  <tr><td nowrap><b>Base de données</b></td><td>better-sqlite3 (SQLite, journalisation WAL) + LowDB (JSON historique) — 147 modules métier, 244 migrations</td></tr>
   <tr><td nowrap><b>Mémoire</b></td><td>Recherche en texte intégral SQLite FTS5 + embeddings vectoriels quantifiés en int8, décroissance typée</td></tr>
   <tr><td nowrap><b>Schémas</b></td><td>Zod 4 — validation des entrées/sorties des outils MCP + contrats d’API</td></tr>
   <tr><td nowrap><b>Protocoles</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1337,7 +1337,7 @@ Métriques canoniques au 2026-10-18 : **1.976 vidéos uniques** · **20.220.289 
   <tr><td nowrap><b>Tests</b></td><td>Exécuteur de tests Node.js + Vitest — <b>plus de 60 000 déclarations de tests statiques</b> réparties dans plus de 8 400 fichiers de test suivis (unitaires, d’intégration, E2E, de sécurité, de l’écosystème)</td></tr>
   <tr><td nowrap><b>Plateformes</b></td><td>Ordinateur de bureau (Electron) · Android (Termux) · PWA (tout navigateur)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — publication automatique sur npm + Docker Hub lors d’une mise à disposition</td></tr>
-  <tr><td nowrap><b>Liens</b></td><td><a href="https://omniroute.online">Site web</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Liens</b></td><td><a href="https://omniroute.online">Site web</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1837,7 +1837,7 @@ Licence MIT - voir [LICENCE](LICENSE) pour plus de détails.
 
 **[⬆ Retour en haut](#-omniroute)** · Créé avec ❤️ pour la communauté open source de l’IA.
 
-<sub>Créé par <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Licence MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Créé par <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Licence MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- Discussions GitHub activées pour les questions-réponses de la communauté -->

@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                   |          v3.8.50          | **v3.8.51** |      `v3.8.54+`       |
+|                                   |          v3.8.50          | **v3.8.51** |      `v3.8.55+`       |
 | --------------------------------- | :-----------------------: | :---------: | :-------------------: |
 | 🌐 Poskytovatelia                 |            352            |   **358**   |          394          |
 | 🧠 Jedinečné ID chatových modelov |           1320            |  **1374**   |         1491          |
@@ -93,7 +93,7 @@
 
 [![verzia npm](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![Mesačné stiahnutia NPM](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 [![Licencia: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Stiahnutia z Docker Hub](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Stiahnutia Electronu](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -590,7 +590,7 @@ Radar je voliteľný a používa iba požiadavky GET. Klient OmniRoute neodosiel
 
 </div>
 
-> Najdôležitejšie novinky od **v3.8.20 → v3.8.54**. Kompletná história je v [`CHANGELOG.md`](CHANGELOG.md).
+> Najdôležitejšie novinky od **v3.8.20 → v3.8.55**. Kompletná história je v [`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ `quota-weighted` smerovanie** — 20. kombinačná stratégia vynechá vyčerpané účty a potom vyberá spomedzi ostatných v pomere k zostávajúcej kvóte ÷ počtu požiadaviek vo vykonávaní, pričom existujúce konverzácie zostávajú pripnuté. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 Bezhlavý režim** — `omniroute serve --headless` (alebo `OMNIROUTE_HEADLESS=1`) spustí iba proxy engine `/v1/*`, pričom dashboard a subsystémy určené len pre dashboard zostanú vypnuté. → [Bezhlavý režim](docs/guides/HEADLESS.md)
@@ -778,7 +778,7 @@ histórie vášho shellu. → [CLI Integrácie](docs/guides/CLI-INTEGRATIONS.md)
   <tr><th align="left">Platforma</th><th align="left">Inštalácia</th><th align="left">Hlavné výhody</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (globálne)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">Jeden príkaz, ľubovoľný OS</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (globálne)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">Rovnaký tarball z registra, rýchlejšia inštalácia</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Desktop (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Natívne okno + systémová lišta — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Lišta s menu (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Sleduje server a automaticky ho aktualizuje — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>natívne <code>arm64</code></td><td align="left">Raspberry Pi, ARM servery, Apple Silicon</td></tr>
@@ -1040,7 +1040,7 @@ omniroute
 ```
 
 > 💡 Zobrazujú sa upozornenia `npm warn ERESOLVE` alebo upozornenia na peer dependencies? [Sú neškodné](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **Používate npm 11 alebo novší?** npm môže blokovať skripty životného cyklu balíkov, pokiaľ nie sú povolené. `postinstall` balíka OmniRoute (`node scripts/build/postinstall.mjs`) je potrebný na prípravu natívnych súborov runtime. Pri globálnej inštalácii povoľte balíky uvedené v upozornení npm. Pre súpravu balíkov nahlásenú OmniRoute 3.8.54:
+> **Používate npm 11 alebo novší?** npm môže blokovať skripty životného cyklu balíkov, pokiaľ nie sú povolené. `postinstall` balíka OmniRoute (`node scripts/build/postinstall.mjs`) je potrebný na prípravu natívnych súborov runtime. Pri globálnej inštalácii povoľte balíky uvedené v upozornení npm. Pre súpravu balíkov nahlásenú OmniRoute 3.8.55:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1101,7 +1101,7 @@ Používajte ich iba pre klientov, ktorí nedokážu pripojiť `Authorization: B
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` sleduje najvyššiu **publikovanú** stabilnú verziu SemVer. Nesleduje git `main`. Pre GitOps použite `:X.Y.Z`. Pozrite si [kanály vydaní Docker](docs/guides/DOCKER_GUIDE.md#release-channels). Obraz má nastavenú hodnotu **`OMNIROUTE_MEMORY_MB=1024`**. To stačí na dashboard a nenáročný chat. **Kódovacie agenti** (`POST /v1/responses` z Claude Code, Codex, Grok, …) potrebujú oveľa väčšiu haldu V8, inak proces skončí chybou `FATAL ERROR` pri približne 12 GiB v rámci dvoch prekrývajúcich sa dlhých kontextov. Veľkosť kontajnera nastavte vyššie než veľkosť haldy (natívne buffre sa nachádzajú mimo V8):
@@ -1115,7 +1115,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Úplná tabuľka: [Sprievodca Dockerom — RAM za behu](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1322,7 +1322,7 @@ Kanonické metriky k 2026-10-18: **1.976 jedinečných videí** · **20.220.289 
   <tr><td nowrap><b>Runtime</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Jazyk</b></td><td>TypeScript 6.0 — <b>100 % TypeScriptu</b> v <code>src/</code> a <code>open-sse/</code> (v jadre od v2.0 žiadne <code>any</code>)</td></tr>
   <tr><td nowrap><b>Framework</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>Databáza</b></td><td>better-sqlite3 (SQLite, WAL žurnálovanie) + LowDB (starší JSON) — 147 doménových modulov, 240 migrácií</td></tr>
+  <tr><td nowrap><b>Databáza</b></td><td>better-sqlite3 (SQLite, WAL žurnálovanie) + LowDB (starší JSON) — 147 doménových modulov, 244 migrácií</td></tr>
   <tr><td nowrap><b>Pamäť</b></td><td>Fulltextové vyhľadávanie SQLite FTS5 + vektorové embeddingy kvantizované na int8, typované vyprchávanie</td></tr>
   <tr><td nowrap><b>Schémy</b></td><td>Zod 4 — validácia I/O nástrojov MCP + kontrakty API</td></tr>
   <tr><td nowrap><b>Protokoly</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1335,7 +1335,7 @@ Kanonické metriky k 2026-10-18: **1.976 jedinečných videí** · **20.220.289 
   <tr><td nowrap><b>Testovanie</b></td><td>Testovací runner Node.js + Vitest — <b>60 000+ statických deklarácií testov</b> vo viac než 8 400 sledovaných testovacích súboroch (jednotkové, integračné, E2E, bezpečnostné, ekosystémové)</td></tr>
   <tr><td nowrap><b>Platformy</b></td><td>Desktop (Electron) · Android (Termux) · PWA (ľubovoľný prehliadač)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — automatické publikovanie do npm + Docker Hub pri vydaní</td></tr>
-  <tr><td nowrap><b>Odkazy</b></td><td><a href="https://omniroute.online">Webová stránka</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Odkazy</b></td><td><a href="https://omniroute.online">Webová stránka</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1835,7 +1835,7 @@ Licencia MIT – podrobnosti nájdete v [LICENSE](LICENSE).
 
 **[⬆ Späť na začiatok](#-omniroute)** · Vytvorené s ❤️ pre komunitu open source AI.
 
-<sub>Vytvoril <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Licencia MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Vytvoril <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Licencia MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- GitHub Discussions sú povolené na komunitné otázky a odpovede -->

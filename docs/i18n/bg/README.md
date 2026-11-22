@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                    |          v3.8.50          | **v3.8.51** |      `v3.8.54+`       |
+|                                    |          v3.8.50          | **v3.8.51** |      `v3.8.55+`       |
 | ---------------------------------- | :-----------------------: | :---------: | :-------------------: |
 | 🌐 Доставчици                      |            352            |   **358**   |          394          |
 | 🧠 Уникални ID на чат модели       |           1320            |  **1374**   |         1491          |
@@ -93,7 +93,7 @@
 
 [![npm версия](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM месечни](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 [![Лиценз: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Изтегляния от Docker](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Изтегляния на Electron](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -598,7 +598,7 @@ Radar се използва само по желание и поддържа е�
 
 </div>
 
-> Последни акценти от **v3.8.20 → v3.8.54**. Пълната история е в [`CHANGELOG.md`](CHANGELOG.md).
+> Последни акценти от **v3.8.20 → v3.8.55**. Пълната история е в [`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ Маршрутизиране с `quota-weighted`** — 20-ата комбо стратегия пропуска изчерпаните акаунти, след което избира измежду останалите пропорционално на оставащата квота ÷ натоварването на текущите заявки, като запазва съществуващите разговори към същия акаунт. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 Headless режим** — `omniroute serve --headless` (или `OMNIROUTE_HEADLESS=1`) стартира само прокси енджина `/v1/*`, като таблото и подсистемите, предназначени само за таблото, са изключени. → [Headless режим](docs/guides/HEADLESS.md)
@@ -786,7 +786,7 @@ omniroute configure codex          # също: claude opencode qwen aider goose 
   <tr><th align="left">Платформа</th><th align="left">Инсталиране</th><th align="left">Акценти</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (глобално)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">Една команда, всяка ОС</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (глобално)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">Същият registry tarball, по-бързи инсталации</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Настолно приложение (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Нативен прозорец + системна област — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Лента с менюта (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Наблюдава и автоматично обновява сървъра — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>нативен <code>arm64</code></td><td align="left">Raspberry Pi, ARM сървъри, Apple Silicon</td></tr>
@@ -1047,7 +1047,7 @@ omniroute
 ```
 
 > 💡 Виждате `npm warn ERESOLVE` или предупреждения за peer зависимости? [Те са безвредни](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **Използвате npm 11 или по-нова версия?** npm може да блокира скриптовете за жизнения цикъл на пакетите, освен ако не бъдат разрешени. `postinstall` на OmniRoute (`node scripts/build/postinstall.mjs`) е необходим за подготовката на собствените runtime файлове. Разрешете пакетите, посочени в предупреждението на npm, при глобално инсталиране. За набора от пакети, отчетен от OmniRoute 3.8.54:
+> **Използвате npm 11 или по-нова версия?** npm може да блокира скриптовете за жизнения цикъл на пакетите, освен ако не бъдат разрешени. `postinstall` на OmniRoute (`node scripts/build/postinstall.mjs`) е необходим за подготовката на собствените runtime файлове. Разрешете пакетите, посочени в предупреждението на npm, при глобално инсталиране. За набора от пакети, отчетен от OmniRoute 3.8.55:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1109,7 +1109,7 @@ Ollama tags:      http://localhost:20128/vscode/YOUR_KEY/api/tags
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` следва най-високата **публикувана** стабилна версия по SemVer. Тя не следва git `main`. Фиксирайте `:X.Y.Z` за GitOps. Вижте [Docker канали за издания](docs/guides/DOCKER_GUIDE.md#release-channels). Образът фиксира **`OMNIROUTE_MEMORY_MB=1024`**. Това е достатъчно за таблото и лек чат. **Агентите за програмиране** (`POST /v1/responses` от Claude Code, Codex, Grok, …) се нуждаят от значително по-голяма V8 heap памет, в противен случай процесът завършва с `FATAL ERROR` при около 12 GiB при два припокриващи се дълги контекста. Оразмерете контейнера над размера на heap паметта (нативните буфери се намират извън V8):
@@ -1123,7 +1123,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Пълната таблица е в: [Ръководство за Docker — RAM по време на изпълнение](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1328,7 +1328,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1 също го п�
   <tr><td nowrap><b>Среда за изпълнение</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Език</b></td><td>TypeScript 6.0 — <b>100% TypeScript</b> в <code>src/</code> и <code>open-sse/</code> (нула <code>any</code> в ядрото от v2.0)</td></tr>
   <tr><td nowrap><b>Рамка</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>База данни</b></td><td>better-sqlite3 (SQLite, WAL журнал) + LowDB (JSON наследена) — 147 домейнни модула, 240 миграции</td></tr>
+  <tr><td nowrap><b>База данни</b></td><td>better-sqlite3 (SQLite, WAL журнал) + LowDB (JSON наследена) — 147 домейнни модула, 244 миграции</td></tr>
   <tr><td nowrap><b>Памет</b></td><td>Пълнотекстово търсене чрез SQLite FTS5 + векторни embedding-и с int8 квантизация, типизирано затихване</td></tr>
   <tr><td nowrap><b>Схеми</b></td><td>Zod 4 — валидиране на входа/изхода на MCP инструментите + API договори</td></tr>
   <tr><td nowrap><b>Протоколи</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1341,7 +1341,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # CI=1 също го п�
   <tr><td nowrap><b>Тестване</b></td><td>Тестов изпълнител на Node.js + Vitest — <b>над 60 000 статични декларации на тестове</b> в над 8 400 проследявани тестови файла (модулни, интеграционни, E2E, за сигурност, за екосистемата)</td></tr>
   <tr><td nowrap><b>Платформи</b></td><td>Настолни компютри (Electron) · Android (Termux) · PWA (всеки браузър)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — автоматично публикуване в npm + Docker Hub при издание</td></tr>
-  <tr><td nowrap><b>Връзки</b></td><td><a href="https://omniroute.online">Уебсайт</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Връзки</b></td><td><a href="https://omniroute.online">Уебсайт</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1841,7 +1841,7 @@ OmniRoute е изграден върху постиженията на гига�
 
 **[⬆ Обратно към началото](#-omniroute)** · Създадено ❤️ за общността на AI с отворен код.
 
-<sub>Създадено от <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Лиценз MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Създадено от <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Лиценз MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- GitHub Discussions е активирана за въпроси и отговори от общността -->

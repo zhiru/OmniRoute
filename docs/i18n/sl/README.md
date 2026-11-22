@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                       |          v3.8.50          | **v3.8.51** |      `v3.8.54+`       |
+|                                       |          v3.8.50          | **v3.8.51** |      `v3.8.55+`       |
 | ------------------------------------- | :-----------------------: | :---------: | :-------------------: |
 | 🌐 Ponudniki                          |            352            |   **358**   |          394          |
 | 🧠 Enolični ID-ji klepetalnih modelov |           1320            |  **1374**   |         1491          |
@@ -93,7 +93,7 @@
 
 [![različica npm](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM mesečno](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 ![Licenca: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)(LICENSE)
 ![Prenosi Docker](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Prenosi Electron](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -598,7 +598,7 @@ trenutnem katalogu najdete na **[radar.omniroute.online/planos](https://radar.om
 
 </div>
 
-> Najnovejši poudarki od **v3.8.20 → v3.8.54**. Celotna zgodovina je v [`CHANGELOG.md`](CHANGELOG.md).
+> Najnovejši poudarki od **v3.8.20 → v3.8.55**. Celotna zgodovina je v [`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ Usmerjanje `quota-weighted`** — 20. kombinirana strategija preskoči izčrpane račune, nato pa med preostalimi izbira sorazmerno glede na preostalo kvoto ÷ obremenitev zahtev v izvajanju, pri čemer obstoječi pogovori ostanejo pripeti. → [Samodejne kombinacije](docs/routing/AUTO-COMBO.md)
 - **🧰 Brezglavi način** — `omniroute serve --headless` (ali `OMNIROUTE_HEADLESS=1`) zažene samo posredniški mehanizem `/v1/*`, nadzorna plošča in podsistemi, namenjeni samo nadzorni plošči, pa so izklopljeni. → [Brezglavi način](docs/guides/HEADLESS.md)
@@ -786,7 +786,7 @@ izven zgodovine vaše lupine. → [CLI integracije](docs/guides/CLI-INTEGRATIONS
   <tr><th align="left">Platforma</th><th align="left">Namestitev</th><th align="left">Prednosti</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (globalno)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">En ukaz, kateri koli OS</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (globalno)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">Isti arhiv registra, hitrejše namestitve</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Več arhitektur: <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Več arhitektur: <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Namizje (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Izvorno okno + sistemska vrstica — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Menijska vrstica (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Nadzira strežnik in ga samodejno posodablja — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>izvorni <code>arm64</code></td><td align="left">Raspberry Pi, strežniki ARM, Apple Silicon</td></tr>
@@ -1048,7 +1048,7 @@ omniroute
 ```
 
 > 💡 Se prikazujejo `npm warn ERESOLVE` ali opozorila o odvisnostih peer? [Neškodljiva so](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **Uporabljate npm 11 ali novejšo različico?** npm lahko blokira skripte življenjskega cikla paketov, razen če so dovoljene. `postinstall` za OmniRoute (`node scripts/build/postinstall.mjs`) je potreben za pripravo izvornih izvajalnih datotek. Pri globalni namestitvi dovolite pakete, navedene v npm-jevem opozorilu. Za nabor paketov, ki ga je prijavil OmniRoute 3.8.54:
+> **Uporabljate npm 11 ali novejšo različico?** npm lahko blokira skripte življenjskega cikla paketov, razen če so dovoljene. `postinstall` za OmniRoute (`node scripts/build/postinstall.mjs`) je potreben za pripravo izvornih izvajalnih datotek. Pri globalni namestitvi dovolite pakete, navedene v npm-jevem opozorilu. Za nabor paketov, ki ga je prijavil OmniRoute 3.8.55:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1109,7 +1109,7 @@ Uporabite jih samo za odjemalce, ki ne morejo dodati `Authorization: Bearer ...`
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 `:latest` sledi najvišji **objavljeni** stabilni različici SemVer. Ne sledi veji git `main`. Za GitOps pripnite `:X.Y.Z`. Glejte [Kanali izdaj Docker](docs/guides/DOCKER_GUIDE.md#release-channels). Slika ima nastavljeno **`OMNIROUTE_MEMORY_MB=1024`**. To zadostuje za nadzorno ploščo in lažji klepet. **Agenti za programiranje** (`POST /v1/responses` iz Claude Code, Codex, Grok, …) potrebujejo precej večjo kopico V8, sicer se proces pri približno 12 GiB in dveh prekrivajočih se dolgih kontekstih konča z napako `FATAL ERROR`. Velikost vsebnika nastavite nad velikostjo kopice (izvorni medpomnilniki so zunaj V8):
@@ -1123,7 +1123,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Celotna tabela: [Vodnik za Docker — pomnilnik RAM med izvajanjem](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1329,7 +1329,7 @@ Kanonične metrike na dan 2026-10-18: **1.976 edinstvenih videoposnetkov** · **
   <tr><td nowrap><b>Izvajalno okolje</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Jezik</b></td><td>TypeScript 6.0 — <b>100 % TypeScripta</b> v <code>src/</code> in <code>open-sse/</code> (v jedru od v2.0 ni nobenega <code>any</code>)</td></tr>
   <tr><td nowrap><b>Ogrodje</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>Zbirka podatkov</b></td><td>better-sqlite3 (SQLite, beleženje WAL) + LowDB (podedovani JSON) — 147 domenskih modulov, 240 migracij</td></tr>
+  <tr><td nowrap><b>Zbirka podatkov</b></td><td>better-sqlite3 (SQLite, beleženje WAL) + LowDB (podedovani JSON) — 147 domenskih modulov, 244 migracij</td></tr>
   <tr><td nowrap><b>Pomnilnik</b></td><td>Celotno besedilo SQLite FTS5 + vektorjske vgradnje, kvantizirane z int8, s tipiziranim upadanjem</td></tr>
   <tr><td nowrap><b>Sheme</b></td><td>Zod 4 — preverjanje V/I orodij MCP + pogodbe API</td></tr>
   <tr><td nowrap><b>Protokoli</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1342,7 +1342,7 @@ Kanonične metrike na dan 2026-10-18: **1.976 edinstvenih videoposnetkov** · **
   <tr><td nowrap><b>Testiranje</b></td><td>Testni izvajalnik Node.js + Vitest — <b>več kot 60.000 statičnih deklaracij testov</b> v več kot 8.400 sledenih datotekah testov (enotski, integracijski, E2E, varnostni testi in testi ekosistema)</td></tr>
   <tr><td nowrap><b>Platforme</b></td><td>Namizni računalnik (Electron) · Android (Termux) · PWA (poljuben brskalnik)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — samodejna objava v npm + Docker Hub ob izdaji</td></tr>
-  <tr><td nowrap><b>Povezave</b></td><td><a href="https://omniroute.online">Spletno mesto</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Povezave</b></td><td><a href="https://omniroute.online">Spletno mesto</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1842,7 +1842,7 @@ Licenca MIT – podrobnosti najdete v [LICENSE](LICENSE).
 
 **[⬆ Nazaj na vrh](#-omniroute)** · Ustvarjeno z ❤️ za odprtokodno skupnost umetne inteligence.
 
-<sub>Ustvaril <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Licenca MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Ustvaril <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Licenca MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- GitHub Discussions je omogočen za vprašanja in odgovore skupnosti -->

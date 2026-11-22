@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                               |           v3.8.50           | **v3.8.51** |       `v3.8.54+`       |
+|                                               |           v3.8.50           | **v3.8.51** |       `v3.8.55+`       |
 | --------------------------------------------- | :-------------------------: | :---------: | :--------------------: |
 | 🌐 Πάροχοι                                    |             352             |   **358**   |          394           |
 | 🧠 Μοναδικά αναγνωριστικά μοντέλων συνομιλίας |            1320             |  **1374**   |          1491          |
@@ -93,7 +93,7 @@
 
 [![έκδοση npm](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![Μηνιαίες λήψεις NPM](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 [![Άδεια χρήσης: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Λήψεις Docker](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Λήψεις Electron](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -599,7 +599,7 @@ Pix copia-e-cola:
 
 </div>
 
-> Πρόσφατες σημαντικές αλλαγές από **v3.8.20 → v3.8.54**. Πλήρες ιστορικό στο [`CHANGELOG.md`](CHANGELOG.md).
+> Πρόσφατες σημαντικές αλλαγές από **v3.8.20 → v3.8.55**. Πλήρες ιστορικό στο [`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ Δρομολόγηση `quota-weighted`** — η 20ή στρατηγική combo παραλείπει τους εξαντλημένους λογαριασμούς και, στη συνέχεια, επιλέγει μεταξύ των υπόλοιπων ανάλογα με το leftover quota ÷ in-flight load, διατηρώντας τις υπάρχουσες συνομιλίες καρφιτσωμένες. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 Headless λειτουργία** — η εντολή `omniroute serve --headless` (ή `OMNIROUTE_HEADLESS=1`) εκτελεί μόνο τη μηχανή διαμεσολάβησης `/v1/*`, με τον πίνακα ελέγχου και τα υποσυστήματα που αφορούν αποκλειστικά τον πίνακα απενεργοποιημένα. → [Headless Mode](docs/guides/HEADLESS.md)
@@ -787,7 +787,7 @@ omniroute configure codex          # επίσης: claude opencode qwen aider go
   <tr><th align="left">Πλατφόρμα</th><th align="left">Εγκατάσταση</th><th align="left">Κύρια χαρακτηριστικά</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (καθολική)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">Μία εντολή, οποιοδήποτε λειτουργικό σύστημα</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (καθολική)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">Το ίδιο tarball από το registry, ταχύτερες εγκαταστάσεις</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Multi-arch <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Υπολογιστής (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Εγγενές παράθυρο + περιοχή ειδοποιήσεων — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Γραμμή μενού (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Επιβλέπει και ενημερώνει αυτόματα τον διακομιστή — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>εγγενές <code>arm64</code></td><td align="left">Raspberry Pi, διακομιστές ARM, Apple Silicon</td></tr>
@@ -1047,7 +1047,7 @@ omniroute
 ```
 
 > 💡 Βλέπετε `npm warn ERESOLVE` ή προειδοποιήσεις peer-dep; [Είναι ακίνδυνες](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **Χρησιμοποιείτε npm 11 ή νεότερο;** Το npm ενδέχεται να αποκλείσει τα package lifecycle scripts, εκτός αν επιτραπεί η εκτέλεσή τους. Το `postinstall` του OmniRoute (`node scripts/build/postinstall.mjs`) απαιτείται για την προετοιμασία των εγγενών αρχείων runtime. Επιτρέψτε τα πακέτα που αναφέρονται στην προειδοποίηση του npm κατά την καθολική εγκατάσταση. Για το σύνολο πακέτων που αναφέρει το OmniRoute 3.8.54:
+> **Χρησιμοποιείτε npm 11 ή νεότερο;** Το npm ενδέχεται να αποκλείσει τα package lifecycle scripts, εκτός αν επιτραπεί η εκτέλεσή τους. Το `postinstall` του OmniRoute (`node scripts/build/postinstall.mjs`) απαιτείται για την προετοιμασία των εγγενών αρχείων runtime. Επιτρέψτε τα πακέτα που αναφέρονται στην προειδοποίηση του npm κατά την καθολική εγκατάσταση. Για το σύνολο πακέτων που αναφέρει το OmniRoute 3.8.55:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1109,7 +1109,7 @@ curl http://localhost:20128/v1/models -H "Authorization: Bearer YOUR_KEY"
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Το `:latest` ακολουθεί την υψηλότερη **δημοσιευμένη** σταθερή έκδοση SemVer. Δεν παρακολουθεί το git `main`. Χρησιμοποιήστε `:X.Y.Z` για GitOps. Δείτε τα [κανάλια εκδόσεων του Docker](docs/guides/DOCKER_GUIDE.md#release-channels).Το image ορίζει `OMNIROUTE_MEMORY_MB=1024`. Αυτό επαρκεί για τον πίνακα ελέγχου και μια ελαφριά συνομιλία. Οι **coding agents** (`POST /v1/responses` από Claude Code, Codex, Grok, …) χρειάζονται πολύ μεγαλύτερο σωρό V8, διαφορετικά η διεργασία εμφανίζει `FATAL ERROR`s περίπου στα ~12 GiB με δύο επικαλυπτόμενα μεγάλα περιβάλλοντα. Ορίστε το μέγεθος του container πάνω από τον σωρό (τα εγγενή buffer βρίσκονται εκτός του V8):
@@ -1123,7 +1123,7 @@ docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Πλήρης πίνακας: [Οδηγός Docker — RAM κατά τον χρόνο εκτέλεσης](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1330,7 +1330,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # Το CI=1 το παρ�
   <tr><td nowrap><b>Εκτέλεση</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Γλώσσα</b></td><td>TypeScript 6.0 — <b>100% TypeScript</b> σε <code>src/</code> και <code>open-sse/</code> (μηδενικά <code>any</code> στον πυρήνα από την v2.0)</td></tr>
   <tr><td nowrap><b>Πλαίσιο</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>Βάση δεδομένων</b></td><td>better-sqlite3 (SQLite, ημερολόγιο WAL) + LowDB (JSON παλαιού τύπου) — 147 λειτουργικές μονάδες, 240 μεταναστεύσεις</td></tr>
+  <tr><td nowrap><b>Βάση δεδομένων</b></td><td>better-sqlite3 (SQLite, ημερολόγιο WAL) + LowDB (JSON παλαιού τύπου) — 147 λειτουργικές μονάδες, 244 μεταναστεύσεις</td></tr>
   <tr><td nowrap><b>Μνήμη</b></td><td>Πλήρες κείμενο SQLite FTS5 + διανυσματικά embeddings με κβαντοποίηση int8, τυποποιημένη εξασθένηση</td></tr>
   <tr><td nowrap><b>Σχήματα</b></td><td>Zod 4 — επικύρωση εισόδου/εξόδου εργαλείων MCP + συμβάσεις API</td></tr>
   <tr><td nowrap><b>Πρωτόκολλα</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1343,7 +1343,7 @@ OMNIROUTE_SKIP_POSTINSTALL=1 npm install -g omniroute   # Το CI=1 το παρ�
   <tr><td nowrap><b>Δοκιμές</b></td><td>Εκτελεστής δοκιμών Node.js + Vitest — <b>60.000+ στατικές δηλώσεις δοκιμών</b> σε περισσότερα από 8.400 καταγεγραμμένα αρχεία δοκιμών (μονάδας, ενοποίησης, E2E, ασφάλειας, οικοσυστήματος)</td></tr>
   <tr><td nowrap><b>Πλατφόρμες</b></td><td>Υπολογιστής (Electron) · Android (Termux) · PWA (οποιοδήποτε πρόγραμμα περιήγησης)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — αυτόματη δημοσίευση στο npm + Docker Hub κατά την κυκλοφορία</td></tr>
-  <tr><td nowrap><b>Σύνδεσμοι</b></td><td><a href="https://omniroute.online">Ιστότοπος</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Σύνδεσμοι</b></td><td><a href="https://omniroute.online">Ιστότοπος</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1843,7 +1843,7 @@ gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes
 
 **[⬆ Επιστροφή στην κορυφή](#-omniroute)** · Δημιουργήθηκε με ❤️ για την κοινότητα AI ανοιχτού κώδικα.
 
-<sub>Δημιουργήθηκε από τον <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Άδεια MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Δημιουργήθηκε από τον <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Άδεια MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- Το GitHub Discussions είναι ενεργοποιημένο για ερωτήσεις και απαντήσεις της κοινότητας -->

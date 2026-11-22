@@ -472,7 +472,7 @@ ara [`docs/guides/KIRO_SETUP.md`](./KIRO_SETUP.md).
 2. **Soluzzjoni permanenti:** Agħmel bind espliċitu ma' IPv4 billi tuża `-p 127.0.0.1:20128:20128` fil-kmand `docker run` tiegħek:
    ```bash
    docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
    ```
    Dan jisforza l-bind tal-IPv4 u jevita wkoll li jesponi l-proxy fuq l-interfaces kollha tal-host.
 

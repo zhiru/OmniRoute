@@ -463,7 +463,7 @@ lee [`docs/guides/KIRO_SETUP.md`](./KIRO_SETUP.md).
 2. **Ndozi na-adịgide adịgide:** Kee ya na IPv4 kpọmkwem site n'iji `-p 127.0.0.1:20128:20128` n'iwu `docker run` gị:
    ```bash
    docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
    ```
    Nke a na-amanye IPv4 bind ma na-egbochikwa ikpughe proxy ahụ na interface niile nke host.
 

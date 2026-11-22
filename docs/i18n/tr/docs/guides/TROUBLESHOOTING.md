@@ -477,7 +477,7 @@ içe aktarma akışından herhangi biriyle yeniden ekleyin.
 2. **Kalıcı düzeltme:** `docker run` komutunuzda `-p 127.0.0.1:20128:20128` kullanarak açıkça IPv4'e bağlayın:
    ```bash
    docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+     -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
    ```
    Bu, IPv4 bağlamasını zorunlu kılar ve ayrıca proxy'nin ana makinenin tüm ağ arayüzlerinde açığa çıkmasını önler.
 
