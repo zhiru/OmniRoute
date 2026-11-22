@@ -71,7 +71,7 @@
 
 <div align="center">
 
-|                                          |         v3.8.50         | **v3.8.51** |      `v3.8.54+`       |
+|                                          |         v3.8.50         | **v3.8.51** |      `v3.8.55+`       |
 | ---------------------------------------- | :---------------------: | :---------: | :-------------------: |
 | 🌐 Soláthraithe                          |           352           |   **358**   |          394          |
 | 🧠 Aitheantóirí uathúla samhlacha comhrá |          1320           |  **1374**   |         1491          |
@@ -93,7 +93,7 @@
 
 [![Leagan npm](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)
 ![NPM Míosúil](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)
-[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)
+[![Docker Hub](https://img.shields.io/docker/v/cheaperinference/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/cheaperinference/omniroute)
 ![Ceadúnas: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 ![Íoslódálacha Docker](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)
 ![Íoslódálacha Electron](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)
@@ -599,7 +599,7 @@ faoin gcatalóg reatha ag **[radar.omniroute.online/planos](https://radar.omniro
 
 </div>
 
-> Na buaicphointí is déanaí ó **v3.8.20 → v3.8.54**. An stair iomlán in [`CHANGELOG.md`](CHANGELOG.md).
+> Na buaicphointí is déanaí ó **v3.8.20 → v3.8.55**. An stair iomlán in [`CHANGELOG.md`](CHANGELOG.md).
 
 - **⚖️ Ródú `quota-weighted`** — seachnaíonn an 20ú straitéis teaglaim cuntais ídithe, ansin roghnaíonn sí as na cinn eile i gcomhréir le cuóta fágtha ÷ ualach atá ar eitilt, agus coinníonn sí comhráite atá ann cheana ceangailte. → [Auto-Combo](docs/routing/AUTO-COMBO.md)
 - **🧰 Mód gan cheann** — ritheann `omniroute serve --headless` (nó `OMNIROUTE_HEADLESS=1`) inneall seachfhreastalaí `/v1/*` amháin, agus an painéal agus na fochórais atá sonrach don phainéal múchta. → [Mód Gan Cheann](docs/guides/HEADLESS.md)
@@ -786,7 +786,7 @@ an timpeallacht/args cruinn gan é a rith, agus coimeádann `--api-key-env NAME`
   <tr><th align="left">Ardán</th><th align="left">Suiteáil</th><th align="left">Buaicphointí</th></tr>
   <tr><td align="left" nowrap>📦 <b>npm (domhanda)</b></td><td align="left" nowrap><code>npm install -g omniroute</code></td><td align="left">Ordú amháin, aon chóras oibriúcháin</td></tr>
   <tr><td align="left" nowrap>⚡ <b>Bun (domhanda)</b></td><td align="left" nowrap><code>bun add -g omniroute</code></td><td align="left">An tarball céanna ón gclárlann, suiteálacha níos tapúla</td></tr>
-  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … diegosouzapw/omniroute</code></td><td align="left">Il-ailtireacht <b>AMD64 + ARM64</b></td></tr>
+  <tr><td align="left" nowrap>🐳 <b>Docker</b></td><td align="left" nowrap><code>docker run … cheaperinference/omniroute</code></td><td align="left">Il-ailtireacht <b>AMD64 + ARM64</b></td></tr>
   <tr><td align="left" nowrap>🖥️ <b>Deasc (Electron)</b></td><td align="left" nowrap><code>npm run electron:build</code></td><td align="left">Fuinneog dhúchasach + tráidire córais — <b>Windows / macOS / Linux</b></td></tr>
   <tr><td align="left" nowrap>🎩 <b>Barra roghchláir (OmniRouteTray)</b></td><td align="left" nowrap><code>brew install --cask zoispag/tap/omniroute-tray</code></td><td align="left">Déanann sé monatóireacht ar an bhfreastalaí agus nuashonraíonn sé go huathoibríoch — <b>macOS</b></td></tr>
   <tr><td align="left" nowrap>💪 <b>ARM</b></td><td align="left" nowrap>native <code>arm64</code></td><td align="left">Raspberry Pi, freastalaithe ARM, Apple Silicon</td></tr>
@@ -1047,7 +1047,7 @@ omniroute
 ```
 
 > 💡 An bhfeiceann tú `npm warn ERESOLVE` nó rabhaidh faoi spleáchais chomhghleacaithe? [Tá siad neamhdhíobhálach](docs/guides/TROUBLESHOOTING.md#npm-install-warnings-eresolve--peer--deprecated).
-> **An bhfuil npm 11 nó níos nuaí á úsáid agat?** Féadfaidh npm scripteanna shaolré na bpacáistí a bhlocáil mura gceadaítear iad. Tá `postinstall` OmniRoute (`node scripts/build/postinstall.mjs`) riachtanach chun a chomhaid dhúchasacha ama rite a ullmhú. Ceadaigh na pacáistí atá ainmnithe i rabhadh npm agus tú á suiteáil go domhanda. Maidir leis an tacar pacáistí a thuairiscigh OmniRoute 3.8.54:
+> **An bhfuil npm 11 nó níos nuaí á úsáid agat?** Féadfaidh npm scripteanna shaolré na bpacáistí a bhlocáil mura gceadaítear iad. Tá `postinstall` OmniRoute (`node scripts/build/postinstall.mjs`) riachtanach chun a chomhaid dhúchasacha ama rite a ullmhú. Ceadaigh na pacáistí atá ainmnithe i rabhadh npm agus tú á suiteáil go domhanda. Maidir leis an tacar pacáistí a thuairiscigh OmniRoute 3.8.55:
 >
 > ```bash
 > npm install -g --allow-scripts=omniroute,keytar,onnxruntime-node,@parcel/watcher,@swc/core,protobufjs,esbuild omniroute
@@ -1109,7 +1109,7 @@ Bain úsáid astu seo amháin le haghaidh cliant nach féidir leo `Authorization
 
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 Leanann `:latest` an SemVer cobhsaí **foilsithe** is airde. Ní leanann sé git `main`. Pionnáil `:X.Y.Z` le haghaidh GitOps. Féach [Cainéil Eisiúna Docker](docs/guides/DOCKER_GUIDE.md#release-channels). Pionnálann an íomhá **`OMNIROUTE_MEMORY_MB=1024`**. Is leor é sin don deais agus do chomhrá éadrom. Teastaíonn carn V8 i bhfad níos mó ó **ghníomhairí códaithe** (`POST /v1/responses` ó Claude Code, Codex, Grok, …), nó faigheann an próiseas `FATAL ERROR` ag thart ar 12 GiB le linn dhá chomhthéacs fhada atá ag forluí. Socraigh méid an choimeádáin os cionn mhéid an chairn (bíonn maoláin dhúchasacha lasmuigh de V8):
@@ -1123,7 +1123,7 @@ Leanann `:latest` an SemVer cobhsaí **foilsithe** is airde. Ní leanann sé git
 ```bash
 docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
   -e OMNIROUTE_MEMORY_MB=8192 --memory=10g \
-  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+  -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data cheaperinference/omniroute:latest
 ```
 
 An tábla iomlán: [Treoir Docker — RAM ag am rite](docs/guides/DOCKER_GUIDE.md#runtime-ram-for-coding-agents).
@@ -1329,7 +1329,7 @@ Méadrachtaí canónacha ar 2026-10-18: **1.976 físeán uathúil** · **20.220.
   <tr><td nowrap><b>Am rite</b></td><td>Node.js 22.x / 24.x LTS — <code>&gt;=22.22.2 &lt;23 || &gt;=24.0.0 &lt;27</code></td></tr>
   <tr><td nowrap><b>Teanga</b></td><td>TypeScript 6.0 — <b>100% TypeScript</b> ar fud <code>src/</code> agus <code>open-sse/</code> (<code>any</code> nialasach sa chroílár ó v2.0)</td></tr>
   <tr><td nowrap><b>Creat</b></td><td>Next.js 16 + React 19 + Tailwind CSS 4</td></tr>
-  <tr><td nowrap><b>Bunachar sonraí</b></td><td>better-sqlite3 (SQLite, iriseoireacht WAL) + LowDB (JSON oidhreachtúil) — 147 modúl fearainn, 240 imirce</td></tr>
+  <tr><td nowrap><b>Bunachar sonraí</b></td><td>better-sqlite3 (SQLite, iriseoireacht WAL) + LowDB (JSON oidhreachtúil) — 147 modúl fearainn, 244 imirce</td></tr>
   <tr><td nowrap><b>Cuimhne</b></td><td>Téacs iomlán SQLite FTS5 + leabuithe veicteora cainníochtaithe int8, meath clóscríofa</td></tr>
   <tr><td nowrap><b>Scéimeanna</b></td><td>Zod 4 — bailíochtú I/O uirlisí MCP + conarthaí API</td></tr>
   <tr><td nowrap><b>Prótacail</b></td><td>MCP (stdio / HTTP / SSE) + A2A v0.3 (JSON-RPC 2.0 + SSE)</td></tr>
@@ -1342,7 +1342,7 @@ Méadrachtaí canónacha ar 2026-10-18: **1.976 físeán uathúil** · **20.220.
   <tr><td nowrap><b>Tástáil</b></td><td>Reáchtálaí tástálacha Node.js + Vitest — <b>os cionn 60,000 dearbhú tástála statach</b> thar níos mó ná 8,400 comhad tástála rianaithe (aonaid, comhtháthú, E2E, slándáil, éiceachóras)</td></tr>
   <tr><td nowrap><b>Ardáin</b></td><td>Deasc (Electron) · Android (Termux) · PWA (brabhsálaí ar bith)</td></tr>
   <tr><td nowrap><b>CI/CD</b></td><td>GitHub Actions — foilsiú uathoibríoch npm + Docker Hub nuair a scaoiltear leagan</td></tr>
-  <tr><td nowrap><b>Naisc</b></td><td><a href="https://omniroute.online">Suíomh gréasáin</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/diegosouzapw/omniroute">Docker Hub</a></td></tr>
+  <tr><td nowrap><b>Naisc</b></td><td><a href="https://omniroute.online">Suíomh gréasáin</a> · <a href="https://www.npmjs.com/package/omniroute">npm</a> · <a href="https://hub.docker.com/r/cheaperinference/omniroute">Docker Hub</a></td></tr>
 </table>
 
 <div align="center">
@@ -1842,7 +1842,7 @@ Ceadúnas MIT - féach ar [LICENSE](LICENSE) le haghaidh sonraí.
 
 **[⬆ Ar ais go dtí an barr](#-omniroute)** · Tógtha le ❤️ don phobal AI foinse oscailte.
 
-<sub>Cruthaithe ag <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.54 · Node ≥22.22.2 · Ceadúnas MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
+<sub>Cruthaithe ag <a href="https://github.com/diegosouzapw">Diego Souza</a> · OmniRoute v3.8.55 · Node ≥22.22.2 · Ceadúnas MIT · <a href="https://omniroute.online">omniroute.online</a></sub>
 
 </div>
 <!-- Tá GitHub Discussions cumasaithe le haghaidh Ceisteanna agus Freagraí an phobail -->

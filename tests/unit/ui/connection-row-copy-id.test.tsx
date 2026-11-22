@@ -3,6 +3,8 @@ import React, { act } from "react";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { createRoot } from "react-dom/client";
+import { screen } from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import ConnectionRow, {
@@ -109,12 +111,44 @@ describe("ConnectionRow connection-id chip", () => {
 });
 
 describe("ConnectionPinTip", () => {
-  it("documents the x-omniroute-connection header and the copy chip", () => {
-    const el = render(<ConnectionPinTip />);
-    const text = el.querySelector("button")?.getAttribute("aria-label") || "";
-    expect(text).toContain("x-omniroute-connection");
-    expect(text).not.toContain("x-connection-id");
-  });
+  it.each(["keyboard focus", "hover"])(
+    "opens the icon tooltip on %s and describes the pin header and copy chip",
+    async (interaction) => {
+      const user = userEvent.setup();
+      render(<ConnectionPinTip />);
+      const trigger = screen.getByRole("button", { name: "More information" });
+      expect(trigger.getAttribute("type")).toBe("button");
+      expect(trigger.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+      expect(trigger.textContent).toBe("");
+      expect(screen.queryByRole("tooltip")).toBeNull();
+
+      await act(async () => {
+        if (interaction === "keyboard focus") {
+          await user.tab();
+        } else {
+          await user.hover(trigger);
+        }
+      });
+      if (interaction === "keyboard focus") {
+        expect(document.activeElement).toBe(trigger);
+      }
+
+      // Radix portals the help to document.body and exposes it as the trigger's
+      // description; the short accessible name belongs to the icon button.
+      const tooltip = await screen.findByRole("tooltip");
+      expect(tooltip.textContent).toContain("x-omniroute-connection");
+      expect(tooltip.textContent).not.toContain("x-connection-id");
+      expect(tooltip.textContent).toContain("connection ID");
+      expect(tooltip.textContent).toContain("click the ID chip on a connection to copy it");
+      expect(trigger.getAttribute("aria-describedby")).toBe(tooltip.id);
+
+      await act(async () => {
+        await user.keyboard("{Escape}");
+      });
+      expect(screen.queryByRole("tooltip")).toBeNull();
+      expect(trigger.hasAttribute("aria-describedby")).toBe(false);
+    }
+  );
 });
 
 describe("chat pin header (regression guard)", () => {
